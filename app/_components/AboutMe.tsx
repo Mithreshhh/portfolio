@@ -67,16 +67,17 @@ const AboutMe = () => {
                 <div className="grid md:grid-cols-12 mt-9">
                     <div className="md:col-span-5">
                         <p className="text-5xl slide-up-and-fade">
-                            Hi, I&apos;m Tajmirul.
+                            Hi, I&apos;m Mithresh.
                         </p>
                     </div>
                     <div className="md:col-span-7">
                         <div className="text-lg text-muted-foreground max-w-[450px]">
                             <p className="slide-up-and-fade">
-                                I&apos;m a frontend web developer dedicated to
-                                turning ideas into creative solutions. I
-                                specialize in creating seamless and intuitive
-                                user experiences.
+                                I&apos;m a full stack developer turning ideas into
+                                reliable, scalable applications. I work across
+                                the stack to craft seamless, intuitive user
+                                experiences backed by robust APIs and data
+                                layers.
                             </p>
                             <p className="mt-3 slide-up-and-fade">
                                 My approach focuses on creating scalable,
@@ -85,6 +86,17 @@ const AboutMe = () => {
                                 performance, accessibility, and responsiveness,
                                 I strive to deliver experiences that not only
                                 engage users but also drive tangible results.
+                            </p>
+                            <p className="mt-3 slide-up-and-fade">
+                                I&apos;m currently learning Machine Learning and
+                                exploring ways to integrate ML/AI features into
+                                real-world projects — starting with data
+                                preprocessing, model training, and deployment
+                                pipelines.
+                            </p>
+                            <p className="mt-3 slide-up-and-fade">
+                                Education: pursuing my degree at college with a
+                                current CGPA of <span className="text-foreground font-medium">8.8</span>.
                             </p>
                         </div>
                     </div>

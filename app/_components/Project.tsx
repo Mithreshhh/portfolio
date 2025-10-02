@@ -109,13 +109,11 @@ const Project = ({ index, project, selectedProject, onMouseEnter }: Props) => {
         >
             {selectedProject === null && (
                 <Image
-                    src={project.thumbnail}
+                    src={(project.images && project.images[0]) || project.thumbnail || '/logo/react.png'}
                     alt="Project"
                     width="300"
                     height="200"
-                    className={cn(
-                        'w-full object-cover mb-6 aspect-[3/2] object-top',
-                    )}
+                    className={cn('w-full object-cover mb-6')}
                     key={project.slug}
                     loading="lazy"
                 />
@@ -125,8 +123,29 @@ const Project = ({ index, project, selectedProject, onMouseEnter }: Props) => {
                     _{(index + 1).toString().padStart(2, '0')}.
                 </div>
                 <div className="">
-                    <h4 className="text-4xl xs:text-6xl flex gap-4 font-anton transition-all duration-700 bg-gradient-to-r from-primary to-foreground from-[50%] to-[50%] bg-[length:200%] bg-right bg-clip-text text-transparent group-hover:bg-left">
+                    <h4 className="text-4xl xs:text-6xl flex gap-3 items-center font-anton transition-all duration-700 bg-gradient-to-r from-primary to-foreground from-[50%] to-[50%] bg-[length:200%] bg-right bg-clip-text text-transparent group-hover:bg-left">
                         {project.title}
+                        {project.status && (
+                            <span
+                                className={cn(
+                                    'text-xs uppercase tracking-wide rounded-full px-2 py-1 border',
+                                    {
+                                        'border-green-500 text-green-400':
+                                            project.status === 'live',
+                                        'border-yellow-500 text-yellow-400':
+                                            project.status === 'in-progress',
+                                        'border-blue-500 text-blue-400':
+                                            project.status === 'private',
+                                    },
+                                )}
+                            >
+                                {project.status === 'live'
+                                    ? 'Live'
+                                    : project.status === 'in-progress'
+                                    ? 'In Development'
+                                    : 'Private'}
+                            </span>
+                        )}
                         <span className="text-foreground opacity-0 group-hover:opacity-100 transition-all">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

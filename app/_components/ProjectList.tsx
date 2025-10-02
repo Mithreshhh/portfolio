@@ -106,7 +106,7 @@ const ProjectList = () => {
     return (
         <section className="pb-section" id="selected-projects">
             <div className="container">
-                <SectionTitle title="SELECTED PROJECTS" />
+                <SectionTitle title="FEATURED WORK" />
 
                 <div className="group/projects relative" ref={containerRef}>
                     {selectedProject !== null && (
@@ -114,9 +114,14 @@ const ProjectList = () => {
                             className="max-md:hidden absolute right-0 top-0 z-[1] pointer-events-none w-[200px] xl:w-[350px] aspect-[3/4] overflow-hidden opacity-0"
                             ref={imageContainer}
                         >
-                            {PROJECTS.map((project) => (
+                            {PROJECTS.map((project) => {
+                                const thumb =
+                                    (project.images && project.images[0]) ||
+                                    project.thumbnail ||
+                                    '/logo/react.png';
+                                return (
                                 <Image
-                                    src={project.thumbnail}
+                                    src={thumb}
                                     alt="Project"
                                     width="400"
                                     height="500"
@@ -131,7 +136,8 @@ const ProjectList = () => {
                                     ref={imageRef}
                                     key={project.slug}
                                 />
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
 

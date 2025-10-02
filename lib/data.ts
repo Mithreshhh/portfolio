@@ -1,20 +1,19 @@
 import { IProject } from '@/types';
 
 export const GENERAL_INFO = {
-    email: 'tasmirolislam@gmail.com',
+    email: 'mithreshuttarwarmmvi@gmail.com',
 
     emailSubject: "Let's collaborate on a project",
-    emailBody: 'Hi Tajmirul, I am reaching out to you because...',
+    emailBody: 'Hi Mithresh, I am reaching out to you because...',
 
-    oldPortfolio: 'https://www.legacy.me.toinfinite.dev',
-    upworkProfile: 'https://www.upwork.com/freelancers/tajmirul',
+    oldPortfolio: '#',
+    upworkProfile:
+        'mailto:mithreshuttarwarmmvi@gmail.com?subject=Let%27s%20collaborate%20on%20a%20project&body=Hi%20Mithresh%2C%20I%20am%20reaching%20out%20to%20you%20because...'
 };
 
 export const SOCIAL_LINKS = [
-    { name: 'github', url: 'https://github.com/Tajmirul' },
-    { name: 'linkedin', url: 'https://www.linkedin.com/in/tajmirul' },
-    { name: 'facebook', url: 'https://www.facebook.com/tajmirul.2000' },
-    { name: 'Old Version', url: GENERAL_INFO.oldPortfolio },
+    { name: 'github', url: 'https://github.com/Mithreshhh' },
+    { name: 'linkedin', url: 'https://www.linkedin.com/in/mithresh-uttarwar/' },
 ];
 
 export const MY_STACK = {
@@ -43,18 +42,7 @@ export const MY_STACK = {
             name: 'Tailwind CSS',
             icon: '/logo/tailwind.png',
         },
-        {
-            name: 'GSAP',
-            icon: '/logo/gsap.png',
-        },
-        {
-            name: 'Framer Motion',
-            icon: '/logo/framer-motion.png',
-        },
-        {
-            name: 'Sass',
-            icon: '/logo/sass.png',
-        },
+        // Removed animation and preprocessor badges per request
         {
             name: 'Bootstrap',
             icon: '/logo/bootstrap.svg',
@@ -87,10 +75,6 @@ export const MY_STACK = {
             name: 'MongoDB',
             icon: '/logo/mongodb.svg',
         },
-        {
-            name: 'Prisma',
-            icon: '/logo/prisma.png',
-        },
     ],
     tools: [
         {
@@ -105,204 +89,107 @@ export const MY_STACK = {
             name: 'AWS',
             icon: '/logo/aws.png',
         },
+        {
+            name: 'n8n',
+            icon: '/logo/n8n.svg',
+        },
+    ],
+    languages: [
+        { name: 'Java', icon: '/logo/java.svg' },
+        { name: 'Python', icon: '/logo/python.svg' },
+    ],
+    ml: [
+        { name: 'NumPy', icon: '/logo/numpy.svg' },
+        { name: 'Pandas', icon: '/logo/pandas.svg' },
+        { name: 'Jupyter', icon: '/logo/jupyter.svg' },
     ],
 };
 
 export const PROJECTS: IProject[] = [
     {
-        title: 'MTI Electronics',
-        slug: 'mti-electronics',
-        liveUrl: 'https://mti-electronics.vercel.app/',
+        title: 'Voltworx',
+        slug: 'voltworx',
+        liveUrl: 'https://www.volt-worx.com/',
         year: 2025,
-        description: `
-      A complete agency portfolio platform built for MTI Electronics to showcase their services, blog content, and product offerings. <br/> <br/>
-      
-      Key Features:<br/>
-      <ul>
-        <li>🛠️ Service Display System: Interactive service showcase with synchronized sliders</li>
-        <li>✍️ Blog Management: SEO-friendly blog with categorization and search</li>
-        <li>🛒 Product Catalog: Organized product display with filtering capabilities</li>
-        <li>📱 Fully Responsive: Optimized for all device sizes</li>
-        <li>⚡ Fast Performance: Optimized Next.js frontend with ISR (Incremental Static Regeneration)</li>
-      </ul><br/>
-      
-      Technical Highlights:
-      <ul>
-        <li>Implemented complex slider synchronization logic using Swiper.js</li>
-        <li>Customized Payload CMS admin panel for intuitive content management</li>
-        <li>Developed reusable UI components with shadcn for design consistency</li>
-        <li>Configured efficient data fetching strategies in Next.js</li>
-      </ul>
-      `,
-        role: `
-      Full-Stack Developer <br/>
-      Owned the entire development lifecycle:
-      <ul>
-        <li>✅ Backend: Configured Payload CMS with custom collections for services, blogs, and products</li>
-        <li>🎨 Frontend: Built all UI components using Tailwind CSS and shadcn</li>
-        <li>🔄 State Management: Implemented client-side data fetching and caching</li>
-        <li>🖥️ CMS Customization: Created admin interfaces for content editors</li>
-        <li>🚀 Deployment: Set up CI/CD pipeline for Vercel hosting</li>
-        <li>🧩 Third-Party Integration: Added Swiper.js for interactive sliders</li>
-      </ul>
-      `,
-        techStack: [
-            'Next.js',
-            'Payload CMS',
-            'Tailwind CSS',
-            'shadcn',
-            'Swiper.js',
-            'React Hook Form',
-            'Vercel',
-        ],
-        thumbnail: '/projects/thumbnail/mti-electronics.webp',
-        longThumbnail: '/projects/long/mti-electronics.webp',
-        images: [
-            '/projects/images/mti-electronics-1.webp',
-            '/projects/images/mti-electronics-2.webp',
-        ],
-    },
-    {
-        title: 'Epikcart',
-        slug: 'epikcart',
-        techStack: [
-            'React',
-            'Redux',
-            'React i18n',
-            'Tailwind CSS',
-            'Framer Motion',
-            'debouncing',
-            'Api Integration',
-        ],
-        thumbnail: '/projects/thumbnail/epikcart.jpg',
-        longThumbnail: '/projects/long/epikcart.jpg',
-        images: [
-            '/projects/images/epikcart-1.png',
-            '/projects/images/epikcart-2.png',
-            '/projects/images/epikcart-3.png',
-            '/projects/images/epikcart-4.png',
-            '/projects/images/epikcart-5.png',
-        ],
-        liveUrl: 'https://demo.epikcart.siphertech.com/',
-        year: 2023,
-        description: `Epikcart is a feature-rich, scalable e-commerce platform tailored for large businesses. It features dynamic product filtering, multi-language support with RTL, advanced inventory management, order tracking, and refund systems, offering a comprehensive solution for multi-vendor operations.`,
-        role: `As the frontend developer in a team of five, I: <br/>
-        - Built the frontend from scratch using React, Redux, RTK Query, and Tailwind CSS.<br/>
-        - Developed dynamic filtering logic for the product search page with admin-configurable parameters.<br/>
-        - Integrated multi-language support with React i18n, including RTL handling.<br/>
-        - Delivered a responsive, user-friendly interface in collaboration with the UI/UX designer.`,
-    },
-    {
-        title: 'Resume Roaster',
-        slug: 'resume-roaster',
-        techStack: [
-            'GPT-4',
-            'Next.js',
-            'Postgressql',
-            'Prisma',
-            'Tailwind CSS',
-        ],
-        thumbnail: '/projects/thumbnail/resume-roaster.jpg',
-        longThumbnail: '/projects/long/resume-roaster.jpg',
-        images: [
-            '/projects/images/resume-roaster-1.png',
-            '/projects/images/resume-roaster-2.png',
-            '/projects/images/resume-roaster-3.png',
-        ],
-        liveUrl: 'https://resume-roaster.vercel.app/',
-        year: 2023,
         description:
-            'Resume Roaster is a web application designed to provide tailored resume feedback and professional writing services. Built with Next.js, PostgreSQL, Prisma, and Tailwind CSS, it integrates GPT-4 for AI-powered recommendations. The platform also includes peer-to-peer reviews with a points-based system, fostering a collaborative and engaging experience. Targeting freshers, experienced professionals, and programmers, it helps optimize resumes for job-specific success.',
-        role: `As the sole developer and business owner, I:<br/>
-        - Designed and developed the platform end-to-end using Next.js, PostgreSQL, Prisma, and Tailwind CSS.<br/>
-        - Integrated GPT-4 for AI-driven feedback and insights.<br/>
-        - Implemented complex SQL queries, including one to identify the top two resumes based on user points.`,
+            'Main live product showcasing real-world delivery and polish.',
+        role: 'CTO & Full‑Stack Developer',
+        techStack: ['Next.js', 'React', 'Tailwind CSS'],
+        thumbnail: '/projects/thumbnail/placeholder.svg',
+        longThumbnail: '/projects/long/placeholder.svg',
+        images: ['/images/voltworx(1).png', '/images/voltworx(2).png'],
+        status: 'live',
     },
     {
-        title: 'Real Estate',
-        slug: 'property-pro',
-        techStack: [
-            'React.js',
-            'Redux',
-            'Tailwind CSS',
-            'React i18n',
-            'Framer Motion',
-        ],
-        thumbnail: '/projects/thumbnail/property-pro.jpg',
-        longThumbnail: '/projects/long/property-pro.jpg',
-        images: [
-            '/projects/images/property-pro-1.png',
-            '/projects/images/property-pro-2.png',
-            '/projects/images/property-pro-3.png',
-        ],
-        liveUrl: 'https://demo.propertypro.siphertech.com/',
-        year: 2023,
+        title: 'SIH 2025 Project',
+        slug: 'sih-2025',
+        year: 2025,
+        description: 'Significant ongoing work for Smart India Hackathon.',
+        role: 'Lead Developer',
+        techStack: ['React', 'Node.js', 'MongoDB'],
+        thumbnail: '/projects/thumbnail/placeholder.svg',
+        longThumbnail: '/projects/long/placeholder.svg',
+        images: ['/projects/long/placeholder.svg'],
+        status: 'in-progress',
+    },
+    {
+        title: 'College Website (MLRITM)',
+        slug: 'mlritm-website',
+        year: 2025,
+        description: 'Official college website project. Live on Vercel.',
+        role: 'Developer',
+        techStack: ['Next.js', 'Payload CMS', 'Tailwind CSS'],
+        thumbnail: '/projects/thumbnail/placeholder.svg',
+        longThumbnail: '/projects/long/placeholder.svg',
+        images: ['/images/mlritm(1).png', '/images/mlritm(2).png'],
+        sourceCode: 'https://github.com/rochanreddy/mlritm_web',
+        liveUrl: 'https://mlritm-web.vercel.app/',
+        status: 'live',
+    },
+    {
+        title: 'Browser Extension',
+        slug: 'browser-extension',
+        year: 2024,
         description:
-            'PropertyPro is a real estate management platform offering users a seamless experience to explore, manage, and view property listings. The application emphasizes accessibility and responsive design, ensuring a smooth interface across devices.',
-        role: `As the frontend developer, I:<br/>
-        - Built the frontend using React, Redux, RTK Query, Framer Motion, and Tailwind CSS.<br/>
-        - Integrated dynamic state management for efficient handling of property data.<br/>
-        - Implemented multi-language support with React i18n to cater to diverse audiences.<br/>
-        - Enhanced user interaction with animations and transitions using Framer Motion.`,
-    },
-    {
-        title: 'Consulting Finance',
-        slug: 'crenotive',
-        techStack: ['HTML', 'CSS & SCSS', 'Javascript', 'Bootstrap'],
-        thumbnail: '/projects/thumbnail/consulting-finance.jpg',
-        longThumbnail: '/projects/long/consulting-finance.jpg',
-        images: [
-            '/projects/images/consulting-finance-1.png',
-            '/projects/images/consulting-finance-2.png',
-            '/projects/images/consulting-finance-3.png',
-        ],
-        sourceCode: 'https://github.com/Tajmirul/crenotive',
-        liveUrl: 'https://crenotive.netlify.app/',
-        year: 2023,
-        description:
-            'I developed Crenotive, a portfolio website using Html, SASS, and jQuery to showcase services and expertise. The design focuses on responsive user experience and effective presentation of professional achievements.',
-        role: ``,
-    },
-    {
-        title: 'devLinks',
-        slug: 'devLinks',
-        techStack: ['Next.js', 'Formik', 'Drag & Drop', 'Tailwind CSS'],
-        thumbnail: '/projects/thumbnail/devLinks.jpg',
-        longThumbnail: '/projects/long/devLinks.jpg',
-        images: [
-            '/projects/images/devLinks-1.png',
-            '/projects/images/devLinks-2.png',
-            '/projects/images/devLinks-3.png',
-        ],
-        sourceCode: 'https://github.com/Tajmirul/devsLink',
-        liveUrl: 'https://devlinks-demo.vercel.app/auth/signin',
-        year: 2023,
-        description: `One of the most challenging projects in Frontend Mentor.<br/><br/>
-
-            I developed a LinkSharing App as part of the Frontend Mentor challenge, utilizing React, Redux, and Tailwind CSS to create a responsive and feature-rich platform. The app allows users to share, save, and explore links, with a focus on intuitive design and smooth navigation. Advanced state management ensures efficient data handling for user interactions.`,
-        role: ``,
+            'DSA Helper — a Chrome extension that detects algorithms on coding sites and surfaces definitions, time/space complexities, and examples. Built UI first; packaging and store listing next.',
+        role: 'Developer',
+        techStack: ['JavaScript', 'Chrome API', 'HTML/CSS'],
+        thumbnail: '/images/web-ext(1).png',
+        longThumbnail: '/images/web-ext(2).png',
+        images: ['/images/web-ext(1).png', '/images/web-ext(2).png'],
+        status: 'in-progress',
     },
 ];
 
-export const MY_EXPERIENCE = [
+export const EXPERIENCE_GROUPS = [
     {
-        title: 'Software Engineer (Frontend)',
-        company: 'Strativ AB',
-        duration: 'Dec 2024 - Present',
+        title: 'Freelance / Client Work',
+        items: ['Gym Client Website (monthly)'],
     },
     {
-        title: 'Frontend Developer',
-        company: 'Epikcoders',
-        duration: 'Oct 2023 - Nov 2024',
+        title: 'College Projects',
+        items: [
+            { label: 'IIC MLRITM Platform (Developer)', url: 'https://iic.mlritm.ac.in/' },
+            'MLRITM College Website',
+            'SIH Project (Lead Developer)',
+        ],
     },
     {
-        title: 'Frontend Engineer',
-        company: 'Anchorblock Technology',
-        duration: 'Oct 2022 - Sep 2023',
+        title: 'Personal Projects',
+        items: [
+            { label: 'voltworx.com (CTO)', url: 'https://www.volt-worx.com/' },
+        ],
     },
     {
-        title: 'Frontend Developer (Part-time)',
-        company: 'Branex IT',
-        duration: 'Jan 2022 - Oct 2022',
+        title: 'Competitions',
+        items: ['Ideathon Winner (Geethanjali)', 'Participated in one hackathon'],
+    },
+    {
+        title: 'Club / Leadership Roles',
+        items: ['IIC MLRITM (Developer)'],
+    },
+    {
+        title: 'Internships',
+        items: ['Join Eazy — Frontend Developer (1 month)'],
     },
 ];

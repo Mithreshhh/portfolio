@@ -13,7 +13,7 @@ interface Props {
     project: IProject;
 }
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const ProjectDetails = ({ project }: Props) => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -175,30 +175,32 @@ const ProjectDetails = ({ project }: Props) => {
                     </div>
                 </div>
 
-                <div
-                    className="fade-in-later relative flex flex-col gap-2 max-w-[800px] mx-auto"
-                    id="images"
-                >
-                    {project.images.map((image) => (
-                        <div
-                            key={image}
-                            className="group relative w-full aspect-[750/400] bg-background-light"
-                            style={{
-                                backgroundImage: `url(${image})`,
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center 50%',
-                                backgroundRepeat: 'no-repeat',
-                            }}
-                        >
-                            <a
-                                href={image}
-                                target="_blank"
-                                className="absolute top-4 right-4 bg-background/70 text-foreground size-12 inline-flex justify-center items-center transition-all opacity-0 hover:bg-primary hover:text-primary-foreground group-hover:opacity-100"
+                <div className="fade-in-later grid gap-3 max-w-[1000px] mx-auto" id="images">
+                    {(project.images?.length ? project.images : [project.thumbnail]).map(
+                        (image, idx) => (
+                            <div
+                                key={image}
+                                className={
+                                    idx === 0
+                                        ? 'relative w-full aspect-[16/9] rounded-md overflow-hidden'
+                                        : 'relative w-full aspect-[21/9] rounded-md overflow-hidden'
+                                }
                             >
-                                <ExternalLink />
-                            </a>
-                        </div>
-                    ))}
+                                <img
+                                    src={image}
+                                    alt="Project image"
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                />
+                                <a
+                                    href={image}
+                                    target="_blank"
+                                    className="absolute top-3 right-3 bg-background/70 text-foreground size-10 inline-flex justify-center items-center transition-all opacity-0 hover:bg-primary hover:text-primary-foreground hover:opacity-100"
+                                >
+                                    <ExternalLink />
+                                </a>
+                            </div>
+                        ),
+                    )}
                 </div>
             </div>
         </section>

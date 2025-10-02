@@ -4,33 +4,36 @@
 
 @layer base {
     :root {
-        --background: 0 0% 13%;
-        --background-light: 0 0% 19%;
-        --foreground: 0 0% 87%;
+        /* Dark base unchanged for layout */
+        --background: 0 0% 10%;
+        --background-light: 0 0% 16%;
+        --foreground: 0 0% 92%;
 
-        --card: 0 0% 3.9%;
+        --card: 0 0% 6%;
         --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
+        --popover: 0 0% 6%;
         --popover-foreground: 0 0% 98%;
 
-        --primary: 140 100% 47%;
-        --primary-foreground: 0 0% 13%;
-        --secondary: 193 100% 47%;
-        --secondary-foreground: 0 0% 13%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 71%;
-        --accent: 0 0% 14.9%;
+        /* New brand: Purple primary + Orange secondary */
+        --primary: 265 85% 62%; /* vivid purple */
+        --primary-foreground: 0 0% 10%;
+        --secondary: 24 95% 58%; /* orange */
+        --secondary-foreground: 0 0% 10%;
+
+        --muted: 0 0% 18%;
+        --muted-foreground: 0 0% 70%;
+        --accent: 210 90% 55%; /* blue accent for links/badges */
         --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
+        --destructive: 0 72% 40%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 24%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
+        --border: 0 0% 26%;
+        --input: 0 0% 18%;
+        --ring: 265 85% 62%;
+        --chart-1: 265 85% 62%;
+        --chart-2: 24 95% 58%;
+        --chart-3: 210 90% 55%;
+        --chart-4: 155 75% 45%;
+        --chart-5: 340 75% 60%;
     }
 }
 
@@ -39,10 +42,18 @@
         display: none;
     }
     * {
-        @apply border-border !cursor-none;
+        @apply border-border;
     }
     body {
         @apply bg-background text-foreground font-roboto-flex;
+        /* Subtle gradient background with soft radial tints */
+        background-image:
+            radial-gradient(1200px 800px at 10% 0%, hsla(265,85%,22%,0.22), transparent 45%),
+            radial-gradient(1000px 700px at 95% 100%, hsla(24,95%,28%,0.18), transparent 45%),
+            linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background-light)) 100%);
+        background-attachment: fixed, fixed, fixed;
+        background-size: auto, auto, auto;
+        background-repeat: no-repeat;
     }
 }
 
