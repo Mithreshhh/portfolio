@@ -8,6 +8,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
 import { useRef } from 'react';
+import Image from 'next/image';
 
 interface Props {
     project: IProject;
@@ -186,10 +187,12 @@ const ProjectDetails = ({ project }: Props) => {
                                         : 'relative w-full aspect-[21/9] rounded-md overflow-hidden'
                                 }
                             >
-                                <img
+                                <Image
                                     src={image}
                                     alt="Project image"
-                                    className="absolute inset-0 w-full h-full object-cover"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, 1000px"
+                                    className="object-cover"
                                 />
                                 <a
                                     href={image}
