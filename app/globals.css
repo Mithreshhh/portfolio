@@ -59,7 +59,7 @@
 
 @layer components {
     .grid {
-        @apply gap-[25px];
+        @apply gap-4 md:gap-[25px];
     }
 
     .markdown-text ul {

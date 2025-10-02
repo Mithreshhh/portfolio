@@ -1,3 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Next.js">
+  <rect width="64" height="64" rx="12" fill="#111"/>
+  <path d="M20 46V18h6v16l18-16v28h-6V30L20 46z" fill="#fff"/>
+</svg>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="12" fill="#1b1b1b"/>
   <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="16">Next</text>

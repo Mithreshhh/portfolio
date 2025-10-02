@@ -20,27 +20,27 @@ export const MY_STACK = {
     frontend: [
         {
             name: 'JavaScript',
-            icon: '/logo/js.png',
+            icon: '/logo/js.svg',
         },
         {
             name: 'TypeScript',
-            icon: '/logo/ts.png',
+            icon: '/logo/ts.svg',
         },
         {
             name: 'React',
-            icon: '/logo/react.png',
+            icon: '/logo/react.svg',
         },
         {
             name: 'Next.js',
-            icon: '/logo/next.png',
+            icon: '/logo/next.svg',
         },
         {
             name: 'Redux',
-            icon: '/logo/redux.png',
+            icon: '/logo/redux.svg',
         },
         {
             name: 'Tailwind CSS',
-            icon: '/logo/tailwind.png',
+            icon: '/logo/tailwind.svg',
         },
         // Removed animation and preprocessor badges per request
         {
@@ -51,7 +51,7 @@ export const MY_STACK = {
     backend: [
         {
             name: 'Node.js',
-            icon: '/logo/node.png',
+            icon: '/logo/node.svg',
         },
         {
             name: 'NestJS',
@@ -59,7 +59,7 @@ export const MY_STACK = {
         },
         {
             name: 'Express.js',
-            icon: '/logo/express.png',
+            icon: '/logo/express.svg',
         },
     ],
     database: [
@@ -69,7 +69,7 @@ export const MY_STACK = {
         },
         {
             name: 'PostgreSQL',
-            icon: '/logo/postgreSQL.png',
+            icon: '/logo/postgreSQL.svg',
         },
         {
             name: 'MongoDB',
@@ -79,7 +79,7 @@ export const MY_STACK = {
     tools: [
         {
             name: 'Git',
-            icon: '/logo/git.png',
+            icon: '/logo/git.svg',
         },
         {
             name: 'Docker',
@@ -87,7 +87,7 @@ export const MY_STACK = {
         },
         {
             name: 'AWS',
-            icon: '/logo/aws.png',
+            icon: '/logo/aws.svg',
         },
         {
             name: 'n8n',

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PostgreSQL">
+  <rect width="64" height="64" rx="12" fill="#336791"/>
+  <path d="M20 44c-2-10 4-22 12-22s14 12 12 22H20z" fill="#fff"/>
+  <circle cx="28" cy="32" r="2" fill="#336791"/>
+  <circle cx="36" cy="32" r="2" fill="#336791"/>
+</svg>
+

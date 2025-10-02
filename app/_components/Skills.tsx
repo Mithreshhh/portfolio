@@ -79,23 +79,19 @@ const Skills = () => {
                                     >
                                         <div className="inline-flex items-center justify-center size-12 rounded-full bg-background-light border border-border/60 overflow-hidden">
                                             {item.icon ? (
-                                                String(item.icon).endsWith('.svg') ? (
-                                                    <img
-                                                        src={item.icon}
-                                                        alt={item.name}
-                                                        width={32}
-                                                        height={32}
-                                                        className="h-8 w-8 object-contain"
-                                                    />
-                                                ) : (
-                                                    <Image
-                                                        src={item.icon}
-                                                        alt={item.name}
-                                                        width="32"
-                                                        height="32"
-                                                        className="h-8 w-8 object-contain"
-                                                    />
-                                                )
+                                                <Image
+                                                    src={item.icon}
+                                                    alt={item.name}
+                                                    width={32}
+                                                    height={32}
+                                                    className="h-8 w-8 object-contain"
+                                                    onError={(e) => {
+                                                        try {
+                                                            // @ts-ignore - next/image event typing allows setting src
+                                                            e.currentTarget.src = '/logo/react.svg';
+                                                        } catch (_) {}
+                                                    }}
+                                                />
                                             ) : (
                                                 <span className="inline-flex items-center justify-center size-12 rounded-full bg-background-light text-muted-foreground text-sm font-medium">
                                                     {String(item.name).charAt(0)}
