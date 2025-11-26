@@ -1,6 +1,7 @@
 'use client';
 import ArrowAnimation from '@/components/ArrowAnimation';
 import Button from '@/components/Button';
+import { MusicPlayer } from '@/components/MusicPlayer';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
@@ -87,6 +88,9 @@ const Banner = () => {
                     </div>
                 </div>
             </div>
+            
+            {/* Music Player */}
+            <MusicPlayer youtubeVideoId="vfnAYipqj1k" />
         </section>
     );
 };
