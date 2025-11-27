@@ -2,7 +2,7 @@
 
 import DisplayCards from '@/components/DisplayCards';
 import DisplayCardsEnhanced from '@/components/DisplayCardsEnhanced';
-import { Briefcase, Code2, Award, Rocket, Sparkles, Trophy, GraduationCap } from 'lucide-react';
+import { Sparkles, Trophy, GraduationCap } from 'lucide-react';
 
 export default function ShowcaseDemo() {
     return (
@@ -145,7 +145,7 @@ export default function ShowcaseDemo() {
                         </li>
                         <li className="flex items-start gap-3">
                             <span className="text-primary mt-1">▸</span>
-                            <span><strong className="text-foreground">Purple/Orange Theme:</strong> Matches your portfolio's vibrant color scheme</span>
+                            <span><strong className="text-foreground">Purple/Orange Theme:</strong> Matches your portfolio&apos;s vibrant color scheme</span>
                         </li>
                     </ul>
                 </section>

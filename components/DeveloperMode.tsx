@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Code2, Zap, Activity, Eye, EyeOff } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Code2, Zap, Activity, EyeOff } from 'lucide-react';
 
 export default function DeveloperMode() {
   const [isActive, setIsActive] = useState(false);
