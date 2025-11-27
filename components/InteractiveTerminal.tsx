@@ -22,7 +22,6 @@ export default function InteractiveTerminal() {
   const [isTyping, setIsTyping] = useState(false);
   const [matrixActive, setMatrixActive] = useState(false);
   const [konamiUnlocked, setKonamiUnlocked] = useState(false);
-  const [konamiSequence, setKonamiSequence] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout>();
@@ -92,7 +91,6 @@ export default function InteractiveTerminal() {
     const handleScroll = () => {
       if (!outputRef.current) return;
       const { scrollTop, scrollHeight, clientHeight } = outputRef.current;
-      const scrollPercent = scrollTop / (scrollHeight - clientHeight);
       
       // Add fade effect at top/bottom
       const fadeHeight = 50;
@@ -190,7 +188,7 @@ export default function InteractiveTerminal() {
     ),
     hire: () => (
       <div className="space-y-2">
-        <p className="text-primary font-bold">Let's Work Together!</p>
+        <p className="text-primary font-bold">Let&apos;s Work Together!</p>
         <p>📧 Email: <span className="text-accent">mithreshuttarwarmmvi@gmail.com</span></p>
         <p>💼 Status: <span className="text-green-400">Open to opportunities</span></p>
         <p>🔗 LinkedIn: <a href="https://www.linkedin.com/in/mithresh-uttarwar/" target="_blank" className="text-secondary hover:underline">linkedin.com/in/mithresh-uttarwar</a></p>
@@ -222,11 +220,9 @@ export default function InteractiveTerminal() {
     ),
     konami: () => {
       const sequence = ['up', 'up', 'down', 'down', 'left', 'right', 'left', 'right', 'b', 'a'];
-      setKonamiSequence(sequence);
       
       setTimeout(() => {
         setKonamiUnlocked(true);
-        setKonamiSequence([]);
       }, 2000);
 
       return (
@@ -412,7 +408,7 @@ export default function InteractiveTerminal() {
               <div className="space-y-2 text-green-400 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <p className="flex items-center gap-2">
                   <span className="animate-pulse">●</span>
-                  Welcome to Mithresh's Interactive Terminal!
+                  Welcome to Mithresh&apos;s Interactive Terminal!
                 </p>
                 <p>Type <span className="text-secondary font-bold">/help</span> to see available commands.</p>
                 <p className="text-muted-foreground text-xs">Tip: Try <span className="text-accent">/matrix</span> for something cool 😉</p>

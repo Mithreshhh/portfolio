@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Music, Volume2, VolumeX, Maximize2, Minimize2, Radio } from 'lucide-react';
+import { Music, Volume2, VolumeX, Minimize2, Radio } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface MusicVisualizerProps {
