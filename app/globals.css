@@ -39,21 +39,78 @@
 
 @layer base {
     ::-webkit-scrollbar {
-        display: none;
+        width: 8px;
     }
+    
+    ::-webkit-scrollbar-track {
+        background: hsl(var(--background));
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: hsl(var(--primary) / 0.5);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: hsl(var(--primary) / 0.7);
+    }
+    
     * {
         @apply border-border;
     }
+    
+    html {
+        scroll-behavior: smooth;
+    }
+    
     body {
         @apply bg-background text-foreground font-roboto-flex;
-        /* Subtle gradient background with soft radial tints */
+        position: relative;
+        overflow-x: hidden;
+    }
+    
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        /* Animated gradient mesh background */
         background-image:
-            radial-gradient(1200px 800px at 10% 0%, hsla(265,85%,22%,0.22), transparent 45%),
-            radial-gradient(1000px 700px at 95% 100%, hsla(24,95%,28%,0.18), transparent 45%),
+            radial-gradient(circle at 20% 20%, hsla(265,85%,35%,0.15), transparent 50%),
+            radial-gradient(circle at 80% 80%, hsla(24,95%,35%,0.12), transparent 50%),
+            radial-gradient(circle at 40% 60%, hsla(210,90%,35%,0.08), transparent 40%),
             linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background-light)) 100%);
-        background-attachment: fixed, fixed, fixed;
-        background-size: auto, auto, auto;
-        background-repeat: no-repeat;
+        background-attachment: fixed;
+        animation: gradientShift 15s ease infinite;
+    }
+    
+    body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        /* Subtle grid pattern */
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 50px 50px;
+        mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
+        pointer-events: none;
+    }
+    
+    @keyframes gradientShift {
+        0%, 100% {
+            background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%;
+        }
+        25% {
+            background-position: 30% 40%, 70% 60%, 60% 40%, 0% 0%;
+        }
+        50% {
+            background-position: 60% 30%, 40% 70%, 40% 60%, 0% 0%;
+        }
+        75% {
+            background-position: 40% 60%, 60% 40%, 50% 50%, 0% 0%;
+        }
     }
 }
 
@@ -64,5 +121,56 @@
 
     .markdown-text ul {
         @apply pl-5 mt-2 list-disc;
+    }
+    
+    /* Glassmorphism utility */
+    .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .glass-hover {
+        transition: all 0.3s ease;
+    }
+    
+    .glass-hover:hover {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 40px -10px hsl(var(--primary) / 0.3);
+    }
+    
+    /* Text glow effect */
+    .text-glow {
+        text-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    }
+    
+    .text-glow-secondary {
+        text-shadow: 0 0 20px hsl(var(--secondary) / 0.3);
+    }
+    
+    /* Smooth animations */
+    .smooth-transition {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Section divider */
+    .section-divider {
+        position: relative;
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+    }
+    
+    .section-divider::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5), transparent);
     }
 }

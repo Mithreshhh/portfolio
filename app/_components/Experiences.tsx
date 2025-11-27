@@ -78,9 +78,9 @@ const Experiences = () => {
 
                         return (
                             <div key={group.title} className="experience-item">
-                                <div className="flex items-center gap-3 mb-5">
-                                    <Icon className="text-primary" />
-                                    <p className="text-5xl md:text-6xl font-anton leading-none">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <Icon className="text-primary transition-transform hover:scale-110 hover:rotate-6 duration-300" />
+                                    <p className="text-5xl md:text-6xl font-anton leading-none hover:text-primary smooth-transition">
                                         {group.title}
                                     </p>
                                 </div>
@@ -88,7 +88,7 @@ const Experiences = () => {
                                 <div className="flex flex-wrap gap-3">
                                     {group.items.map((item: any) => {
                                         const content = typeof item === 'string' ? (
-                                            <span className="px-4 py-2 rounded-full border border-border/60 bg-background-light text-base md:text-lg text-foreground/90">
+                                            <span className="px-5 py-2.5 rounded-full glass glass-hover text-base md:text-lg text-foreground/90 cursor-default">
                                                 {item}
                                             </span>
                                         ) : (
@@ -96,7 +96,7 @@ const Experiences = () => {
                                                 href={item.url}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="px-4 py-2 rounded-full border border-border/60 bg-background-light text-base md:text-lg text-foreground/90 hover:border-primary/60 hover:text-primary"
+                                                className="px-5 py-2.5 rounded-full glass glass-hover text-base md:text-lg text-foreground/90 hover:text-primary hover:shadow-lg hover:shadow-primary/20"
                                             >
                                                 {item.label}
                                             </a>

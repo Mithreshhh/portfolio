@@ -7,9 +7,12 @@ import './globals.css';
 import Footer from '@/components/Footer';
 import ScrollProgressIndicator from '@/components/ScrollProgressIndicator';
 import ParticleBackground from '@/components/ParticleBackground';
+import ParticleConstellation from '@/components/ParticleConstellation';
 import Navbar from '@/components/Navbar';
 import Preloader from '../components/Preloader';
 import StickyEmail from './_components/StickyEmail';
+import InteractiveTerminal from '@/components/InteractiveTerminal';
+import DeveloperMode from '@/components/DeveloperMode';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 
@@ -76,7 +79,10 @@ export default function RootLayout({
                     <Preloader />
                     <ScrollProgressIndicator />
                     <ParticleBackground />
+                    <ParticleConstellation />
                     <StickyEmail />
+                    <InteractiveTerminal />
+                    <DeveloperMode />
                 </ReactLenis>
             </body>
         </html>

@@ -52,34 +52,34 @@ const AboutMe = () => {
     );
 
     return (
-        <section className="pb-20 md:pb-section" id="about-me">
+        <section className="pb-20 md:pb-section relative" id="about-me">
             <div className="container" ref={container}>
-                <h2 className="text-4xl md:text-6xl font-thin mb-20 slide-up-and-fade">
+                <h2 className="text-4xl md:text-6xl font-thin mb-20 slide-up-and-fade leading-relaxed hover:text-primary smooth-transition">
                     I believe in a user centered design approach, ensuring that
                     every project I work on is tailored to meet the specific
                     needs of its users.
                 </h2>
 
-                <p className="pb-3 border-b text-muted-foreground slide-up-and-fade">
+                <p className="pb-3 border-b border-border/50 text-muted-foreground slide-up-and-fade uppercase text-sm tracking-wider">
                     This is me.
                 </p>
 
-                <div className="grid md:grid-cols-12 mt-9">
+                <div className="grid md:grid-cols-12 mt-9 gap-8">
                     <div className="md:col-span-5">
-                        <p className="text-4xl xs:text-5xl slide-up-and-fade">
+                        <p className="text-4xl xs:text-5xl slide-up-and-fade font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                             Hi, I&apos;m Mithresh.
                         </p>
                     </div>
                     <div className="md:col-span-7">
-                        <div className="text-base md:text-lg text-muted-foreground md:max-w-[450px]">
-                            <p className="slide-up-and-fade">
+                        <div className="text-base md:text-lg text-muted-foreground md:max-w-[450px] space-y-4">
+                            <p className="slide-up-and-fade leading-relaxed hover:text-foreground/90 smooth-transition">
                                 I&apos;m a full stack developer turning ideas into
                                 reliable, scalable applications. I work across
                                 the stack to craft seamless, intuitive user
                                 experiences backed by robust APIs and data
                                 layers.
                             </p>
-                            <p className="mt-3 slide-up-and-fade">
+                            <p className="slide-up-and-fade leading-relaxed hover:text-foreground/90 smooth-transition">
                                 My approach focuses on creating scalable,
                                 high-performing solutions tailored to both user
                                 needs and business objectives. By prioritizing
@@ -87,16 +87,16 @@ const AboutMe = () => {
                                 I strive to deliver experiences that not only
                                 engage users but also drive tangible results.
                             </p>
-                            <p className="mt-3 slide-up-and-fade">
+                            <p className="slide-up-and-fade leading-relaxed hover:text-foreground/90 smooth-transition">
                                 I&apos;m currently learning Machine Learning and
                                 exploring ways to integrate ML/AI features into
                                 real-world projects — starting with data
                                 preprocessing, model training, and deployment
                                 pipelines.
                             </p>
-                            <p className="mt-3 slide-up-and-fade">
+                            <p className="slide-up-and-fade leading-relaxed glass rounded-lg px-4 py-3 border border-primary/20">
                                 Education: pursuing my degree at college with a
-                                current CGPA of <span className="text-foreground font-medium">8.8</span>.
+                                current CGPA of <span className="text-primary font-bold text-xl">8.8</span>
                             </p>
                         </div>
                     </div>

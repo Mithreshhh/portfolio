@@ -103,7 +103,7 @@ const Project = ({ index, project, selectedProject, onMouseEnter }: Props) => {
     return (
         <TransitionLink
             href={`/projects/${project.slug}`}
-            className="project-item group leading-none py-5 md:border-b first:!pt-0 last:pb-0 last:border-none md:group-hover/projects:opacity-30 md:hover:!opacity-100 transition-all"
+            className="project-item group leading-none py-5 md:border-b first:!pt-0 last:pb-0 last:border-none md:group-hover/projects:opacity-30 md:hover:!opacity-100 smooth-transition hover:scale-[1.01] rounded-lg md:px-4"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
@@ -128,7 +128,7 @@ const Project = ({ index, project, selectedProject, onMouseEnter }: Props) => {
                         {project.status && (
                             <span
                                 className={cn(
-                                    'text-xs uppercase tracking-wide rounded-full px-2 py-1 border',
+                                    'text-xs uppercase tracking-wide rounded-full px-3 py-1.5 glass glass-hover',
                                     {
                                         'border-green-500 text-green-400':
                                             project.status === 'live',

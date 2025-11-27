@@ -78,9 +78,9 @@ const Skills = () => {
 
                 <div className="space-y-20">
                     {Object.entries(MY_STACK).map(([key, value]) => (
-                        <div className="grid sm:grid-cols-12" key={key}>
+                        <div className="grid sm:grid-cols-12 gap-6" key={key}>
                             <div className="sm:col-span-5">
-                                <p className="slide-up text-5xl font-anton leading-none text-muted-foreground uppercase">
+                                <p className="slide-up text-5xl font-anton leading-none text-muted-foreground uppercase hover:text-primary smooth-transition">
                                     {key}
                                 </p>
                             </div>
@@ -88,19 +88,19 @@ const Skills = () => {
                             <div className="sm:col-span-7 flex gap-x-11 gap-y-9 flex-wrap">
                                 {value.map((item) => (
                                     <div
-                                        className="slide-up flex gap-3.5 items-center leading-none"
+                                        className="slide-up flex gap-3.5 items-center leading-none group cursor-pointer"
                                         key={item.name}
                                     >
-                                        <div className="inline-flex items-center justify-center size-12 rounded-full bg-background-light border border-border/60 overflow-hidden">
+                                        <div className="inline-flex items-center justify-center size-12 rounded-full glass glass-hover overflow-hidden group-hover:scale-110 smooth-transition">
                                             {item.icon ? (
                                                 <TechIcon src={item.icon} alt={item.name} />
                                             ) : (
-                                                <span className="inline-flex items-center justify-center size-12 rounded-full bg-background-light text-muted-foreground text-sm font-medium">
+                                                <span className="inline-flex items-center justify-center size-12 rounded-full text-muted-foreground text-sm font-medium">
                                                     {String(item.name).charAt(0)}
                                                 </span>
                                             )}
                                         </div>
-                                        <span className="text-2xl capitalize">
+                                        <span className="text-2xl capitalize group-hover:text-primary smooth-transition">
                                             {item.name}
                                         </span>
                                     </div>
