@@ -15,6 +15,9 @@ const Banner = () => {
     // move the content a little up on scroll
     useGSAP(
         () => {
+            // Ensure elements are visible initially
+            gsap.set('.slide-up-and-fade', { opacity: 1, y: 0, visibility: 'visible' });
+            
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: containerRef.current,
@@ -26,7 +29,7 @@ const Banner = () => {
 
             tl.fromTo(
                 '.slide-up-and-fade',
-                { y: 0 },
+                { y: 0, opacity: 1 },
                 { y: -150, opacity: 0, stagger: 0.02 },
             );
         },
@@ -41,11 +44,11 @@ const Banner = () => {
                 ref={containerRef}
             >
                 <div className="max-md:grow max-md:flex flex-col justify-center items-start max-w-[544px] relative z-10">
-                    <h1 className="banner-title slide-up-and-fade leading-[1.02] md:leading-[.95] text-5xl sm:text-[64px] md:text-[80px] font-anton text-foreground">
+                    <h1 className="banner-title slide-up-and-fade leading-[1.02] md:leading-[.95] text-5xl sm:text-[64px] md:text-[80px] font-anton text-foreground opacity-100" style={{ opacity: 1, color: 'inherit' }}>
                         <span className="text-primary" style={{ color: 'hsl(var(--primary))' }}>FULL STACK</span>
                         <br /> <span className="ml-4 text-foreground hover:text-primary smooth-transition" style={{ color: 'hsl(var(--foreground))' }}>DEVELOPER</span>
                     </h1>
-                    <p className="banner-description slide-up-and-fade mt-5 md:mt-6 text-base md:text-lg text-muted-foreground max-w-prose leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                    <p className="banner-description slide-up-and-fade mt-5 md:mt-6 text-base md:text-lg text-muted-foreground max-w-prose leading-relaxed opacity-100" style={{ opacity: 1, color: 'hsl(var(--muted-foreground))' }}>
                         Hi! I&apos;m{' '}
                         <span className="font-medium text-foreground bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                             Mithresh

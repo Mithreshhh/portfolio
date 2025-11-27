@@ -33,6 +33,9 @@ const Skills = () => {
 
             if (!slideUpEl?.length) return;
 
+            // Ensure elements are visible initially
+            gsap.set('.slide-up', { opacity: 1, y: 0, visibility: 'visible' });
+
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: containerRef.current,
@@ -42,12 +45,18 @@ const Skills = () => {
                 },
             });
 
-            tl.from('.slide-up', {
-                opacity: 0,
-                y: 40,
-                ease: 'none',
-                stagger: 0.4,
-            });
+            tl.fromTo('.slide-up', 
+                {
+                    opacity: 0,
+                    y: 40,
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    ease: 'none',
+                    stagger: 0.4,
+                }
+            );
         },
         { scope: containerRef },
     );

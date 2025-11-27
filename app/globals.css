@@ -173,4 +173,11 @@
         height: 2px;
         background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5), transparent);
     }
+    
+    /* Ensure animated elements are visible by default (fallback if JS fails) */
+    .slide-up-and-fade,
+    .slide-up {
+        opacity: 1;
+        visibility: visible;
+    }
 }
