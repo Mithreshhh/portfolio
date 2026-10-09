@@ -53,10 +53,10 @@ const Banner = () => {
                         <span className="font-medium text-foreground bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                             Mithresh
                         </span>
-                        . A full stack developer crafting scalable, responsive
-                        web applications. I&apos;m currently learning machine
-                        learning and looking forward to building
-                        ML/AI-powered features and projects.
+                        . A Computer Science undergraduate and full stack
+                        developer working with React, Next.js, Node.js, and
+                        REST APIs. Currently building production LMS
+                        infrastructure at an early-stage AI EdTech startup.
                     </p>
                     <Button
                         as="link"
@@ -74,7 +74,7 @@ const Banner = () => {
                             NOW
                         </h5>
                         <p className="text-foreground text-sm font-medium">
-                            SIH Project · VoltWorx · Freelance
+                            Full Stack Dev @ Menler
                         </p>
                     </div>
                     <div className="info-card rounded-2xl px-6 py-4 bg-background/90 backdrop-blur-md border-2 border-secondary/40 hover:border-secondary/70 hover:bg-background smooth-transition hover:scale-105 hover:shadow-2xl hover:shadow-secondary/30">

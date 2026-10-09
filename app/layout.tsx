@@ -31,8 +31,9 @@ const robotoFlex = Roboto_Flex({
 });
 
 export const metadata: Metadata = {
-    title: 'Portfolio - Mithresh',
-    description: 'Personal portfolio of Mithresh',
+    title: 'Mithresh Uttarwar - Full Stack Developer',
+    description:
+        'Portfolio of Mithresh Uttarwar, a Computer Science undergraduate and full stack developer working with React, Next.js, Node.js, and REST APIs.',
 };
 
 export default function RootLayout({

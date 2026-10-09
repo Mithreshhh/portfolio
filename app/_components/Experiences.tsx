@@ -67,6 +67,7 @@ const Experiences = () => {
                 <div className="grid gap-14">
                     {EXPERIENCE_GROUPS.map((group) => {
                         const map: Record<string, any> = {
+                            'Work Experience': Briefcase,
                             'Freelance / Client Work': Briefcase,
                             'College Projects': GraduationCap,
                             'Personal Projects': Rocket,

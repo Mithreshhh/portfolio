@@ -99,15 +99,17 @@ const AboutMe = () => {
                                 engage users but also drive tangible results.
                             </p>
                             <p className="slide-up-and-fade leading-relaxed hover:text-foreground/90 smooth-transition opacity-100" style={{ opacity: 1 }}>
-                                I&apos;m currently learning Machine Learning and
-                                exploring ways to integrate ML/AI features into
-                                real-world projects — starting with data
-                                preprocessing, model training, and deployment
-                                pipelines.
+                                I&apos;m currently a Full Stack Developer at
+                                Menler Learning Systems, building production LMS
+                                infrastructure at an early-stage AI EdTech
+                                startup — from an integrated PDF reader and
+                                Google Drive automation to assessment scoring.
                             </p>
                             <p className="slide-up-and-fade leading-relaxed glass rounded-lg px-4 py-3 border border-primary/20 opacity-100" style={{ opacity: 1 }}>
-                                Education: pursuing my degree at college with a
-                                current CGPA of <span className="text-primary font-bold text-xl">8.8</span>
+                                Education: B.Tech in Computer Science at Marri
+                                Laxman Reddy Institute of Technology and
+                                Management (2023 – 2027) with a CGPA of{' '}
+                                <span className="text-primary font-bold text-xl">8.66</span>
                             </p>
                         </div>
                     </div>

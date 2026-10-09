@@ -59,7 +59,7 @@ const Footer = async () => {
                 <div className="mt-8">
                     <Button
                         as="link"
-                        href="/mithreshhh resume.pdf"
+                        href={GENERAL_INFO.resume}
                         target="_blank"
                         download
                         variant="secondary"
