@@ -26,6 +26,10 @@ const MENU_LINKS = [
         url: '/#my-experience',
     },
     {
+        name: 'GitHub',
+        url: '/#github-activity',
+    },
+    {
         name: 'Projects',
         url: '/#selected-projects',
     },
