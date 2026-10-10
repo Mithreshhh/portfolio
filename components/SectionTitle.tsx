@@ -17,7 +17,7 @@ const SectionTitle = ({ icon, title, className, classNames }: Props) => {
     return (
         <div
             className={cn(
-                'flex items-center gap-4 mb-14 relative',
+                'flex items-center gap-4 mb-10 relative',
                 className,
                 classNames?.container,
             )}

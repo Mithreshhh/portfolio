@@ -39,7 +39,7 @@ const TimelineItem = ({ entry }: { entry: ExperienceEntry }) => {
 
             <article
                 className={cn(
-                    'relative mb-8 overflow-hidden rounded-2xl border bg-background-light/20 p-5 backdrop-blur-sm transition-colors sm:p-7',
+                    'relative mb-5 overflow-hidden rounded-2xl border bg-background-light/20 p-5 backdrop-blur-sm transition-colors sm:p-6',
                     current ? 'border-primary/40' : 'border-border/50 hover:border-border',
                 )}
             >
@@ -94,7 +94,7 @@ const TimelineItem = ({ entry }: { entry: ExperienceEntry }) => {
                     </p>
                 </header>
 
-                <ul className="relative mt-5 space-y-2.5">
+                <ul className="relative mt-4 space-y-2">
                     {entry.highlights.map((h, i) => (
                         <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-foreground/85">
                             <span
@@ -107,7 +107,7 @@ const TimelineItem = ({ entry }: { entry: ExperienceEntry }) => {
                 </ul>
 
                 {entry.stack.length > 0 && (
-                    <ul className="relative mt-5 flex flex-wrap gap-2">
+                    <ul className="relative mt-4 flex flex-wrap gap-2">
                         {entry.stack.map((s) => (
                             <li
                                 key={s}
@@ -123,6 +123,8 @@ const TimelineItem = ({ entry }: { entry: ExperienceEntry }) => {
     );
 };
 
+// One shared panel split by hairlines instead of three boxes: short columns no longer
+// sit inside a tall empty border.
 const InfoCard = ({
     icon: Icon,
     title,
@@ -134,20 +136,15 @@ const InfoCard = ({
     children: ReactNode;
     className?: string;
 }) => (
-    <article
-        className={cn(
-            'exp-card relative overflow-hidden rounded-2xl border border-border/50 bg-background-light/20 p-6 backdrop-blur-sm',
-            className,
-        )}
-    >
-        <header className="mb-5 flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                <Icon size={18} />
+    <div className={cn('exp-card relative p-5 sm:p-6', className)}>
+        <header className="mb-4 flex items-center gap-3">
+            <span className="grid size-9 place-items-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
+                <Icon size={17} />
             </span>
-            <h3 className="font-anton text-2xl uppercase leading-none tracking-wide">{title}</h3>
+            <h3 className="font-anton text-xl uppercase leading-none tracking-wide sm:text-2xl">{title}</h3>
         </header>
         {children}
-    </article>
+    </div>
 );
 
 const Experiences = () => {
@@ -195,7 +192,7 @@ const Experiences = () => {
     );
 
     return (
-        <section className="py-20 md:py-section" id="my-experience">
+        <section className="py-16 md:py-section" id="my-experience">
             <div className="container" ref={containerRef}>
                 <SectionTitle title="My Experience" />
 
@@ -203,7 +200,7 @@ const Experiences = () => {
                     {/* Rail: sits behind the dots, drawn by scroll. */}
                     <div
                         aria-hidden="true"
-                        className="exp-rail absolute bottom-8 left-[7px] top-7 w-0.5 origin-top bg-gradient-to-b from-primary via-secondary/70 to-border sm:left-[11px]"
+                        className="exp-rail absolute bottom-5 left-[7px] top-7 w-0.5 origin-top bg-gradient-to-b from-primary via-secondary/70 to-border sm:left-[11px]"
                     />
                     <ol ref={timelineRef} className="relative" aria-label="Work experience">
                         {EXPERIENCE.map((entry) => (
@@ -212,9 +209,10 @@ const Experiences = () => {
                     </ol>
                 </div>
 
-                <div className="exp-cards mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="exp-cards mt-3 grid grid-cols-1 gap-0 divide-y divide-border/50 overflow-hidden rounded-2xl border border-border/50 bg-background-light/20 backdrop-blur-sm sm:grid-cols-2 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
                     <InfoCard icon={GraduationCap} title="Education" className="sm:col-span-2 lg:col-span-1">
-                        <ol className="space-y-4">
+                        {/* Three-up when the column spans the row on tablets; stacked otherwise. */}
+                        <ol className="space-y-3 sm:grid sm:grid-cols-3 sm:gap-x-6 sm:space-y-0 lg:grid-cols-1 lg:gap-y-3">
                             {EDUCATION.map((e) => (
                                 <li key={e.degree} className="flex items-start justify-between gap-3">
                                     <div className="min-w-0">
@@ -230,8 +228,8 @@ const Experiences = () => {
                         </ol>
                     </InfoCard>
 
-                    <InfoCard icon={Trophy} title="Achievements">
-                        <ul className="space-y-3.5">
+                    <InfoCard icon={Trophy} title="Achievements" className="sm:border-r sm:border-border/50 lg:border-r-0">
+                        <ul className="space-y-3">
                             {ACHIEVEMENTS.map((a) => (
                                 <li key={a.title} className="flex gap-3">
                                     <span
@@ -248,7 +246,7 @@ const Experiences = () => {
                     </InfoCard>
 
                     <InfoCard icon={Briefcase} title="Also">
-                        <ul className="space-y-3.5">
+                        <ul className="space-y-3">
                             {OTHER_WORK.map((o) => (
                                 <li key={o.title} className="flex gap-3">
                                     <span
@@ -262,7 +260,7 @@ const Experiences = () => {
                                 </li>
                             ))}
                         </ul>
-                        <p className="mt-5 text-sm text-muted-foreground">
+                        <p className="mt-4 text-sm text-muted-foreground">
                             Open to internships and freelance work —{' '}
                             <Link href="/hire-me" className="text-primary underline-offset-4 hover:underline">
                                 let&apos;s talk

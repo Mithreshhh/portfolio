@@ -28,7 +28,7 @@ const GithubActivity = async () => {
     const github = SOCIAL_LINKS.find((l) => l.name === 'github')?.url ?? `https://github.com/${GITHUB_USER}`;
 
     return (
-        <section className="py-20 md:py-section" id="github-activity">
+        <section className="py-16 md:py-section" id="github-activity">
             <div className="container">
                 <SectionTitle title="GitHub Activity" />
 

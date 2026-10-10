@@ -63,9 +63,9 @@ const AboutMe = () => {
     );
 
     return (
-        <section className="pb-20 md:pb-section relative" id="about-me">
+        <section className="pb-16 md:pb-section relative" id="about-me">
             <div className="container" ref={container}>
-                <h2 className="text-4xl md:text-6xl font-thin mb-20 slide-up-and-fade leading-relaxed hover:text-primary smooth-transition opacity-100" style={{ opacity: 1 }}>
+                <h2 className="text-3xl md:text-5xl font-thin mb-10 max-w-[900px] slide-up-and-fade leading-snug md:leading-snug hover:text-primary smooth-transition opacity-100" style={{ opacity: 1 }}>
                     I believe in a user centered design approach, ensuring that
                     every project I work on is tailored to meet the specific
                     needs of its users.
@@ -75,14 +75,14 @@ const AboutMe = () => {
                     This is me.
                 </p>
 
-                <div className="grid md:grid-cols-12 mt-9 gap-8">
+                <div className="grid md:grid-cols-12 mt-6 gap-6 md:gap-8">
                     <div className="md:col-span-5">
-                        <p className="text-4xl xs:text-5xl slide-up-and-fade font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent opacity-100" style={{ opacity: 1 }}>
+                        <p className="text-3xl xs:text-4xl slide-up-and-fade font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent opacity-100" style={{ opacity: 1 }}>
                             Hi, I&apos;m Mithresh.
                         </p>
                     </div>
                     <div className="md:col-span-7">
-                        <div className="text-base md:text-lg text-muted-foreground md:max-w-[450px] space-y-4">
+                        <div className="text-base md:text-lg text-muted-foreground md:max-w-[480px] space-y-4">
                             <p className="slide-up-and-fade leading-relaxed hover:text-foreground/90 smooth-transition opacity-100" style={{ opacity: 1 }}>
                                 I&apos;m a full stack developer turning ideas into
                                 reliable, scalable applications. I work across

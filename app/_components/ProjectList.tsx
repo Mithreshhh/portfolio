@@ -19,16 +19,29 @@ const STATUS_LABEL: Record<NonNullable<IProject['status']>, string> = {
     private: 'Private',
 };
 
-const ProjectCard = ({ project, index, featured }: { project: IProject; index: number; featured: boolean }) => {
+const ProjectCard = ({
+    project,
+    index,
+    featured,
+    orphan,
+}: {
+    project: IProject;
+    index: number;
+    featured: boolean;
+    /** Last card of an odd remainder: goes full-width (row layout) on md so the grid has no hole. */
+    orphan: boolean;
+}) => {
     const image = (project.images && project.images[0]) || project.thumbnail;
     const href = `/projects/${project.slug}`;
     const live = project.status === 'live';
+    const row = featured || orphan;
 
     return (
         <article
             className={cn(
                 'project-card group relative flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-background-light/20 backdrop-blur-sm transition-[border-color,box-shadow] duration-300 hover:border-foreground/40 hover:shadow-[0_24px_60px_-30px_hsl(var(--foreground)/0.25)]',
-                featured && 'md:col-span-2 md:flex-row',
+                featured && 'md:col-span-2 md:flex-row lg:col-span-3',
+                orphan && 'md:col-span-2 md:flex-row lg:col-span-1 lg:flex-col',
             )}
         >
             {/* Screenshot: greyscale at rest, colour on hover. */}
@@ -37,7 +50,9 @@ const ProjectCard = ({ project, index, featured }: { project: IProject; index: n
                 aria-label={`${project.title} case study`}
                 className={cn(
                     'relative block shrink-0 overflow-hidden bg-background',
-                    featured ? 'aspect-[16/10] md:aspect-auto md:w-[56%]' : 'aspect-[16/10]',
+                    row ? 'aspect-[16/10] md:aspect-auto md:w-[56%]' : 'aspect-[16/10]',
+                    orphan && 'lg:aspect-[16/10] lg:w-auto',
+                    featured && 'md:min-h-[360px]',
                 )}
             >
                 <Image
@@ -50,7 +65,7 @@ const ProjectCard = ({ project, index, featured }: { project: IProject; index: n
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
             </TransitionLink>
 
-            <div className="flex flex-1 flex-col p-5 sm:p-6 md:p-7">
+            <div className={cn('flex flex-1 flex-col p-5 sm:p-6', featured && 'md:p-7')}>
                 <div className="flex items-center justify-between gap-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                     <span className="tabular-nums">
                         {String(index + 1).padStart(2, '0')} · {project.year}
@@ -71,7 +86,7 @@ const ProjectCard = ({ project, index, featured }: { project: IProject; index: n
                 <h3
                     className={cn(
                         'mt-3 font-anton uppercase leading-none tracking-wide',
-                        featured ? 'text-4xl sm:text-5xl' : 'text-3xl sm:text-4xl',
+                        featured ? 'text-4xl sm:text-5xl' : 'text-3xl',
                     )}
                 >
                     <TransitionLink href={href} className="transition-colors hover:text-foreground/80">
@@ -80,11 +95,11 @@ const ProjectCard = ({ project, index, featured }: { project: IProject; index: n
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground">{project.role}</p>
 
-                <p className={cn('mt-4 leading-relaxed text-foreground/85', featured ? 'text-[15px] md:text-base' : 'text-[15px]')}>
+                <p className={cn('mt-3 leading-relaxed text-foreground/85', featured ? 'text-[15px] md:text-base' : 'text-sm')}>
                     {project.description}
                 </p>
 
-                <ul className="mt-4 flex flex-wrap gap-2">
+                <ul className="mt-3 flex flex-wrap gap-1.5">
                     {project.techStack.map((tech) => (
                         <li
                             key={tech}
@@ -95,7 +110,7 @@ const ProjectCard = ({ project, index, featured }: { project: IProject; index: n
                     ))}
                 </ul>
 
-                <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6 text-sm">
+                <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5 text-sm">
                     {project.liveUrl && (
                         <a
                             href={project.liveUrl}
@@ -155,11 +170,11 @@ const ProjectList = () => {
     );
 
     return (
-        <section className="py-20 md:py-section" id="selected-projects">
+        <section className="py-16 md:py-section" id="selected-projects">
             <div className="container" ref={containerRef}>
                 <SectionTitle title="Featured Work" />
 
-                <div className="mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+                <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
                     <p className="max-w-[560px] text-base text-muted-foreground md:text-lg">
                         Things I&apos;ve shipped — {liveCount} of {PROJECTS.length} are live right now. Click through for
                         the full story on each.
@@ -176,9 +191,16 @@ const ProjectList = () => {
                     </a>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {/* First project is the hero card; the rest sit three-up on desktop, two-up on tablets. */}
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                     {PROJECTS.map((project, i) => (
-                        <ProjectCard key={project.slug} project={project} index={i} featured={i === 0} />
+                        <ProjectCard
+                            key={project.slug}
+                            project={project}
+                            index={i}
+                            featured={i === 0}
+                            orphan={i === PROJECTS.length - 1 && (PROJECTS.length - 1) % 2 === 1}
+                        />
                     ))}
                 </div>
             </div>

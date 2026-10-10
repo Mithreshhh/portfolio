@@ -33,7 +33,7 @@ const Footer = async () => {
                     {GENERAL_INFO.email}
                 </a>
 
-                <ul className="flex items-center justify-center gap-5 mt-8">
+                <ul className="flex items-center justify-center gap-5 mt-6">
                     {socialLinks.map((link) => {
                         const Icon = iconFor(link.name);
                         return (
@@ -56,7 +56,7 @@ const Footer = async () => {
                     })}
                 </ul>
 
-                <div className="mt-8">
+                <div className="mt-6">
                     <Button
                         as="link"
                         href={GENERAL_INFO.resume}
@@ -70,7 +70,7 @@ const Footer = async () => {
                     </Button>
                 </div>
 
-                <div className="mt-10 h-px w-full bg-border/40" />
+                <div className="mt-8 h-px w-full bg-border/40" />
 
                 <div className="pt-5 text-sm text-muted-foreground flex items-center justify-center gap-2 flex-wrap">
                     <span>© {new Date().getFullYear()} Mithresh</span>

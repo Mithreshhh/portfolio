@@ -65,7 +65,7 @@ export default {
                 'roboto-flex': ['var(--font-roboto-flex)'],
             },
             padding: {
-                section: '140px',
+                section: '96px',
             },
             container: {
                 center: true,
