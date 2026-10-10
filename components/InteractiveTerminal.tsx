@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { X, Minimize2, Maximize2, Terminal as TerminalIcon, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PROJECTS, MY_STACK } from '@/lib/data';
+import { useScrolledPast } from '@/lib/useScrolledPast';
 import MatrixRain from './MatrixRain';
 
 interface Command {
@@ -22,6 +23,8 @@ export default function InteractiveTerminal() {
   const [isTyping, setIsTyping] = useState(false);
   const [matrixActive, setMatrixActive] = useState(false);
   const [konamiUnlocked, setKonamiUnlocked] = useState(false);
+  // Keep the launcher out of the hero; it appears once the visitor starts reading.
+  const scrolled = useScrolledPast();
   const inputRef = useRef<HTMLInputElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout>();
@@ -318,7 +321,12 @@ export default function InteractiveTerminal() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 z-50 size-14 rounded-full bg-gradient-to-r from-primary to-secondary hover:scale-110 smooth-transition shadow-2xl shadow-primary/50 flex items-center justify-center group animate-in fade-in slide-in-from-left-4 duration-500"
+        className={cn(
+          'fixed bottom-6 left-6 z-50 size-14 rounded-full bg-gradient-to-r from-primary to-secondary hover:scale-110 shadow-2xl shadow-primary/50 flex items-center justify-center group transition-[opacity,transform] duration-500',
+          scrolled ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-4',
+        )}
+        tabIndex={scrolled ? 0 : -1}
+        aria-hidden={!scrolled}
         title="Open Terminal"
       >
         <TerminalIcon className="size-6 text-white group-hover:animate-pulse transition-transform group-hover:rotate-12" />

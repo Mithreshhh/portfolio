@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Music, Volume2, VolumeX, Minimize2, Radio } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useScrolledPast } from '@/lib/useScrolledPast';
 
 interface MusicVisualizerProps {
   youtubeVideoId: string;
@@ -19,6 +20,8 @@ export default function MusicVisualizer({
   const [isMuted, setIsMuted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [bars, setBars] = useState<number[]>(Array(20).fill(0));
+  // Hidden while the hero is on screen so it doesn't compete with the real CTAs.
+  const scrolled = useScrolledPast();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -112,9 +115,16 @@ export default function MusicVisualizer({
 
       {/* Main player button */}
       {!isExpanded && (
-        <div className="fixed bottom-8 right-8 z-50 group">
+        <div
+          className={cn(
+            'fixed bottom-8 right-8 z-50 group transition-[opacity,transform] duration-500',
+            scrolled || isPlaying ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-4',
+          )}
+          aria-hidden={!(scrolled || isPlaying)}
+        >
           <button
             onClick={() => setIsPlaying(!isPlaying)}
+            tabIndex={scrolled || isPlaying ? 0 : -1}
             className="relative w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center hover:scale-110"
           >
             {isPlaying && (

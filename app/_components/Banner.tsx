@@ -16,7 +16,11 @@ const HeroScene = dynamic(() => import('@/components/HeroScene'), { ssr: false }
 
 const Banner = ({ contributionsLastYear }: { contributionsLastYear?: number }) => {
     const containerRef = React.useRef<HTMLDivElement>(null);
-    const liveCount = PROJECTS.filter((p) => p.status === 'live').length;
+    const liveProjects = PROJECTS.filter((p) => p.status === 'live');
+    const liveCount = liveProjects.length;
+
+    // The scene is a map, not a decoration: one orbiting satellite per product that is live today.
+    const satellites = liveProjects.map((p) => ({ label: p.title, sub: 'live', href: `/projects/${p.slug}` }));
 
     // Proof strip: hard facts a visitor can verify, not adjectives.
     const proof: { label: string; value: string; href?: string; live?: boolean }[] = [
@@ -58,9 +62,20 @@ const Banner = ({ contributionsLastYear }: { contributionsLastYear?: number }) =
 
     return (
         <section className="relative overflow-hidden bg-gradient-to-b from-black via-black/60 to-transparent" id="banner">
-            {/* 3D scene: right half on desktop, full-bleed and dimmed on phones. */}
+            {/* 3D scene: right half on desktop, full-bleed and dimmed on phones. Only the labels take pointer events. */}
             <div className="pointer-events-none absolute inset-0 md:left-auto md:w-[58%]">
-                <HeroScene className="absolute inset-0 opacity-35 md:opacity-100 [mask-image:radial-gradient(ellipse_70%_75%_at_60%_50%,black_45%,transparent_100%)]" />
+                <HeroScene
+                    satellites={satellites}
+                    className="absolute inset-0"
+                    canvasClassName="absolute inset-0 opacity-35 md:opacity-100 [mask-image:radial-gradient(ellipse_70%_75%_at_60%_50%,black_45%,transparent_100%)]"
+                />
+                {liveCount > 0 && (
+                    <p className="absolute bottom-10 right-6 hidden max-w-[220px] text-right text-[11px] uppercase leading-relaxed tracking-[0.22em] text-muted-foreground md:block lg:right-10">
+                        In orbit: {liveCount} live {liveCount === 1 ? 'product' : 'products'}.
+                        <br />
+                        Click one to see how it was built.
+                    </p>
+                )}
             </div>
 
             <div

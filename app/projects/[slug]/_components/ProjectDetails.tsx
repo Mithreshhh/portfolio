@@ -1,12 +1,13 @@
 'use client';
 import parse from 'html-react-parser';
-import ArrowAnimation from '@/components/ArrowAnimation';
 import TransitionLink from '@/components/TransitionLink';
+import { PROJECTS } from '@/lib/data';
+import { cn } from '@/lib/utils';
 import { IProject } from '@/types';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink, Github, Globe } from 'lucide-react';
 import { useRef } from 'react';
 import Image from 'next/image';
 
@@ -16,8 +17,17 @@ interface Props {
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+const STATUS_LABEL: Record<NonNullable<IProject['status']>, string> = {
+    live: 'Live',
+    'in-progress': 'In development',
+    private: 'Private',
+};
+
 const ProjectDetails = ({ project }: Props) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const index = PROJECTS.findIndex((p) => p.slug === project.slug);
+    const next = PROJECTS[(index + 1) % PROJECTS.length];
+    const live = project.status === 'live';
 
     useGSAP(
         () => {
@@ -40,47 +50,18 @@ const ProjectDetails = ({ project }: Props) => {
         { scope: containerRef },
     );
 
-    // blur info div and make it smaller on scroll
+    // Screenshots rise in as they enter the viewport.
     useGSAP(
         () => {
-            if (window.innerWidth < 992) return;
-
-            gsap.to('#info', {
-                filter: 'blur(3px)',
-                autoAlpha: 0,
-                scale: 0.9,
-                // position: 'sticky',
-                scrollTrigger: {
-                    trigger: '#info',
-                    start: 'bottom bottom',
-                    end: 'bottom top',
-                    pin: true,
-                    pinSpacing: false,
-                    scrub: 0.5,
-                },
-            });
-        },
-        { scope: containerRef },
-    );
-
-    // parallax effect on images
-    useGSAP(
-        () => {
-            gsap.utils
-                .toArray<HTMLDivElement>('#images > div')
-                .forEach((imageDiv, i) => {
-                    gsap.to(imageDiv, {
-                        backgroundPosition: `center 0%`,
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: imageDiv,
-                            start: () => (i ? 'top bottom' : 'top 50%'),
-                            end: 'bottom top',
-                            scrub: true,
-                            // invalidateOnRefresh: true, // to make it responsive
-                        },
-                    });
+            gsap.utils.toArray<HTMLDivElement>('#images > div').forEach((imageDiv) => {
+                gsap.from(imageDiv, {
+                    y: 40,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    scrollTrigger: { trigger: imageDiv, start: 'top 90%', once: true },
                 });
+            });
         },
         { scope: containerRef },
     );
@@ -91,49 +72,64 @@ const ProjectDetails = ({ project }: Props) => {
                 <TransitionLink
                     back
                     href="/"
-                    className="mb-16 inline-flex gap-2 items-center group h-12"
+                    className="mb-8 inline-flex gap-2 items-center group h-12"
                 >
                     <ArrowLeft className="group-hover:-translate-x-1 group-hover:text-primary transition-all duration-300" />
                     Back
                 </TransitionLink>
 
-                <div
-                    className="top-0 min-h-[calc(100svh-100px)] flex"
-                    id="info"
-                >
+                <div className="flex" id="info">
                     <div className="relative w-full">
-                        <div className="flex items-start gap-6 mx-auto mb-10 max-w-[635px]">
-                            <h1 className="fade-in-later opacity-0 text-4xl md:text-[60px] leading-none font-anton overflow-hidden">
-                                <span className="inline-block">
-                                    {project.title}
+                        <div className="mx-auto mb-8 max-w-[635px]">
+                            <p className="fade-in-later flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                                <span className="tabular-nums">
+                                    {String(index + 1).padStart(2, '0')} / {String(PROJECTS.length).padStart(2, '0')} · {project.year}
                                 </span>
+                                {project.status && (
+                                    <span
+                                        className={cn(
+                                            'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 tracking-[0.16em]',
+                                            live ? 'border-foreground/60 text-foreground' : 'border-border text-muted-foreground',
+                                        )}
+                                    >
+                                        {live && <span className="size-1.5 rounded-full bg-foreground motion-safe:animate-pulse" />}
+                                        {STATUS_LABEL[project.status]}
+                                    </span>
+                                )}
+                            </p>
+                            <h1 className="fade-in-later mt-4 font-anton text-4xl uppercase leading-none tracking-wide md:text-[60px]">
+                                {project.title}
                             </h1>
 
-                            <div className="fade-in-later opacity-0 flex gap-2">
-                                {project.sourceCode && (
-                                    <a
-                                        href={project.sourceCode}
-                                        target="_blank"
-                                        rel="noreferrer noopener"
-                                        className="hover:text-primary"
-                                    >
-                                        <Github size={30} />
-                                    </a>
-                                )}
+                            <div className="fade-in-later mt-6 flex flex-wrap items-center gap-3">
                                 {project.liveUrl && (
                                     <a
                                         href={project.liveUrl}
                                         target="_blank"
                                         rel="noreferrer noopener"
-                                        className="hover:text-primary"
+                                        className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
                                     >
-                                        <ExternalLink size={30} />
+                                        <Globe size={15} aria-hidden="true" />
+                                        Open live site
+                                        <ArrowUpRight size={13} aria-hidden="true" />
+                                    </a>
+                                )}
+                                {project.sourceCode && (
+                                    <a
+                                        href={project.sourceCode}
+                                        target="_blank"
+                                        rel="noreferrer noopener"
+                                        className="inline-flex h-10 items-center gap-2 rounded-md border border-foreground/40 px-4 text-sm font-medium transition-colors hover:border-foreground hover:bg-foreground/10"
+                                    >
+                                        <Github size={15} aria-hidden="true" />
+                                        Source
+                                        <ArrowUpRight size={13} aria-hidden="true" />
                                     </a>
                                 )}
                             </div>
                         </div>
 
-                        <div className="max-w-[635px] space-y-7 pb-20 mx-auto">
+                        <div className="max-w-[635px] space-y-6 pb-12 mx-auto">
                             <div className="fade-in-later">
                                 <p className="text-muted-foreground font-anton mb-3">
                                     Year
@@ -171,12 +167,10 @@ const ProjectDetails = ({ project }: Props) => {
                                 </div>
                             )}
                         </div>
-
-                        <ArrowAnimation />
                     </div>
                 </div>
 
-                <div className="fade-in-later grid gap-3 max-w-[1000px] mx-auto" id="images">
+                <div className="grid gap-3 max-w-[1000px] mx-auto" id="images">
                     {(project.images?.length ? project.images : [project.thumbnail]).map(
                         (image, idx) => (
                             <div
@@ -205,6 +199,20 @@ const ProjectDetails = ({ project }: Props) => {
                         ),
                     )}
                 </div>
+
+                {/* Keep the visitor moving through the work instead of bouncing back to the top. */}
+                {next && next.slug !== project.slug && (
+                    <div className="mx-auto mt-14 max-w-[1000px] border-t border-border/50 pt-8">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Next project</p>
+                        <TransitionLink
+                            href={`/projects/${next.slug}`}
+                            className="group mt-2 inline-flex items-center gap-3 font-anton text-3xl uppercase leading-none tracking-wide hover:text-foreground/80 sm:text-4xl"
+                        >
+                            {next.title}
+                            <ArrowRight size={26} aria-hidden="true" className="transition-transform group-hover:translate-x-1" />
+                        </TransitionLink>
+                    </div>
+                )}
             </div>
         </section>
     );

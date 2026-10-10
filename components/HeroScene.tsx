@@ -1,18 +1,40 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import TransitionLink from '@/components/TransitionLink';
+
+export interface Satellite {
+    /** Shown next to the satellite. */
+    label: string;
+    /** Small muted suffix, e.g. "live". */
+    sub?: string;
+    /** Where clicking the label goes. */
+    href: string;
+}
 
 /**
- * Hero backdrop: a wireframe planet with node points, two thin orbit rings
- * carrying satellites, and a star field — all white on black. Slow rotation,
- * mouse parallax, pauses when off-screen or the tab is hidden, and renders a
- * single static frame under prefers-reduced-motion.
+ * Hero scene: a wireframe planet (the work in progress) with one orbiting
+ * satellite per shipped product. Each satellite carries a clickable label that
+ * tracks its projected position and dims while it passes behind the planet.
+ * White on black. Slow rotation, mouse parallax, pauses when off-screen or the
+ * tab is hidden, and renders a single static frame under prefers-reduced-motion.
  *
  * Imported with next/dynamic (ssr: false) so three.js stays out of the
  * initial bundle.
  */
-const HeroScene = ({ className }: { className?: string }) => {
+const HeroScene = ({
+    className,
+    canvasClassName,
+    satellites = [],
+}: {
+    /** Wrapper: positions the scene and its labels. */
+    className?: string;
+    /** Canvas host only: masks and opacity go here so the labels stay crisp. */
+    canvasClassName?: string;
+    satellites?: Satellite[];
+}) => {
     const mountRef = useRef<HTMLDivElement>(null);
+    const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
         const mount = mountRef.current;
@@ -26,13 +48,16 @@ const HeroScene = ({ className }: { className?: string }) => {
         // The canvas must be sized in CSS pixels regardless of device pixel ratio;
         // the drawing buffer is scaled separately by setPixelRatio/setSize.
         Object.assign(renderer.domElement.style, { display: 'block', width: '100%', height: '100%' });
-        mount.appendChild(renderer.domElement);
+        renderer.domElement.setAttribute('aria-hidden', 'true');
+        const host = mount.firstElementChild as HTMLElement;
+        host.appendChild(renderer.domElement);
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
         camera.position.set(0, 0.2, 7.2);
 
         const WHITE = 0xffffff;
+        const PLANET_R = 1.7;
         const world = new THREE.Group();
         scene.add(world);
 
@@ -40,7 +65,7 @@ const HeroScene = ({ className }: { className?: string }) => {
         const planet = new THREE.Group();
         world.add(planet);
 
-        const shellGeo = new THREE.IcosahedronGeometry(1.7, 2);
+        const shellGeo = new THREE.IcosahedronGeometry(PLANET_R, 2);
         const shell = new THREE.Mesh(
             shellGeo,
             new THREE.MeshBasicMaterial({ color: WHITE, wireframe: true, transparent: true, opacity: 0.22 }),
@@ -49,7 +74,7 @@ const HeroScene = ({ className }: { className?: string }) => {
 
         // Opaque core hides the far side of the wireframe so it reads as a solid body.
         const core = new THREE.Mesh(
-            new THREE.SphereGeometry(1.66, 48, 48),
+            new THREE.SphereGeometry(PLANET_R - 0.04, 48, 48),
             new THREE.MeshBasicMaterial({ color: 0x050505 }),
         );
         planet.add(core);
@@ -63,28 +88,34 @@ const HeroScene = ({ className }: { className?: string }) => {
 
         // Fresnel-style rim: a slightly larger back-facing sphere, additive.
         const rim = new THREE.Mesh(
-            new THREE.SphereGeometry(1.74, 48, 48),
+            new THREE.SphereGeometry(PLANET_R + 0.04, 48, 48),
             new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.06, side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false }),
         );
         planet.add(rim);
 
-        // --- Rings and satellites -------------------------------------------------
-        const ringMat = new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.45 });
+        // --- Orbits: one per satellite ----------------------------------------------
+        const ringMat = new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.4 });
+        const satMat = new THREE.MeshBasicMaterial({ color: WHITE });
+        const haloMat = new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false });
         const makeRing = (radius: number, tiltX: number, tiltZ: number) => {
             const g = new THREE.Group();
             g.rotation.set(tiltX, 0, tiltZ);
             g.add(new THREE.Mesh(new THREE.TorusGeometry(radius, 0.0075, 6, 240), ringMat));
-            const sat = new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 12), new THREE.MeshBasicMaterial({ color: WHITE }));
-            const halo = new THREE.Mesh(
-                new THREE.SphereGeometry(0.13, 12, 12),
-                new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false }),
-            );
-            sat.add(halo);
+            const sat = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), satMat);
+            sat.add(new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 12), haloMat));
             g.add(sat);
             world.add(g);
             return { group: g, sat, radius };
         };
-        const rings = [makeRing(2.55, 1.25, 0.35), makeRing(3.05, 1.05, -0.7)];
+        // Tilts are spread so the orbits read as a system rather than a stack.
+        const ORBITS = [
+            { r: 2.5, tx: 1.25, tz: 0.35, spin: 0.08, speed: 0.42 },
+            { r: 3.0, tx: 1.05, tz: -0.7, spin: -0.05, speed: -0.3 },
+            { r: 3.45, tx: 1.4, tz: 1.1, spin: 0.035, speed: 0.24 },
+            { r: 3.9, tx: 0.9, tz: -1.6, spin: -0.03, speed: -0.19 },
+        ];
+        const count = Math.max(1, Math.min(satellites.length || 2, ORBITS.length));
+        const rings = ORBITS.slice(0, count).map((o) => ({ ...makeRing(o.r, o.tx, o.tz), ...o }));
 
         // --- Stars ---------------------------------------------------------------
         const STAR_COUNT = 1800;
@@ -113,18 +144,52 @@ const HeroScene = ({ className }: { className?: string }) => {
         };
         window.addEventListener('pointermove', onPointerMove, { passive: true });
 
+        let W = 1;
+        let H = 1;
         const resize = () => {
-            const w = mount.clientWidth || 1;
-            const h = mount.clientHeight || 1;
-            renderer.setSize(w, h);
-            camera.aspect = w / h;
+            W = mount.clientWidth || 1;
+            H = mount.clientHeight || 1;
+            renderer.setSize(W, H);
+            camera.aspect = W / H;
             // Keep the planet a similar on-screen size on very wide or very tall panels.
-            camera.position.z = w / h > 1.5 ? 7.2 : w / h < 0.8 ? 9.5 : 8.2;
+            camera.position.z = W / H > 1.5 ? 7.4 : W / H < 0.8 ? 9.8 : 8.4;
             camera.updateProjectionMatrix();
         };
         resize();
         const ro = new ResizeObserver(resize);
         ro.observe(mount);
+
+        // Scratch vectors for label placement.
+        const v = new THREE.Vector3();
+        const c = new THREE.Vector3();
+        const placeLabels = () => {
+            planet.getWorldPosition(c);
+            const centerDist = c.distanceTo(camera.position);
+            // Planet radius in screen px, from a point on the edge of its disk.
+            v.copy(c).add(new THREE.Vector3(PLANET_R * world.scale.x, 0, 0)).project(camera);
+            c.project(camera);
+            const planetPx = Math.abs(v.x - c.x) * 0.5 * W;
+
+            rings.forEach(({ sat }, i) => {
+                const el = labelRefs.current[i];
+                if (!el) return;
+                sat.getWorldPosition(v);
+                const behind = v.distanceTo(camera.position) > centerDist;
+                v.project(camera);
+                const x = (v.x + 1) * 0.5 * W;
+                const y = (1 - v.y) * 0.5 * H;
+                const dx = (v.x - c.x) * 0.5 * W;
+                const dy = (v.y - c.y) * 0.5 * H;
+                const offscreen = x < 0 || x > W || y < 0 || y > H;
+                const occluded = offscreen || (behind && Math.hypot(dx, dy) < planetPx + 6);
+                // Flip the label to the left when the satellite is on the right half.
+                const left = x > W * 0.58;
+                el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(${left ? '-100%' : '0'}, -50%)`;
+                el.style.opacity = occluded ? '0' : '1';
+                el.style.pointerEvents = occluded ? 'none' : 'auto';
+                el.dataset.side = left ? 'left' : 'right';
+            });
+        };
 
         let raf = 0;
         let visible = true;
@@ -154,13 +219,15 @@ const HeroScene = ({ className }: { className?: string }) => {
             stars.rotation.y = t * 0.012;
             stars.rotation.x = t * 0.004;
 
-            rings.forEach(({ group, sat, radius }, i) => {
-                group.rotation.y = t * (i === 0 ? 0.08 : -0.05);
-                const a = t * (i === 0 ? 0.5 : -0.34) + i * 2.1;
+            rings.forEach(({ group, sat, radius, spin, speed }, i) => {
+                group.rotation.y = t * spin;
+                const a = t * speed + i * 2.1;
                 sat.position.set(Math.cos(a) * radius, Math.sin(a) * radius, 0);
             });
 
+            world.updateMatrixWorld();
             renderer.render(scene, camera);
+            placeLabels();
             if (!reduced && visible && !hidden) raf = requestAnimationFrame(frame);
         };
         const kick = () => {
@@ -201,11 +268,38 @@ const HeroScene = ({ className }: { className?: string }) => {
                 }
             });
             renderer.dispose();
-            if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement);
+            if (renderer.domElement.parentNode === host) host.removeChild(renderer.domElement);
         };
-    }, []);
+        // Satellites are static site data; re-running the scene on identity changes is wasteful.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [satellites.length]);
 
-    return <div ref={mountRef} aria-hidden="true" className={className} />;
+    return (
+        <div ref={mountRef} className={className}>
+            {/* Canvas host: must stay the first child (the effect appends the canvas here). */}
+            <div className={canvasClassName ?? 'absolute inset-0'} aria-hidden="true" />
+            {/* Labels ride their satellites; the wrapper is positioned per frame, the link inside stays a plain link. */}
+            {satellites.map((s, i) => (
+                <div
+                    key={s.href}
+                    ref={(el) => {
+                        labelRefs.current[i] = el;
+                    }}
+                    className="group absolute left-0 top-0 hidden opacity-0 transition-opacity duration-300 will-change-transform md:block"
+                >
+                    <TransitionLink
+                        href={s.href}
+                        className="flex items-center gap-2 whitespace-nowrap rounded-full border border-border/70 bg-background/70 py-1 pl-2 pr-3 text-xs text-foreground/90 backdrop-blur-sm transition-colors hover:border-foreground/70 group-data-[side=left]:flex-row-reverse group-data-[side=left]:pl-3 group-data-[side=left]:pr-2"
+                        aria-label={`${s.label}${s.sub ? `, ${s.sub}` : ''}: open case study`}
+                    >
+                        <span className="size-1.5 rounded-full bg-foreground" aria-hidden="true" />
+                        <span>{s.label}</span>
+                        {s.sub && <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{s.sub}</span>}
+                    </TransitionLink>
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default HeroScene;
