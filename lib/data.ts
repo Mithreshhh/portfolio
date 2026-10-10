@@ -181,6 +181,126 @@ export const EXPERIENCE: ExperienceEntry[] = [
     },
 ];
 
+// --- Hero blueprints ---------------------------------------------------------
+// The hero draws these as animated system diagrams. Every node and fact maps to a
+// line on the résumé; don't add components that weren't actually built.
+export type BlueprintKind = 'actor' | 'app' | 'service' | 'data' | 'external' | 'note';
+
+export interface BlueprintNode {
+    id: string;
+    label: string;
+    sub?: string;
+    kind: BlueprintKind;
+    /** Position in a 640 × 360 viewBox (node centre). */
+    x: number;
+    y: number;
+}
+
+export interface BlueprintEdge {
+    from: string;
+    to: string;
+}
+
+export interface Blueprint {
+    key: string;
+    title: string;
+    /** Short status line shown under the title. */
+    tag: string;
+    href?: string;
+    nodes: BlueprintNode[];
+    edges: BlueprintEdge[];
+    facts: string[];
+}
+
+export const BLUEPRINTS: Blueprint[] = [
+    {
+        key: 'menler',
+        title: 'Menler LMS',
+        tag: 'Now · Full Stack Developer',
+        href: '#my-experience',
+        nodes: [
+            { id: 'users', label: '~30 users', sub: 'students & staff', kind: 'actor', x: 74, y: 180 },
+            { id: 'app', label: 'LMS web app', sub: 'WebP · speed 48 → 91', kind: 'app', x: 236, y: 180 },
+            { id: 'api', label: 'LMS backend', sub: 'core infrastructure', kind: 'service', x: 398, y: 180 },
+            { id: 'pdf', label: 'PDF reader', sub: 'pdf.js, integrated', kind: 'service', x: 562, y: 70 },
+            { id: 'drive', label: 'Google Drive', sub: 'content automation', kind: 'external', x: 562, y: 180 },
+            { id: 'score', label: 'Assessment scoring', sub: 'phase 2', kind: 'service', x: 562, y: 290 },
+            { id: 'hooks', label: 'Webhooks', sub: 'audited · secrets rotated', kind: 'note', x: 236, y: 300 },
+        ],
+        edges: [
+            { from: 'users', to: 'app' },
+            { from: 'app', to: 'api' },
+            { from: 'api', to: 'pdf' },
+            { from: 'api', to: 'drive' },
+            { from: 'api', to: 'score' },
+            { from: 'hooks', to: 'api' },
+        ],
+        facts: ['3 core modules shipped to ~30 users', 'Page speed 48 → 91', 'Found and fixed an exploitable webhook'],
+    },
+    {
+        key: 'student-hub',
+        title: 'Smart Student Hub',
+        tag: 'Live · 2026',
+        href: '/projects/smart-student-hub',
+        nodes: [
+            { id: 'who', label: 'Students · Faculty', sub: 'role-based dashboards', kind: 'actor', x: 74, y: 180 },
+            { id: 'web', label: 'Next.js', sub: 'on Vercel', kind: 'app', x: 236, y: 180 },
+            { id: 'api', label: 'Express API', sub: 'Azure · JWT · RBAC', kind: 'service', x: 398, y: 180 },
+            { id: 'db', label: 'PostgreSQL', sub: 'Azure Database', kind: 'data', x: 562, y: 100 },
+            { id: 'blob', label: 'Blob Storage', sub: 'Managed Identity', kind: 'data', x: 562, y: 260 },
+            { id: 'share', label: 'Shareable portfolio', sub: 'verified, public link', kind: 'note', x: 236, y: 300 },
+        ],
+        edges: [
+            { from: 'who', to: 'web' },
+            { from: 'web', to: 'api' },
+            { from: 'api', to: 'db' },
+            { from: 'api', to: 'blob' },
+            { from: 'web', to: 'share' },
+        ],
+        facts: ['Approval workflows', 'JWT auth with RBAC', 'Azure backend, Vercel frontend'],
+    },
+    {
+        key: 'voltworx',
+        title: 'Voltworx',
+        tag: 'Live · CTO & Full-Stack',
+        href: '/projects/voltworx',
+        nodes: [
+            { id: 'students', label: 'Students', sub: 'micro-projects', kind: 'actor', x: 74, y: 110 },
+            { id: 'startups', label: 'Startups', sub: 'post real work', kind: 'actor', x: 74, y: 250 },
+            { id: 'ui', label: 'React UI', sub: 'responsive', kind: 'app', x: 236, y: 180 },
+            { id: 'api', label: 'Node · Express', sub: 'REST APIs', kind: 'service', x: 398, y: 180 },
+            { id: 'db', label: 'MongoDB', sub: 'documents', kind: 'data', x: 562, y: 180 },
+        ],
+        edges: [
+            { from: 'students', to: 'ui' },
+            { from: 'startups', to: 'ui' },
+            { from: 'ui', to: 'api' },
+            { from: 'api', to: 'db' },
+        ],
+        facts: ['MERN, end to end', 'Connects students with startups', 'Optimised deployment'],
+    },
+    {
+        key: 'iic',
+        title: 'IIC event passes',
+        tag: 'Technical Lead · MLRITM',
+        href: 'https://iic.mlritm.ac.in/',
+        nodes: [
+            { id: 'attendee', label: 'Attendees', sub: 'college events', kind: 'actor', x: 74, y: 180 },
+            { id: 'site', label: 'IIC website', sub: 'React', kind: 'app', x: 236, y: 180 },
+            { id: 'pay', label: 'Payments', sub: 'integrated gateway', kind: 'external', x: 398, y: 100 },
+            { id: 'pass', label: 'Event pass', sub: '~150 issued', kind: 'service', x: 398, y: 260 },
+            { id: 'mail', label: 'Email campaigns', sub: 'web pages', kind: 'note', x: 562, y: 180 },
+        ],
+        edges: [
+            { from: 'attendee', to: 'site' },
+            { from: 'site', to: 'pay' },
+            { from: 'pay', to: 'pass' },
+            { from: 'site', to: 'mail' },
+        ],
+        facts: ['~150 event passes issued', 'Payments integrated', 'Led the build and on-ground support'],
+    },
+];
+
 export const EDUCATION = [
     {
         degree: 'B.Tech — Computer Science',

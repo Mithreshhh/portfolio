@@ -184,6 +184,36 @@
         animation: marquee 40s linear infinite;
     }
 
+    /* Hero blueprint: nodes settle in, and a hairline counts down to the next diagram. */
+    @keyframes bp-node-in {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .bp-node {
+        opacity: 0;
+        animation: bp-node-in 0.5s ease-out forwards;
+    }
+    @keyframes bp-progress {
+        from {
+            transform: scaleX(0);
+        }
+        to {
+            transform: scaleX(1);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .bp-node {
+            opacity: 1;
+            animation: none;
+        }
+    }
+
     /* Hero "scroll" hint: a line that fills from the top, then drains from the bottom. */
     @keyframes scrollhint {
         0% {
