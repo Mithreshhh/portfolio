@@ -9,6 +9,7 @@ const COLORS = [
     'bg-yellow-500 text-black',
     'bg-blue-500 text-white',
     'bg-teal-500 text-black',
+    'bg-purple-500 text-white',
     'bg-indigo-500 text-white',
 ];
 

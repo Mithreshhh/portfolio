@@ -408,7 +408,7 @@ function Stat({
     )
   }
   return (
-    <div className="grid grid-cols-[auto_auto] items-end gap-x-2" style={{ justifyContent: align }}>
+    <div className="grid grid-cols-[auto_auto] items-end gap-x-2 gap-y-0" style={{ justifyContent: align }}>
       {align === "end" ? (
         <>
           <div className="text-right text-[13px] leading-tight" style={{ color: MUTED }}>
@@ -1168,7 +1168,8 @@ export default function ContributionSkyline({
     { label: "Longest streak", value: nf.format(stats.longest.days), unit: stats.longest.days === 1 ? "day" : "days", sub: range(stats.longest.start, stats.longest.end) },
     { label: "Current streak", value: nf.format(stats.current.days), unit: stats.current.days === 1 ? "day" : "days", sub: range(stats.current.start, stats.current.end) },
   ]
-  const showRow = showStats && !(is3d && corners)
+  // Nothing until the stage has been measured, so the row doesn't flash and then hand off to the corners.
+  const showRow = showStats && width > 0 && !(is3d && corners)
   const ease = "cubic-bezier(0.65, 0, 0.35, 1)"
   const levelNames = ["No " + plural, "Light", "Moderate", "Heavy", "Heaviest"]
 
@@ -1190,7 +1191,7 @@ export default function ContributionSkyline({
   return (
     <section
       ref={rootRef}
-      className={"relative w-full rounded-xl border p-4 font-sans sm:p-5 " + className}
+      className={"relative w-full rounded-xl border p-4 sm:p-5 " + className}
       style={{
         background: "var(--color-background, #ffffff)",
         color: "var(--color-foreground, #171717)",
@@ -1246,7 +1247,7 @@ export default function ContributionSkyline({
         <div className="relative px-3 pt-3 sm:px-4 sm:pt-4">
           <div
             ref={stageRef}
-            className="relative w-full overflow-hidden rounded-md outline-offset-4 has-[:focus-visible]:outline-2"
+            className="relative w-full overflow-hidden rounded-md outline-offset-4 has-[:focus-visible]:outline has-[:focus-visible]:outline-2"
             style={{ height: 150, outlineColor: "var(--color-foreground, #171717)" }}
           >
             <canvas
@@ -1317,10 +1318,7 @@ export default function ContributionSkyline({
         </div>
 
         {showRow && (
-          <div
-            className="grid grid-cols-2 gap-x-4 gap-y-4 px-3 pt-4 sm:px-4 lg:grid-cols-4"
-            style={{ transition: "opacity 300ms " + ease }}
-          >
+          <div className="grid grid-cols-2 gap-x-4 gap-y-4 px-3 pt-4 sm:px-4 lg:grid-cols-4">
             {statBlocks.map((s) => (
               <Stat key={s.label} {...s} accent={theme.accent} size={Math.round(bigSize * 0.62)} align="stack" />
             ))}
@@ -1339,12 +1337,10 @@ export default function ContributionSkyline({
                   key={i}
                   type="button"
                   aria-label={levelNames[i]}
-                  aria-pressed={legendLevel === i}
                   title={levelNames[i]}
                   onMouseEnter={() => setLegendLevel(i)}
                   onFocus={() => setLegendLevel(i)}
                   onBlur={() => setLegendLevel(-1)}
-                  onClick={() => setLegendLevel(legendLevel === i ? -1 : i)}
                   className="h-3 w-3 cursor-pointer rounded-[3px] border-0 p-0 transition-[background-color,transform,outline-color] duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
                   style={{
                     background: c,
