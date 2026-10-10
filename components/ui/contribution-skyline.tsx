@@ -484,6 +484,8 @@ export default function ContributionSkyline({
   const [active, setActive] = React.useState(-1)
   const [legendLevel, setLegendLevel] = React.useState(-1)
   const [announce, setAnnounce] = React.useState("")
+  // True once the engine has actually started raising the bars (the view can be "3d" long before that).
+  const [risen, setRisen] = React.useState(false)
 
   const rootRef = React.useRef<HTMLElement>(null)
   const stageRef = React.useRef<HTMLDivElement>(null)
@@ -504,8 +506,8 @@ export default function ContributionSkyline({
   }
 
   // Everything the render loop reads, refreshed every render so the loop never closes over stale props.
-  const cfg = React.useRef({ model, duration, heightScale, orbit, palette, legendLevel, onCellClick, target: view === "3d" ? 1 : 0, setActive, setWidth, setTheme, setAnnounce, describe })
-  cfg.current = { model, duration, heightScale, orbit, palette, legendLevel, onCellClick, target: view === "3d" ? 1 : 0, setActive, setWidth, setTheme, setAnnounce, describe }
+  const cfg = React.useRef({ model, duration, heightScale, orbit, palette, legendLevel, onCellClick, target: view === "3d" ? 1 : 0, setActive, setWidth, setTheme, setAnnounce, setRisen, describe })
+  cfg.current = { model, duration, heightScale, orbit, palette, legendLevel, onCellClick, target: view === "3d" ? 1 : 0, setActive, setWidth, setTheme, setAnnounce, setRisen, describe }
 
   React.useEffect(() => {
     const root = rootRef.current
@@ -1040,6 +1042,7 @@ export default function ContributionSkyline({
       if (!entered) return
       if (goal !== target) {
         target = goal
+        cfg.current.setRisen(goal === 1)
         if (goal === 0) {
           yawGoal = 0
           elevGoal = 0
@@ -1160,6 +1163,8 @@ export default function ContributionSkyline({
     return f.format(dayMs(a)) + " — " + f.format(dayMs(b))
   }
   const is3d = view === "3d"
+  // Corner stats belong to the skyline; show them only once it is actually rising.
+  const up = is3d && risen
   const corners = showStats && width >= 560
   const bigSize = Math.round(Math.max(30, Math.min(56, width * 0.058)))
   const statBlocks = [
@@ -1265,13 +1270,13 @@ export default function ContributionSkyline({
             {showStats && corners && (
               <>
                 <div
-                  aria-hidden={!is3d}
+                  aria-hidden={!up}
                   className="pointer-events-none absolute top-1 right-1 flex flex-col items-end gap-5 transition-[opacity,transform] motion-reduce:transition-none"
                   style={{
-                    opacity: is3d ? 1 : 0,
-                    transform: is3d ? "translateY(0)" : "translateY(-10px)",
-                    transitionDuration: is3d ? "600ms" : "300ms",
-                    transitionDelay: is3d ? Math.round(duration * 0.55) + "ms" : "0ms",
+                    opacity: up ? 1 : 0,
+                    transform: up ? "translateY(0)" : "translateY(-10px)",
+                    transitionDuration: up ? "600ms" : "300ms",
+                    transitionDelay: up ? Math.round(duration * 0.55) + "ms" : "0ms",
                     transitionTimingFunction: ease,
                   }}
                 >
@@ -1279,13 +1284,13 @@ export default function ContributionSkyline({
                   <Stat {...statBlocks[1]} accent={theme.accent} size={bigSize} align="end" />
                 </div>
                 <div
-                  aria-hidden={!is3d}
+                  aria-hidden={!up}
                   className="pointer-events-none absolute bottom-1 left-1 flex flex-col items-start gap-5 transition-[opacity,transform] motion-reduce:transition-none"
                   style={{
-                    opacity: is3d ? 1 : 0,
-                    transform: is3d ? "translateY(0)" : "translateY(10px)",
-                    transitionDuration: is3d ? "600ms" : "300ms",
-                    transitionDelay: is3d ? Math.round(duration * 0.65) + "ms" : "0ms",
+                    opacity: up ? 1 : 0,
+                    transform: up ? "translateY(0)" : "translateY(10px)",
+                    transitionDuration: up ? "600ms" : "300ms",
+                    transitionDelay: up ? Math.round(duration * 0.65) + "ms" : "0ms",
                     transitionTimingFunction: ease,
                   }}
                 >
