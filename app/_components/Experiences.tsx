@@ -12,7 +12,7 @@ import { useRef, type ReactNode } from 'react';
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const TYPE_STYLE: Record<ExperienceType, string> = {
-    Current: 'border-primary/40 bg-primary/10 text-primary',
+    'Full-time': 'border-primary/40 bg-primary/10 text-primary',
     Internship: 'border-secondary/40 bg-secondary/10 text-secondary',
     Leadership: 'border-accent/40 bg-accent/10 text-accent',
 };

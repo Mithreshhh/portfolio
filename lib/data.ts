@@ -115,7 +115,7 @@ export const PROJECTS: IProject[] = [
     },
 ];
 
-export type ExperienceType = 'Current' | 'Internship' | 'Leadership';
+export type ExperienceType = 'Full-time' | 'Internship' | 'Leadership';
 
 export interface ExperienceEntry {
     company: string;
@@ -135,7 +135,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
     {
         company: 'Menler Learning Systems',
         role: 'Full Stack Developer',
-        type: 'Current',
+        type: 'Full-time',
         start: 'Jul 2026',
         end: null,
         url: 'https://menler.in/',
