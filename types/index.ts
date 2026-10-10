@@ -27,5 +27,5 @@ export interface IProject {
     slug: string;
     liveUrl?: string;
     sourceCode?: string;
-    status?: 'live' | 'in-progress' | 'private';
+    status?: 'live' | 'in-progress' | 'open-source' | 'private';
 }

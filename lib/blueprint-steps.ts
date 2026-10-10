@@ -81,26 +81,26 @@ export const BLUEPRINT_STEPS: Record<string, BlueprintStep[]> = {
             nodes: ['db'],
         },
     ],
-    iic: [
+    perception: [
         {
-            title: 'Attendees',
-            body: 'College event attendees are the users: they pay and receive a pass through the site.',
-            nodes: ['attendee'],
+            title: 'A task in plain English',
+            body: 'You type what you want done. The content script lists the visible UI elements (role, label, box, never form values) and marks where personal data sits in the page text.',
+            nodes: ['user', 'content'],
         },
         {
-            title: 'IIC website',
-            body: 'The official Institution Innovation Council website, built in React with a responsive UI and led as Technical Lead.',
-            nodes: ['site'],
+            title: 'Perceive on the device',
+            body: 'The background worker screenshots the tab. UltraFace on ONNX Runtime Web finds faces in about 100-130 ms, a YOLO11n detector I trained finds buttons and inputs from the pixels, and PaddleOCR reads text the page code cannot supply, such as a PDF or a canvas.',
+            nodes: ['worker', 'face', 'ui', 'ocr'],
         },
         {
-            title: 'Payments to passes',
-            body: 'A payment gateway was integrated into the event-pass system, which issued around 150 passes.',
-            nodes: ['pay', 'pass'],
+            title: 'Redact before anything leaves',
+            body: 'Faces, photos, password and card fields, emails, phones and ID numbers are blacked out on a fresh copy of the screenshot and the raw buffer is zeroed. If redaction fails, the step aborts: raw pixels never leave the machine.',
+            nodes: ['worker', 'privacy'],
         },
         {
-            title: 'Email campaigns',
-            body: 'Email campaign web pages were built alongside the site for IIC events, with on-ground support during the events themselves.',
-            nodes: ['mail', 'site'],
+            title: 'Reason, then act',
+            body: 'Only the sanitized context goes to a local FastAPI server, where Gemma (via Ollama) returns one action. The content script executes it and the loop repeats until the task is done.',
+            nodes: ['gemma', 'content'],
         },
     ],
 };
@@ -109,4 +109,5 @@ export const BLUEPRINT_STEPS: Record<string, BlueprintStep[]> = {
 export const PROJECT_BLUEPRINT: Record<string, string> = {
     'smart-student-hub': 'student-hub',
     voltworx: 'voltworx',
+    'perception-agent': 'perception',
 };

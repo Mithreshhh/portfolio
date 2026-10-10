@@ -16,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const STATUS_LABEL: Record<NonNullable<IProject['status']>, string> = {
     live: 'Live',
     'in-progress': 'In development',
+    'open-source': 'Open source',
     private: 'Private',
 };
 
@@ -40,8 +41,8 @@ const ProjectCard = ({
         <article
             className={cn(
                 'project-card group relative flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-background-light/20 backdrop-blur-sm transition-[border-color,box-shadow] duration-300 hover:border-foreground/40 hover:shadow-[0_24px_60px_-30px_hsl(var(--foreground)/0.25)]',
-                featured && 'md:col-span-2 md:flex-row lg:col-span-3',
-                orphan && 'md:col-span-2 md:flex-row lg:col-span-1 lg:flex-col',
+                featured && 'md:col-span-2 md:flex-row',
+                orphan && 'md:col-span-2 md:flex-row',
             )}
         >
             {/* Screenshot: greyscale at rest, colour on hover. */}
@@ -51,7 +52,6 @@ const ProjectCard = ({
                 className={cn(
                     'relative block shrink-0 overflow-hidden bg-background',
                     row ? 'aspect-[16/10] md:aspect-auto md:w-[56%]' : 'aspect-[16/10]',
-                    orphan && 'lg:aspect-[16/10] lg:w-auto',
                     featured && 'md:min-h-[360px]',
                 )}
             >
@@ -191,8 +191,8 @@ const ProjectList = () => {
                     </a>
                 </div>
 
-                {/* First project is the hero card; the rest sit three-up on desktop, two-up on tablets. */}
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {/* First project is the hero card; the rest sit two-up, with a lone last card going wide. */}
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                     {PROJECTS.map((project, i) => (
                         <ProjectCard
                             key={project.slug}

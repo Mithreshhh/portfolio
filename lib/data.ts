@@ -57,6 +57,20 @@ export const MY_STACK = {
 
 export const PROJECTS: IProject[] = [
     {
+        title: 'On-Device Perception Agent',
+        slug: 'perception-agent',
+        year: 2026,
+        description:
+            'A privacy-preserving browser agent. You type a task in plain English; the extension looks at the page, blacks out faces, passwords and personal data on your device, and sends only that sanitized view to a local Gemma model, which decides the next action. Face detection (UltraFace on ONNX Runtime Web), a UI detector I trained (YOLO11n) and on-device OCR run inside the extension; raw pixels never leave the machine.',
+        role: 'Builder: extension, perception models, server',
+        techStack: ['TypeScript', 'ONNX Runtime Web', 'YOLO11n', 'PaddleOCR', 'Python', 'FastAPI', 'Gemma via Ollama'],
+        thumbnail: '/images/perception-agent-4-what-the-ai-sees.png',
+        longThumbnail: '/images/perception-agent-4-what-the-ai-sees.png',
+        images: ['/images/perception-agent-4-what-the-ai-sees.png', '/images/perception-agent-3-page-after.png'],
+        sourceCode: 'https://github.com/Mithreshhh/Major-Project-2',
+        status: 'open-source',
+    },
+    {
         title: 'Smart Student Hub',
         slug: 'smart-student-hub',
         year: 2026,
@@ -169,7 +183,6 @@ export const EXPERIENCE: ExperienceEntry[] = [
         type: 'Leadership',
         start: '2024',
         end: '2025',
-        url: 'https://iic.mlritm.ac.in/',
         summary: 'Led the tech behind the college innovation council and its events.',
         highlights: [
             'Led development of the official IIC website and event-pass system using React, issuing ~150 event passes.',
@@ -280,24 +293,30 @@ export const BLUEPRINTS: Blueprint[] = [
         facts: ['MERN, end to end', 'Connects students with startups', 'Optimised deployment'],
     },
     {
-        key: 'iic',
-        title: 'IIC event passes',
-        tag: 'Technical Lead · MLRITM',
-        href: 'https://iic.mlritm.ac.in/',
+        key: 'perception',
+        title: 'Perception Agent',
+        tag: 'Major project · open source',
+        href: '/projects/perception-agent',
         nodes: [
-            { id: 'attendee', label: 'Attendees', sub: 'college events', kind: 'actor', x: 74, y: 180 },
-            { id: 'site', label: 'IIC website', sub: 'React', kind: 'app', x: 236, y: 180 },
-            { id: 'pay', label: 'Payments', sub: 'integrated gateway', kind: 'external', x: 398, y: 100 },
-            { id: 'pass', label: 'Event pass', sub: '~150 issued', kind: 'service', x: 398, y: 260 },
-            { id: 'mail', label: 'Email campaigns', sub: 'web pages', kind: 'note', x: 562, y: 180 },
+            { id: 'user', label: 'You', sub: 'a task in plain English', kind: 'actor', x: 74, y: 180 },
+            { id: 'content', label: 'Content script', sub: 'DOM elements · PII boxes', kind: 'app', x: 236, y: 180 },
+            { id: 'worker', label: 'Worker', sub: 'screenshot · redact', kind: 'service', x: 398, y: 180 },
+            { id: 'face', label: 'UltraFace', sub: 'faces · ONNX Web', kind: 'service', x: 562, y: 70 },
+            { id: 'ui', label: 'YOLO11n', sub: 'buttons from pixels', kind: 'service', x: 562, y: 180 },
+            { id: 'ocr', label: 'PaddleOCR', sub: 'text in PDFs, canvas', kind: 'service', x: 562, y: 290 },
+            { id: 'gemma', label: 'Gemma · Ollama', sub: 'FastAPI, sanitized JSON', kind: 'external', x: 236, y: 300 },
+            { id: 'privacy', label: 'Raw pixels never leave', sub: 'faces, PII, cards blacked out', kind: 'note', x: 74, y: 300 },
         ],
         edges: [
-            { from: 'attendee', to: 'site' },
-            { from: 'site', to: 'pay' },
-            { from: 'pay', to: 'pass' },
-            { from: 'site', to: 'mail' },
+            { from: 'user', to: 'content' },
+            { from: 'content', to: 'worker' },
+            { from: 'worker', to: 'face' },
+            { from: 'worker', to: 'ui' },
+            { from: 'worker', to: 'ocr' },
+            { from: 'worker', to: 'gemma' },
+            { from: 'gemma', to: 'content' },
         ],
-        facts: ['~150 event passes issued', 'Payments integrated', 'Led the build and on-ground support'],
+        facts: ['Faces, PII and card fields blacked out on-device', 'Face detection ~100-130 ms in the browser', 'Proven end to end in real Chrome'],
     },
 ];
 

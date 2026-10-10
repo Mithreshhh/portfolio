@@ -78,7 +78,8 @@ const AboutMe = () => {
                             <p className="about-in">
                                 Right now that means LMS infrastructure at Menler: a PDF reader, Google Drive automation,
                                 and assessment scoring, used by around 30 people so far. Before that, client sites
-                                at Sleek Sky and the event-pass system for my college&apos;s innovation council.
+                                at Sleek Sky, and my major project: a browser agent that blacks out faces and
+                                personal data on-device before any AI sees the page.
                             </p>
                             <p className="about-in">
                                 Next, I want to work on products that make learning measurably better, with a team that

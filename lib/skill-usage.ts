@@ -1,7 +1,7 @@
 // "Where I used it" matrix data. Every cell maps to a line in lib/data.ts or the
 // résumé; an absent cell means the résumé does not tie that tool to that system.
 
-export type SystemKey = 'menler' | 'student-hub' | 'voltworx' | 'mlritm' | 'iic';
+export type SystemKey = 'menler' | 'student-hub' | 'voltworx' | 'mlritm' | 'perception';
 
 export interface SkillSystem {
     key: SystemKey;
@@ -49,11 +49,11 @@ export const SKILL_SYSTEMS: SkillSystem[] = [
         href: '/projects/mlritm-website',
     },
     {
-        key: 'iic',
-        title: 'IIC website',
-        short: 'IIC',
-        abbr: 'IIC',
-        href: '#my-experience',
+        key: 'perception',
+        title: 'On-Device Perception Agent',
+        short: 'Agent',
+        abbr: 'PA',
+        href: '/projects/perception-agent',
     },
 ];
 
@@ -64,7 +64,7 @@ const ALL: SkillUsage = {
     'student-hub': 'Repo and deploys',
     voltworx: 'Repo and deploys',
     mlritm: 'Shared repo with the team',
-    iic: 'Repo for the site and pass system',
+    perception: 'Open-source repo',
 };
 
 /** Technology name (as in MY_STACK) -> system -> what it was used for. */
@@ -72,10 +72,15 @@ export const SKILL_USAGE: Record<string, SkillUsage> = {
     JavaScript: {
         menler: 'Integrated PDF reader built on pdf.js',
     },
+    TypeScript: {
+        perception: 'MV3 extension, perception pipeline and shared contracts',
+    },
+    Python: {
+        perception: 'FastAPI server, model training and quantization',
+    },
     React: {
         'student-hub': 'Dashboard UI components',
         voltworx: 'Responsive UI',
-        iic: 'Website and event-pass system',
     },
     'Next.js': {
         'student-hub': 'Frontend, hosted on Vercel',

@@ -65,10 +65,12 @@ const ImpactCard = ({ stat }: { stat: ImpactStat }) => {
                 <span aria-hidden="true">
                     {stat.prefix && <span className="text-muted-foreground">{stat.prefix}</span>}
                     <span className="text-foreground">{display}</span>
+                    {stat.suffix && <span className="ml-1 text-3xl text-muted-foreground sm:text-4xl">{stat.suffix}</span>}
                 </span>
                 <span className="sr-only">
                     {stat.prefix}
                     {stat.value}
+                    {stat.suffix ? ` ${stat.suffix}` : ''}
                 </span>
             </p>
 

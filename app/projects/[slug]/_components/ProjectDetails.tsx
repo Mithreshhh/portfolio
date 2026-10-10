@@ -22,6 +22,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const STATUS_LABEL: Record<NonNullable<IProject['status']>, string> = {
     live: 'Live',
     'in-progress': 'In development',
+    'open-source': 'Open source',
     private: 'Private',
 };
 

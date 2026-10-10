@@ -57,6 +57,7 @@ const SECTIONS: { label: string; hash: string | null; keywords: string[]; icon: 
 const STATUS_LABEL: Record<NonNullable<IProject['status']>, string> = {
     live: 'Live',
     'in-progress': 'In dev',
+    'open-source': 'Open source',
     private: 'Private',
 };
 

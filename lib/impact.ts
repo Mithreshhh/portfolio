@@ -5,6 +5,8 @@ export interface ImpactStat {
     value: number;
     /** Rendered in muted text before the number, e.g. "48 → " or "~". */
     prefix?: string;
+    /** Rendered in muted text after the number, e.g. "ms". */
+    suffix?: string;
     label: string;
     detail: string;
     /** Hash anchor on this page or an external URL. */
@@ -20,11 +22,12 @@ export const IMPACT: ImpactStat[] = [
         href: '#experience-timeline',
     },
     {
-        value: 150,
+        value: 130,
         prefix: '~',
-        label: 'Event passes issued',
-        detail: 'IIC event-pass system, React + payments',
-        href: 'https://iic.mlritm.ac.in/',
+        suffix: 'ms',
+        label: 'On-device face detection',
+        detail: 'UltraFace on ONNX Runtime Web, inside the browser extension',
+        href: '/projects/perception-agent',
     },
     {
         value: 30,
