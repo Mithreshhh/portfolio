@@ -6,17 +6,18 @@ import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { ArrowUpRight, Briefcase, GraduationCap, Trophy, type LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useRef, type ReactNode } from 'react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const TYPE_STYLE: Record<ExperienceType, string> = {
-    'Full-time': 'border-primary/40 bg-primary/10 text-primary',
+    Current: 'border-primary/40 bg-primary/10 text-primary',
     Internship: 'border-secondary/40 bg-secondary/10 text-secondary',
     Leadership: 'border-accent/40 bg-accent/10 text-accent',
 };
 
-const TimelineItem = ({ entry, index }: { entry: ExperienceEntry; index: number }) => {
+const TimelineItem = ({ entry }: { entry: ExperienceEntry }) => {
     const current = entry.end === null;
     return (
         <li className="exp-item relative grid grid-cols-[auto_1fr] gap-x-5 gap-y-0 sm:gap-x-8">
@@ -24,8 +25,10 @@ const TimelineItem = ({ entry, index }: { entry: ExperienceEntry; index: number 
             <div className="relative flex w-4 justify-center pt-7 sm:w-6">
                 <span
                     className={cn(
-                        'relative z-10 block size-3 rounded-full ring-4 ring-background',
-                        current ? 'bg-primary shadow-[0_0_0_6px_hsl(var(--primary)/0.2)]' : 'bg-border',
+                        'relative z-10 block size-3 rounded-full',
+                        current
+                            ? 'bg-primary shadow-[0_0_0_4px_hsl(var(--background)),0_0_0_10px_hsl(var(--primary)/0.2)]'
+                            : 'bg-border ring-4 ring-background',
                     )}
                 >
                     {current && (
@@ -87,7 +90,7 @@ const TimelineItem = ({ entry, index }: { entry: ExperienceEntry; index: number 
                             current ? 'border-primary/40 text-foreground' : 'border-border/60 text-muted-foreground',
                         )}
                     >
-                        {entry.start} — {entry.end ?? 'Present'}
+                        {entry.start} – {entry.end ?? 'Present'}
                     </p>
                 </header>
 
@@ -115,8 +118,6 @@ const TimelineItem = ({ entry, index }: { entry: ExperienceEntry; index: number 
                         ))}
                     </ul>
                 )}
-
-                <span className="sr-only">{`Entry ${index + 1} of ${EXPERIENCE.length}`}</span>
             </article>
         </li>
     );
@@ -204,15 +205,15 @@ const Experiences = () => {
                         aria-hidden="true"
                         className="exp-rail absolute bottom-8 left-[7px] top-7 w-0.5 origin-top bg-gradient-to-b from-primary via-secondary/70 to-border sm:left-[11px]"
                     />
-                    <ol ref={timelineRef} className="relative">
-                        {EXPERIENCE.map((entry, i) => (
-                            <TimelineItem key={entry.company + entry.role} entry={entry} index={i} />
+                    <ol ref={timelineRef} className="relative" aria-label="Work experience">
+                        {EXPERIENCE.map((entry) => (
+                            <TimelineItem key={entry.company + entry.role} entry={entry} />
                         ))}
                     </ol>
                 </div>
 
-                <div className="exp-cards mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-                    <InfoCard icon={GraduationCap} title="Education">
+                <div className="exp-cards mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <InfoCard icon={GraduationCap} title="Education" className="sm:col-span-2 lg:col-span-1">
                         <ol className="space-y-4">
                             {EDUCATION.map((e) => (
                                 <li key={e.degree} className="flex items-start justify-between gap-3">
@@ -263,9 +264,9 @@ const Experiences = () => {
                         </ul>
                         <p className="mt-5 text-sm text-muted-foreground">
                             Open to internships and freelance work —{' '}
-                            <a href="/hire-me" className="text-primary underline-offset-4 hover:underline">
+                            <Link href="/hire-me" className="text-primary underline-offset-4 hover:underline">
                                 let&apos;s talk
-                            </a>
+                            </Link>
                             .
                         </p>
                     </InfoCard>

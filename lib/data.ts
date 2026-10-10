@@ -114,7 +114,7 @@ export const PROJECTS: IProject[] = [
     },
 ];
 
-export type ExperienceType = 'Full-time' | 'Internship' | 'Leadership';
+export type ExperienceType = 'Current' | 'Internship' | 'Leadership';
 
 export interface ExperienceEntry {
     company: string;
@@ -134,7 +134,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
     {
         company: 'Menler Learning Systems',
         role: 'Full Stack Developer',
-        type: 'Full-time',
+        type: 'Current',
         start: 'Jul 2026',
         end: null,
         url: 'https://menler.in/',
@@ -146,7 +146,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
             'Contributed to core LMS backend infrastructure and platform functionality end-to-end.',
             'Conducted a security audit that identified an exploitable webhook vulnerability, leading to secret rotation and removal of hardcoded fallbacks.',
         ],
-        stack: ['React', 'Node.js', 'pdf.js', 'Google Drive API'],
+        stack: ['pdf.js', 'Google Drive automation', 'WebP'],
     },
     {
         company: 'Sleek Sky',
@@ -202,13 +202,11 @@ export const EDUCATION = [
 ];
 
 export const ACHIEVEMENTS = [
-    { title: 'Ideathon Winner', detail: 'Geethanjali College' },
+    { title: 'Ideathon winner', detail: 'Geethanjali College' },
     { title: 'Hackathon participant', detail: 'Smart India Hackathon 2025' },
-    { title: '~150 event passes issued', detail: 'IIC event-pass platform I led' },
-    { title: 'Page speed 48 → 91', detail: 'Menler LMS image pipeline' },
 ];
 
 export const OTHER_WORK = [
     { title: 'Gym client website', detail: 'Freelance — built it, maintain it monthly' },
-    { title: 'Join Eazy', detail: 'Frontend Developer intern (1 month)' },
+    { title: 'Join Eazy', detail: 'Frontend Developer Intern (1 month)' },
 ];
