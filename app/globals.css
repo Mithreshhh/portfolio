@@ -156,6 +156,20 @@
     .smooth-transition {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    /* Infinite logo strip (content is duplicated once, so -50% loops seamlessly) */
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    .animate-marquee {
+        animation: marquee 40s linear infinite;
+    }
     
     /* Section divider */
     .section-divider {

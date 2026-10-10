@@ -30,15 +30,15 @@ export const MY_STACK = {
         { name: 'React', icon: '/logo/react.svg' },
         { name: 'Next.js', icon: '/logo/next.svg' },
         { name: 'Redux', icon: '/logo/redux.svg' },
-        { name: 'HTML5', icon: '' },
-        { name: 'CSS3', icon: '' },
+        { name: 'HTML5', icon: '/logo/html5.svg' },
+        { name: 'CSS3', icon: '/logo/css3.svg' },
         { name: 'Tailwind CSS', icon: '/logo/tailwind.svg' },
         { name: 'Bootstrap', icon: '/logo/bootstrap.svg' },
     ],
     backend: [
         { name: 'Node.js', icon: '/logo/node.svg' },
         { name: 'Express.js', icon: '/logo/express.svg' },
-        { name: 'RESTful APIs', icon: '' },
+        { name: 'RESTful APIs', icon: '/logo/api.svg' },
     ],
     database: [
         { name: 'MongoDB', icon: '/logo/mongodb.svg' },
@@ -46,12 +46,12 @@ export const MY_STACK = {
         { name: 'PostgreSQL', icon: '/logo/postgreSQL.svg' },
     ],
     'cloud & tools': [
-        { name: 'Microsoft Azure', icon: '' },
-        { name: 'Vercel', icon: '' },
+        { name: 'Microsoft Azure', icon: '/logo/azure.svg' },
+        { name: 'Vercel', icon: '/logo/vercel.svg' },
         { name: 'Docker', icon: '/logo/docker.svg' },
         { name: 'Git', icon: '/logo/git.svg' },
-        { name: 'GitHub', icon: '' },
-        { name: 'Postman', icon: '' },
+        { name: 'GitHub', icon: '/logo/github.svg' },
+        { name: 'Postman', icon: '/logo/postman.svg' },
     ],
 };
 
