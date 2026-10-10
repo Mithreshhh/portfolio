@@ -114,48 +114,101 @@ export const PROJECTS: IProject[] = [
     },
 ];
 
-export const EXPERIENCE_GROUPS = [
+export type ExperienceType = 'Full-time' | 'Internship' | 'Leadership';
+
+export interface ExperienceEntry {
+    company: string;
+    role: string;
+    type: ExperienceType;
+    start: string;
+    /** null = present */
+    end: string | null;
+    url?: string;
+    summary: string;
+    highlights: string[];
+    stack: string[];
+}
+
+// Mirrors the "Experience" section of the resume, newest first.
+export const EXPERIENCE: ExperienceEntry[] = [
     {
-        title: 'Work Experience',
-        items: [
-            {
-                label: 'Menler Learning Systems — Full Stack Developer (Jul 2026 – Present)',
-                url: 'https://menler.in/',
-            },
+        company: 'Menler Learning Systems',
+        role: 'Full Stack Developer',
+        type: 'Full-time',
+        start: 'Jul 2026',
+        end: null,
+        url: 'https://menler.in/',
+        summary: 'Building production LMS infrastructure at an early-stage AI EdTech startup.',
+        highlights: [
+            'Architected and built 3 core LMS modules used by ~30 users: an integrated PDF reader (pdf.js), Google Drive automation for content workflows, and Phase 2 of the assessment scoring system.',
+            'Improved page speed score from 48 to 91 by converting image assets from PNG to WebP, reducing load times across the platform.',
+            'Developed the Events page and contributed to an in-progress Blog module for the main Menler website.',
+            'Contributed to core LMS backend infrastructure and platform functionality end-to-end.',
+            'Conducted a security audit that identified an exploitable webhook vulnerability, leading to secret rotation and removal of hardcoded fallbacks.',
         ],
+        stack: ['React', 'Node.js', 'pdf.js', 'Google Drive API'],
     },
     {
-        title: 'Internships',
-        items: [
-            'Sleek Sky — Web Development Intern (Jan – Feb 2026)',
-            'Join Eazy — Frontend Developer (1 month)',
+        company: 'Sleek Sky',
+        role: 'Web Development Intern',
+        type: 'Internship',
+        start: 'Jan 2026',
+        end: 'Feb 2026',
+        summary: 'Client websites and CMS work for healthcare practices.',
+        highlights: [
+            'Worked on the CMS module, contributing to core content-management functionality.',
+            'Built 2 industry-specific website templates (dental and cardiology practices) for client deployment.',
+            'Gathered client requirements and delivered end-to-end websites aligned with practice needs.',
         ],
+        stack: ['CMS', 'Client websites'],
     },
     {
-        title: 'Club / Leadership Roles',
-        items: [
-            { label: 'IIC MLRITM — Technical Lead (2024 – 2025)', url: 'https://iic.mlritm.ac.in/' },
+        company: 'Institution Innovation Council, MLRITM',
+        role: 'Technical Lead',
+        type: 'Leadership',
+        start: '2024',
+        end: '2025',
+        url: 'https://iic.mlritm.ac.in/',
+        summary: 'Led the tech behind the college innovation council and its events.',
+        highlights: [
+            'Led development of the official IIC website and event-pass system using React, issuing ~150 event passes.',
+            'Developed email campaign web pages and integrated a payment system into the event-pass platform.',
+            'Actively participated in hosting and providing on-ground support during IIC events.',
+            'Implemented responsive UI to improve accessibility and coordination.',
         ],
+        stack: ['React', 'Payments', 'Email campaigns'],
+    },
+];
+
+export const EDUCATION = [
+    {
+        degree: 'B.Tech — Computer Science',
+        school: 'Marri Laxman Reddy Institute of Technology and Management',
+        period: '2023 – 2027',
+        score: 'CGPA 8.66',
     },
     {
-        title: 'College Projects',
-        items: [
-            { label: 'Smart Student Hub', url: 'https://student-hub-three-pink.vercel.app/' },
-            'MLRITM College Website',
-        ],
+        degree: 'Class XII',
+        school: 'Gyanville Academy',
+        period: '2021 – 2023',
+        score: '96.5%',
     },
     {
-        title: 'Personal Projects',
-        items: [
-            { label: 'voltworx.com (CTO)', url: 'https://www.volt-worx.com/' },
-        ],
+        degree: 'Class X',
+        school: 'Excellaina Infinitum',
+        period: '2021',
+        score: 'GPA 10',
     },
-    {
-        title: 'Freelance / Client Work',
-        items: ['Gym Client Website (monthly)'],
-    },
-    {
-        title: 'Competitions',
-        items: ['Ideathon Winner (Geethanjali)', 'Participated in one hackathon'],
-    },
+];
+
+export const ACHIEVEMENTS = [
+    { title: 'Ideathon Winner', detail: 'Geethanjali College' },
+    { title: 'Hackathon participant', detail: 'Smart India Hackathon 2025' },
+    { title: '~150 event passes issued', detail: 'IIC event-pass platform I led' },
+    { title: 'Page speed 48 → 91', detail: 'Menler LMS image pipeline' },
+];
+
+export const OTHER_WORK = [
+    { title: 'Gym client website', detail: 'Freelance — built it, maintain it monthly' },
+    { title: 'Join Eazy', detail: 'Frontend Developer intern (1 month)' },
 ];
