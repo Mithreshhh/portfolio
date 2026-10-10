@@ -91,19 +91,13 @@ const AboutMe = () => {
                                 layers.
                             </p>
                             <p className="slide-up-and-fade leading-relaxed hover:text-foreground/90 smooth-transition opacity-100" style={{ opacity: 1 }}>
-                                My approach focuses on creating scalable,
-                                high-performing solutions tailored to both user
-                                needs and business objectives. By prioritizing
-                                performance, accessibility, and responsiveness,
-                                I strive to deliver experiences that not only
-                                engage users but also drive tangible results.
-                            </p>
-                            <p className="slide-up-and-fade leading-relaxed hover:text-foreground/90 smooth-transition opacity-100" style={{ opacity: 1 }}>
-                                I&apos;m currently a Full Stack Developer at
+                                Right now I&apos;m a Full Stack Developer at
                                 Menler Learning Systems, building production LMS
                                 infrastructure at an early-stage AI EdTech
                                 startup — from an integrated PDF reader and
                                 Google Drive automation to assessment scoring.
+                                Next, I want to build products that make
+                                learning measurably better for students like me.
                             </p>
                             <p className="slide-up-and-fade leading-relaxed glass rounded-lg px-4 py-3 border border-primary/20 opacity-100" style={{ opacity: 1 }}>
                                 Education: B.Tech in Computer Science at Marri

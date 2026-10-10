@@ -1,14 +1,10 @@
 import SectionTitle from '@/components/SectionTitle';
 import ScrollTriggerRefresh from '@/components/ScrollTriggerRefresh';
-import ContributionSkyline, { type ContributionDay } from '@/components/ui/contribution-skyline';
+import ContributionSkyline from '@/components/ui/contribution-skyline';
 import { SOCIAL_LINKS } from '@/lib/data';
+import { fetchContributions, GITHUB_USER } from '@/lib/github';
 import { ArrowUpRight } from 'lucide-react';
 import type { CSSProperties } from 'react';
-
-const GITHUB_USER = 'Mithreshhh';
-
-// Public, token-free mirror of the GitHub contribution calendar.
-const CONTRIBUTIONS_URL = `https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}?y=last`;
 
 // The skyline reads Tailwind v4-style `--color-*` tokens; map the site's
 // shadcn HSL variables onto them so it picks up the dark theme.
@@ -26,29 +22,6 @@ const PALETTE = {
     light: ['#d4d4d4', '#a3a3a3', '#525252', '#171717'],
     dark: ['#3a3a3a', '#6b6b6b', '#a8a8a8', '#f5f5f5'],
 };
-
-async function fetchContributions(): Promise<ContributionDay[] | null> {
-    try {
-        const res = await fetch(CONTRIBUTIONS_URL, {
-            next: { revalidate: 60 * 60 },
-            // Never let a hung upstream stall the build or a revalidation.
-            signal: AbortSignal.timeout(8000),
-        });
-        if (!res.ok) {
-            console.warn(`[GithubActivity] contributions API responded ${res.status}`);
-            return null;
-        }
-        const json: { contributions?: { date: string; count: number }[] } = await res.json();
-        if (!Array.isArray(json.contributions) || json.contributions.length === 0) {
-            console.warn('[GithubActivity] contributions API returned no days');
-            return null;
-        }
-        return json.contributions.map(({ date, count }) => ({ date, count }));
-    } catch (err) {
-        console.warn('[GithubActivity] contributions fetch failed:', err instanceof Error ? err.message : err);
-        return null;
-    }
-}
 
 const GithubActivity = async () => {
     const data = await fetchContributions();

@@ -23,6 +23,9 @@ const HeroScene = ({ className }: { className?: string }) => {
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
         renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
         renderer.setClearColor(0x000000, 0);
+        // The canvas must be sized in CSS pixels regardless of device pixel ratio;
+        // the drawing buffer is scaled separately by setPixelRatio/setSize.
+        Object.assign(renderer.domElement.style, { display: 'block', width: '100%', height: '100%' });
         mount.appendChild(renderer.domElement);
 
         const scene = new THREE.Scene();
@@ -113,8 +116,10 @@ const HeroScene = ({ className }: { className?: string }) => {
         const resize = () => {
             const w = mount.clientWidth || 1;
             const h = mount.clientHeight || 1;
-            renderer.setSize(w, h, false);
+            renderer.setSize(w, h);
             camera.aspect = w / h;
+            // Keep the planet a similar on-screen size on very wide or very tall panels.
+            camera.position.z = w / h > 1.5 ? 7.2 : w / h < 0.8 ? 9.5 : 8.2;
             camera.updateProjectionMatrix();
         };
         resize();
