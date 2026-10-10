@@ -12,7 +12,6 @@ import Navbar from '@/components/Navbar';
 import Preloader from '../components/Preloader';
 import StickyEmail from './_components/StickyEmail';
 import InteractiveTerminal from '@/components/InteractiveTerminal';
-import DeveloperMode from '@/components/DeveloperMode';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 
@@ -83,7 +82,6 @@ export default function RootLayout({
                     <ParticleConstellation />
                     <StickyEmail />
                     <InteractiveTerminal />
-                    <DeveloperMode />
                 </ReactLenis>
             </body>
         </html>

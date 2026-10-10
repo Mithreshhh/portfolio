@@ -13,7 +13,7 @@ export interface Satellite {
 }
 
 /**
- * Hero scene: a wireframe planet (the work in progress) with one orbiting
+ * Hero scene: a dark planet drawn only by its lit rim, with one orbiting
  * satellite per shipped product. Each satellite carries a clickable label that
  * tracks its projected position and dims while it passes behind the planet.
  * White on black. Slow rotation, mouse parallax, pauses when off-screen or the
@@ -61,64 +61,94 @@ const HeroScene = ({
         const world = new THREE.Group();
         scene.add(world);
 
-        // --- Planet -----------------------------------------------------------
+        // --- Planet: a solid dark body lit by a thin white rim (eclipse look) --------
+        // No wireframe, no vertex dots; the silhouette does the work.
         const planet = new THREE.Group();
         world.add(planet);
 
-        const shellGeo = new THREE.IcosahedronGeometry(PLANET_R, 2);
-        const shell = new THREE.Mesh(
-            shellGeo,
-            new THREE.MeshBasicMaterial({ color: WHITE, wireframe: true, transparent: true, opacity: 0.22 }),
-        );
-        planet.add(shell);
+        const bodyMat = new THREE.ShaderMaterial({
+            uniforms: {
+                uLight: { value: new THREE.Vector3(-0.55, 0.45, 0.7).normalize() },
+            },
+            vertexShader: /* glsl */ `
+                varying vec3 vN;
+                varying vec3 vV;
+                void main() {
+                    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+                    vN = normalize(normalMatrix * normal);
+                    vV = normalize(-mv.xyz);
+                    gl_Position = projectionMatrix * mv;
+                }
+            `,
+            fragmentShader: /* glsl */ `
+                uniform vec3 uLight;
+                varying vec3 vN;
+                varying vec3 vV;
+                void main() {
+                    float facing = max(dot(normalize(vN), normalize(vV)), 0.0);
+                    float rim = pow(1.0 - facing, 4.0);              // bright only at the edge
+                    float lit = max(dot(normalize(vN), uLight), 0.0); // faint crescent toward the light
+                    float v = 0.025 + lit * 0.06 + rim * 0.95;
+                    gl_FragColor = vec4(vec3(v), 1.0);
+                }
+            `,
+        });
+        planet.add(new THREE.Mesh(new THREE.SphereGeometry(PLANET_R, 96, 96), bodyMat));
 
-        // Opaque core hides the far side of the wireframe so it reads as a solid body.
-        const core = new THREE.Mesh(
-            new THREE.SphereGeometry(PLANET_R - 0.04, 48, 48),
-            new THREE.MeshBasicMaterial({ color: 0x050505 }),
-        );
-        planet.add(core);
-
-        // Nodes at every vertex of the shell.
-        const nodes = new THREE.Points(
-            new THREE.BufferGeometry().setAttribute('position', shellGeo.getAttribute('position').clone()),
-            new THREE.PointsMaterial({ color: WHITE, size: 0.045, transparent: true, opacity: 0.9, sizeAttenuation: true }),
-        );
-        planet.add(nodes);
-
-        // Fresnel-style rim: a slightly larger back-facing sphere, additive.
-        const rim = new THREE.Mesh(
-            new THREE.SphereGeometry(PLANET_R + 0.04, 48, 48),
-            new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.06, side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false }),
-        );
-        planet.add(rim);
+        // Soft halo just outside the limb.
+        const haloShell = new THREE.ShaderMaterial({
+            transparent: true,
+            depthWrite: false,
+            side: THREE.BackSide,
+            blending: THREE.AdditiveBlending,
+            vertexShader: /* glsl */ `
+                varying vec3 vN;
+                varying vec3 vV;
+                void main() {
+                    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+                    vN = normalize(normalMatrix * normal);
+                    vV = normalize(-mv.xyz);
+                    gl_Position = projectionMatrix * mv;
+                }
+            `,
+            fragmentShader: /* glsl */ `
+                varying vec3 vN;
+                varying vec3 vV;
+                void main() {
+                    float a = pow(max(dot(normalize(vN), normalize(vV)), 0.0), 6.0) * 0.5;
+                    gl_FragColor = vec4(vec3(1.0), a);
+                }
+            `,
+        });
+        planet.add(new THREE.Mesh(new THREE.SphereGeometry(PLANET_R * 1.08, 64, 64), haloShell));
 
         // --- Orbits: one per satellite ----------------------------------------------
-        const ringMat = new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.4 });
+        const ringMat = new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.28 });
         const satMat = new THREE.MeshBasicMaterial({ color: WHITE });
         const haloMat = new THREE.MeshBasicMaterial({ color: WHITE, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false });
         const makeRing = (radius: number, tiltX: number, tiltZ: number) => {
             const g = new THREE.Group();
             g.rotation.set(tiltX, 0, tiltZ);
-            g.add(new THREE.Mesh(new THREE.TorusGeometry(radius, 0.0075, 6, 240), ringMat));
-            const sat = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), satMat);
-            sat.add(new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 12), haloMat));
+            g.add(new THREE.Mesh(new THREE.TorusGeometry(radius, 0.006, 6, 240), ringMat));
+            const sat = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 16), satMat);
+            sat.add(new THREE.Mesh(new THREE.SphereGeometry(0.16, 16, 16), haloMat));
             g.add(sat);
             world.add(g);
             return { group: g, sat, radius };
         };
         // Tilts are spread so the orbits read as a system rather than a stack.
+        // Tighter, flatter orbits read as one calm system instead of a tangle.
         const ORBITS = [
-            { r: 2.5, tx: 1.25, tz: 0.35, spin: 0.08, speed: 0.42 },
-            { r: 3.0, tx: 1.05, tz: -0.7, spin: -0.05, speed: -0.3 },
-            { r: 3.45, tx: 1.4, tz: 1.1, spin: 0.035, speed: 0.24 },
-            { r: 3.9, tx: 0.9, tz: -1.6, spin: -0.03, speed: -0.19 },
+            { r: 2.35, tx: 1.35, tz: 0.25, spin: 0.06, speed: 0.36 },
+            { r: 2.75, tx: 1.25, tz: -0.35, spin: -0.04, speed: -0.26 },
+            { r: 3.15, tx: 1.45, tz: 0.55, spin: 0.03, speed: 0.2 },
+            { r: 3.55, tx: 1.2, tz: -0.75, spin: -0.025, speed: -0.16 },
         ];
         const count = Math.max(1, Math.min(satellites.length || 2, ORBITS.length));
         const rings = ORBITS.slice(0, count).map((o) => ({ ...makeRing(o.r, o.tx, o.tz), ...o }));
 
         // --- Stars ---------------------------------------------------------------
-        const STAR_COUNT = 1800;
+        const STAR_COUNT = 900;
         const starPos = new Float32Array(STAR_COUNT * 3);
         for (let i = 0; i < STAR_COUNT; i++) {
             // Shell between r=9 and r=32 so nothing sits inside the planet.
@@ -131,7 +161,7 @@ const HeroScene = ({
         }
         const stars = new THREE.Points(
             new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(starPos, 3)),
-            new THREE.PointsMaterial({ color: WHITE, size: 0.07, transparent: true, opacity: 0.75, sizeAttenuation: true }),
+            new THREE.PointsMaterial({ color: WHITE, size: 0.06, transparent: true, opacity: 0.6, sizeAttenuation: true }),
         );
         scene.add(stars);
 
@@ -214,8 +244,7 @@ const HeroScene = ({
             world.rotation.x = pointer.y * 0.2;
             world.position.y = Math.sin(t * 0.6) * 0.08;
 
-            planet.rotation.y = t * 0.12;
-            planet.rotation.x = Math.sin(t * 0.25) * 0.12;
+            // The body is featureless, so its own spin is invisible; keep it still and let the orbits move.
             stars.rotation.y = t * 0.012;
             stars.rotation.x = t * 0.004;
 
