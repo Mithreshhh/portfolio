@@ -1,15 +1,17 @@
 'use client';
 import parse from 'html-react-parser';
+import BlueprintStepper from '@/components/BlueprintStepper';
+import { CompareGallery } from '@/components/CompareSlider';
 import TransitionLink from '@/components/TransitionLink';
+import { PROJECT_BLUEPRINT } from '@/lib/blueprint-steps';
 import { PROJECTS } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { IProject } from '@/types';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import { ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink, Github, Globe } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Github, Globe } from 'lucide-react';
 import { useRef } from 'react';
-import Image from 'next/image';
 
 interface Props {
     project: IProject;
@@ -28,6 +30,7 @@ const ProjectDetails = ({ project }: Props) => {
     const index = PROJECTS.findIndex((p) => p.slug === project.slug);
     const next = PROJECTS[(index + 1) % PROJECTS.length];
     const live = project.status === 'live';
+    const blueprintKey = PROJECT_BLUEPRINT[project.slug];
 
     useGSAP(
         () => {
@@ -170,35 +173,23 @@ const ProjectDetails = ({ project }: Props) => {
                     </div>
                 </div>
 
-                <div className="grid gap-3 max-w-[1000px] mx-auto" id="images">
-                    {(project.images?.length ? project.images : [project.thumbnail]).map(
-                        (image, idx) => (
-                            <div
-                                key={image}
-                                className={
-                                    idx === 0
-                                        ? 'relative w-full aspect-[16/9] rounded-md overflow-hidden'
-                                        : 'relative w-full aspect-[21/9] rounded-md overflow-hidden'
-                                }
-                            >
-                                <Image
-                                    src={image}
-                                    alt="Project image"
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, 1000px"
-                                    className="object-cover"
-                                />
-                                <a
-                                    href={image}
-                                    target="_blank"
-                                    className="absolute top-3 right-3 bg-background/70 text-foreground size-10 inline-flex justify-center items-center transition-all opacity-0 hover:bg-primary hover:text-primary-foreground hover:opacity-100"
-                                >
-                                    <ExternalLink />
-                                </a>
-                            </div>
-                        ),
-                    )}
-                </div>
+                {/* Guided tour of the architecture, only for projects that have a blueprint. */}
+                {blueprintKey && (
+                    <section aria-labelledby="how-built" className="mx-auto mb-12 max-w-[1000px]">
+                        <p id="how-built" className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                            How it&apos;s built
+                        </p>
+                        <BlueprintStepper blueprintKey={blueprintKey} className="mt-3" />
+                    </section>
+                )}
+
+                {/* First screenshot is a mono/colour compare slider; the rest are plain. */}
+                <CompareGallery
+                    id="images"
+                    images={project.images?.length ? project.images : [project.thumbnail]}
+                    alt={`${project.title} screenshot`}
+                    className="mx-auto max-w-[1000px]"
+                />
 
                 {/* Keep the visitor moving through the work instead of bouncing back to the top. */}
                 {next && next.slug !== project.slug && (

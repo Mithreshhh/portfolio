@@ -11,7 +11,7 @@ import ParticleConstellation from '@/components/ParticleConstellation';
 import Navbar from '@/components/Navbar';
 import Preloader from '../components/Preloader';
 import StickyEmail from './_components/StickyEmail';
-import InteractiveTerminal from '@/components/InteractiveTerminal';
+import CommandPalette from '@/components/CommandPalette';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 
@@ -81,7 +81,7 @@ export default function RootLayout({
                     <ParticleBackground />
                     <ParticleConstellation />
                     <StickyEmail />
-                    <InteractiveTerminal />
+                    <CommandPalette />
                 </ReactLenis>
             </body>
         </html>

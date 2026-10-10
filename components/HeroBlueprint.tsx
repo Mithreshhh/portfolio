@@ -1,9 +1,9 @@
 'use client';
 import { BLUEPRINTS, type Blueprint, type BlueprintKind, type BlueprintNode } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { ArrowUpRight } from 'lucide-react';
+import { AppWindow, ArrowUpRight, Cloud, Database, Server, Users, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
 
 /**
  * Animated blueprints of the systems Mithresh has actually built, cycling
@@ -26,6 +26,15 @@ const KIND_CLASS: Record<BlueprintKind, string> = {
     note: 'fill-transparent stroke-transparent',
 };
 
+// A glyph per node kind, so a reader can tell people, apps, services, stores and third parties apart at a glance.
+const KIND_ICON: Partial<Record<BlueprintKind, LucideIcon>> = {
+    actor: Users,
+    app: AppWindow,
+    service: Server,
+    data: Database,
+    external: Cloud,
+};
+
 const size = (n: BlueprintNode) => (n.kind === 'note' ? NOTE : NODE);
 
 /** Where an edge leaves/enters a node: the side facing the other node. */
@@ -46,7 +55,7 @@ const edgePath = (a: { x: number; y: number }, b: { x: number; y: number }) => {
     return `M${a.x},${a.y} L${mx},${a.y} L${mx},${b.y} L${b.x},${b.y}`;
 };
 
-const useReducedMotion = () => {
+export const useReducedMotion = () => {
     const [reduced, setReduced] = useState(false);
     useEffect(() => {
         const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -58,13 +67,30 @@ const useReducedMotion = () => {
     return reduced;
 };
 
-const Diagram = ({ bp, animate, uid }: { bp: Blueprint; animate: boolean; uid: string }) => {
+export interface DiagramProps {
+    bp: Blueprint;
+    /** Run the request dots along the edges. Defaults to true; pass false under reduced motion. */
+    animate?: boolean;
+    /** Prefix for SVG ids so several diagrams can share a page. */
+    uid?: string;
+    /** Node ids to emphasise. Everything else fades; edges touching a highlighted node stay full. */
+    highlight?: string[];
+    className?: string;
+}
+
+/** The bare architecture diagram, shared by the hero and the case-study stepper. */
+export const Diagram = ({ bp, animate = true, uid: uidProp, highlight, className }: DiagramProps) => {
     const byId = useMemo(() => Object.fromEntries(bp.nodes.map((n) => [n.id, n])), [bp]);
+    const autoId = useId().replace(/[^a-zA-Z0-9]/g, '');
+    const uid = uidProp ?? autoId;
+    const focused = highlight && highlight.length > 0 ? new Set(highlight) : null;
+    const dimNode = (id: string) => focused !== null && !focused.has(id);
+    const dimEdge = (e: { from: string; to: string }) => focused !== null && !focused.has(e.from) && !focused.has(e.to);
 
     return (
         <svg
             viewBox={`0 0 ${VB.w} ${VB.h}`}
-            className="block h-auto w-full"
+            className={cn('block h-auto w-full', className)}
             role="img"
             aria-label={`${bp.title} architecture: ${bp.nodes.map((n) => n.label).join(', ')}`}
         >
@@ -82,14 +108,22 @@ const Diagram = ({ bp, animate, uid }: { bp: Blueprint; animate: boolean; uid: s
                 const d = edgePath(anchor(a, b), anchor(b, a));
                 const id = `${uid}-e${i}`;
                 return (
-                    <g key={id}>
+                    <g key={id} className={cn('transition-opacity duration-300', dimEdge(e) && 'opacity-[0.35]')}>
                         <path id={id} d={d} className="fill-none stroke-border" strokeWidth="1" markerEnd={`url(#${uid}-arrow)`} />
                         {animate && (
-                            <circle r="2.6" className="fill-foreground">
-                                <animateMotion dur="2.6s" begin={`${(i * 0.45).toFixed(2)}s`} repeatCount="indefinite" calcMode="linear">
-                                    <mpath href={`#${id}`} />
-                                </animateMotion>
-                            </circle>
+                            <>
+                                {/* Soft halo under the request dot. */}
+                                <circle r="7" className="fill-foreground/20">
+                                    <animateMotion dur="2.6s" begin={`${(i * 0.45).toFixed(2)}s`} repeatCount="indefinite" calcMode="linear">
+                                        <mpath href={`#${id}`} />
+                                    </animateMotion>
+                                </circle>
+                                <circle r="2.6" className="fill-foreground">
+                                    <animateMotion dur="2.6s" begin={`${(i * 0.45).toFixed(2)}s`} repeatCount="indefinite" calcMode="linear">
+                                        <mpath href={`#${id}`} />
+                                    </animateMotion>
+                                </circle>
+                            </>
                         )}
                     </g>
                 );
@@ -100,16 +134,35 @@ const Diagram = ({ bp, animate, uid }: { bp: Blueprint; animate: boolean; uid: s
                 const s = size(n);
                 const note = n.kind === 'note';
                 const dark = n.kind === 'app';
+                const Icon = KIND_ICON[n.kind];
+                const tx = note ? 20 : Icon ? 34 : 12;
                 // Position on the outer group; the entrance animation lives on an inner group, because a
                 // CSS transform would otherwise override the SVG transform attribute and pile every node up.
+                // Highlight dimming is plain opacity, so it is safe on the outer group.
                 return (
-                    <g key={n.id} transform={`translate(${n.x - s.w / 2}, ${n.y - s.h / 2})`}>
+                    <g
+                        key={n.id}
+                        transform={`translate(${n.x - s.w / 2}, ${n.y - s.h / 2})`}
+                        className={cn('transition-opacity duration-300', dimNode(n.id) && 'opacity-[0.35]')}
+                    >
                       <g className="bp-node" style={{ animationDelay: `${i * 70}ms` }}>
                         <rect width={s.w} height={s.h} rx="8" className={cn(KIND_CLASS[n.kind])} strokeWidth="1" />
                         {n.kind === 'data' && <line x1="0" y1="8" x2={s.w} y2="8" className="stroke-foreground/60" strokeWidth="1" />}
                         {note && <circle cx="10" cy={s.h / 2} r="2.5" className="fill-muted-foreground" />}
+                        {Icon && (
+                            // lucide renders an <svg>, which nests fine inside the diagram.
+                            <Icon
+                                x={11}
+                                y={s.h / 2 - 8}
+                                width={16}
+                                height={16}
+                                strokeWidth={1.6}
+                                aria-hidden="true"
+                                className={dark ? 'text-background' : 'text-muted-foreground'}
+                            />
+                        )}
                         <text
-                            x={note ? 20 : 12}
+                            x={tx}
                             y={n.sub ? s.h / 2 - 3 : s.h / 2 + 4}
                             className={cn('font-medium', dark ? 'fill-background' : 'fill-foreground')}
                             fontSize="12.5"
@@ -117,7 +170,7 @@ const Diagram = ({ bp, animate, uid }: { bp: Blueprint; animate: boolean; uid: s
                             {n.label}
                         </text>
                         {n.sub && (
-                            <text x={note ? 20 : 12} y={s.h / 2 + 12} className={dark ? 'fill-background/70' : 'fill-muted-foreground'} fontSize="10">
+                            <text x={tx} y={s.h / 2 + 12} className={dark ? 'fill-background/70' : 'fill-muted-foreground'} fontSize="10">
                                 {n.sub}
                             </text>
                         )}
@@ -150,12 +203,55 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
 
     const external = bp.href?.startsWith('http');
 
+    // Depth: the card tilts toward the pointer and its layers sit at different z-depths, so the
+    // grid, the diagram and the chrome parallax against each other. Mouse only; touch and
+    // reduced-motion visitors get the flat card.
+    const cardRef = useRef<HTMLDivElement>(null);
+    const raf = useRef(0);
+    const [canTilt, setCanTilt] = useState(false);
+    useEffect(() => {
+        const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+        const on = () => setCanTilt(mq.matches && !reduced);
+        on();
+        mq.addEventListener('change', on);
+        return () => mq.removeEventListener('change', on);
+    }, [reduced]);
+
+    const onPointerMove = useCallback(
+        (e: PointerEvent<HTMLDivElement>) => {
+            if (!canTilt || !cardRef.current) return;
+            const r = cardRef.current.getBoundingClientRect();
+            const px = (e.clientX - r.left) / r.width - 0.5;
+            const py = (e.clientY - r.top) / r.height - 0.5;
+            cancelAnimationFrame(raf.current);
+            raf.current = requestAnimationFrame(() => {
+                const el = cardRef.current;
+                if (!el) return;
+                el.style.transform = `rotateX(${(-py * 7).toFixed(2)}deg) rotateY(${(px * 9).toFixed(2)}deg)`;
+                el.style.setProperty('--glare-x', `${((px + 0.5) * 100).toFixed(1)}%`);
+                el.style.setProperty('--glare-y', `${((py + 0.5) * 100).toFixed(1)}%`);
+            });
+        },
+        [canTilt],
+    );
+    const resetTilt = useCallback(() => {
+        cancelAnimationFrame(raf.current);
+        const el = cardRef.current;
+        if (el) el.style.transform = '';
+    }, []);
+    useEffect(() => () => cancelAnimationFrame(raf.current), []);
+
     return (
+        <div className={cn('[perspective:1400px]', className)}>
         <div
+            ref={cardRef}
             className={cn(
-                'relative overflow-hidden rounded-2xl border border-border/60 bg-background/70 backdrop-blur-md',
-                className,
+                'relative rounded-2xl border border-border/60 bg-background/70 backdrop-blur-md transition-transform duration-500 ease-out will-change-transform',
+                canTilt && '[transform-style:preserve-3d]',
             )}
+            style={{ '--glare-x': '50%', '--glare-y': '30%' } as CSSProperties}
+            onPointerMove={onPointerMove}
+            onPointerLeave={resetTilt}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             onFocus={() => setPaused(true)}
@@ -163,14 +259,23 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
                 if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
             }}
         >
-            {/* Faint grid, like paper. */}
+            {/* Faint grid, like paper, pushed back so it drifts behind the diagram on tilt. */}
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(hsl(var(--foreground))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--foreground))_1px,transparent_1px)] [background-size:24px_24px]"
+                className="pointer-events-none absolute inset-0 rounded-2xl opacity-[0.07] [background-image:linear-gradient(hsl(var(--foreground))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--foreground))_1px,transparent_1px)] [background-size:24px_24px]"
+                style={canTilt ? { transform: 'translateZ(-40px) scale(1.04)' } : undefined}
             />
+            {/* Glare that follows the pointer, like light on a glass panel. */}
+            {canTilt && (
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 rounded-2xl opacity-60 [background:radial-gradient(260px_circle_at_var(--glare-x)_var(--glare-y),hsl(var(--foreground)/0.09),transparent_70%)]"
+                    style={{ transform: 'translateZ(60px)' }}
+                />
+            )}
 
             {/* Tabs */}
-            <div role="tablist" aria-label="Systems I've built" className="relative flex flex-wrap gap-1 border-b border-border/60 p-2">
+            <div role="tablist" aria-label="Systems I've built" className="relative flex flex-wrap gap-1 border-b border-border/60 p-2" style={canTilt ? { transform: 'translateZ(16px)' } : undefined}>
                 {BLUEPRINTS.map((b, i) => (
                     <button
                         key={b.key}
@@ -188,7 +293,7 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
             </div>
 
             {/* Header */}
-            <div className="relative flex items-start justify-between gap-4 px-4 pt-4">
+            <div className="relative flex items-start justify-between gap-4 px-4 pt-4" style={canTilt ? { transform: 'translateZ(16px)' } : undefined}>
                 <div className="min-w-0">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Blueprint</p>
                     <h3 className="mt-1 font-anton text-xl uppercase leading-none tracking-wide sm:text-2xl">{bp.title}</h3>
@@ -207,13 +312,16 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
                 )}
             </div>
 
-            {/* Diagram (remounted per blueprint so nodes replay their entrance). */}
-            <div key={bp.key} className="relative px-2 pt-1">
+            {/* Diagram (remounted per blueprint so nodes replay their entrance). Sits closest to the viewer. */}
+            <div key={bp.key} className="relative px-2 pt-1" style={canTilt ? { transform: 'translateZ(44px)' } : undefined}>
                 <Diagram bp={bp} animate={!reduced} uid={`${uid}-${bp.key}`} />
             </div>
 
             {/* Facts */}
-            <ul className="relative flex flex-wrap gap-x-4 gap-y-1 border-t border-border/60 px-4 py-3 text-xs text-muted-foreground">
+            <ul
+                className="relative flex flex-wrap gap-x-4 gap-y-1 border-t border-border/60 px-4 py-3 text-xs text-muted-foreground"
+                style={canTilt ? { transform: 'translateZ(16px)' } : undefined}
+            >
                 {bp.facts.map((f) => (
                     <li key={f} className="flex items-center gap-1.5">
                         <span className="size-1 rounded-full bg-foreground/70" aria-hidden="true" />
@@ -231,6 +339,7 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
                     style={{ width: '100%', animation: `bp-progress ${CYCLE_MS}ms linear forwards` }}
                 />
             )}
+        </div>
         </div>
     );
 };

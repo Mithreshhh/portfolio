@@ -224,7 +224,7 @@ export const BLUEPRINTS: Blueprint[] = [
             { id: 'api', label: 'LMS backend', sub: 'core infrastructure', kind: 'service', x: 398, y: 180 },
             { id: 'pdf', label: 'PDF reader', sub: 'pdf.js, integrated', kind: 'service', x: 562, y: 70 },
             { id: 'drive', label: 'Google Drive', sub: 'content automation', kind: 'external', x: 562, y: 180 },
-            { id: 'score', label: 'Assessment scoring', sub: 'phase 2', kind: 'service', x: 562, y: 290 },
+            { id: 'score', label: 'Scoring', sub: 'assessments · phase 2', kind: 'service', x: 562, y: 290 },
             { id: 'hooks', label: 'Webhooks', sub: 'audited · secrets rotated', kind: 'note', x: 236, y: 300 },
         ],
         edges: [

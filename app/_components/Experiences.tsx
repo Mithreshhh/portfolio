@@ -1,4 +1,5 @@
 'use client';
+import ImpactStats from '@/components/ImpactStats';
 import SectionTitle from '@/components/SectionTitle';
 import { ACHIEVEMENTS, EDUCATION, EXPERIENCE, OTHER_WORK, type ExperienceEntry, type ExperienceType } from '@/lib/data';
 import { cn } from '@/lib/utils';
@@ -196,7 +197,10 @@ const Experiences = () => {
             <div className="container" ref={containerRef}>
                 <SectionTitle title="My Experience" />
 
-                <div className="relative">
+                <ImpactStats className="mb-8" />
+
+                {/* Own anchor so the impact cards' "in the timeline" links land here, not on the section title. */}
+                <div id="experience-timeline" className="relative scroll-mt-24">
                     {/* Rail: sits behind the dots, drawn by scroll. */}
                     <div
                         aria-hidden="true"

@@ -1,3 +1,4 @@
+import CommitFeed from '@/components/CommitFeed';
 import SectionTitle from '@/components/SectionTitle';
 import ScrollTriggerRefresh from '@/components/ScrollTriggerRefresh';
 import ContributionSkyline from '@/components/ui/contribution-skyline';
@@ -66,6 +67,9 @@ const GithubActivity = async () => {
                         <ArrowUpRight className="shrink-0 text-primary transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </a>
                 )}
+
+                {/* Renders nothing (not even its margin) when the events feed is empty or rate-limited. */}
+                <CommitFeed />
             </div>
         </section>
     );

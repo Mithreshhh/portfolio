@@ -1,11 +1,11 @@
 'use client';
+import HireCard from '@/components/HireCard';
 import SectionTitle from '@/components/SectionTitle';
-import { ACHIEVEMENTS, EDUCATION, EXPERIENCE, GENERAL_INFO, PROJECTS } from '@/lib/data';
+import { ACHIEVEMENTS, EDUCATION, EXPERIENCE, PROJECTS } from '@/lib/data';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import { ArrowRight, Gauge, ShieldCheck, Users } from 'lucide-react';
-import Link from 'next/link';
+import { Gauge, ShieldCheck, Users } from 'lucide-react';
 import React from 'react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -111,21 +111,7 @@ const AboutMe = () => {
                             ))}
                         </dl>
 
-                        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
-                            <Link
-                                href="/hire-me"
-                                className="inline-flex items-center gap-1.5 text-foreground underline-offset-4 hover:underline"
-                            >
-                                Work with me
-                                <ArrowRight size={14} aria-hidden="true" />
-                            </Link>
-                            <a href={GENERAL_INFO.resume} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground">
-                                Resume (PDF)
-                            </a>
-                            <a href={`mailto:${GENERAL_INFO.email}`} className="text-muted-foreground hover:text-foreground">
-                                {GENERAL_INFO.email}
-                            </a>
-                        </div>
+                        <HireCard className="mt-6" />
                     </aside>
                 </div>
             </div>
