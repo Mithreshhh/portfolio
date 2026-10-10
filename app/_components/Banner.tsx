@@ -1,98 +1,127 @@
 'use client';
-import ArrowAnimation from '@/components/ArrowAnimation';
 import Button from '@/components/Button';
 import MusicVisualizer from '@/components/MusicVisualizer';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
+import { ArrowDown, MapPin } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import React from 'react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+// three.js is ~150 kB gzipped; keep it out of the first paint.
+const HeroScene = dynamic(() => import('@/components/HeroScene'), { ssr: false });
+
+const STATUS = [
+    { label: 'Now', value: 'Full Stack Dev @ Menler', live: true },
+    { label: 'Open to', value: 'Internships · Freelance' },
+    { label: 'Win', value: 'Ideathon Champion' },
+];
+
 const Banner = () => {
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    // move the content a little up on scroll
     useGSAP(
         () => {
-            // Ensure elements are visible initially
-            gsap.set('.slide-up-and-fade', { opacity: 1, y: 0, visibility: 'visible' });
-            
-            const tl = gsap.timeline({
+            // Intro: copy rises in once the preloader is gone.
+            gsap.from('.hero-in', {
+                y: 28,
+                opacity: 0,
+                duration: 0.9,
+                stagger: 0.08,
+                ease: 'power3.out',
+                delay: 0.2,
+            });
+
+            // Exit: fade the copy as the hero scrolls away.
+            gsap.to('.hero-copy', {
+                y: -120,
+                opacity: 0,
+                ease: 'none',
                 scrollTrigger: {
                     trigger: containerRef.current,
-                    start: 'bottom 70%',
-                    end: 'bottom 10%',
+                    start: 'bottom 75%',
+                    end: 'bottom 15%',
                     scrub: 1,
                 },
             });
-
-            tl.fromTo(
-                '.slide-up-and-fade',
-                { y: 0, opacity: 1 },
-                { y: -150, opacity: 0, stagger: 0.02 },
-            );
         },
         { scope: containerRef },
     );
 
     return (
-        <section className="relative overflow-hidden" id="banner">
-            <ArrowAnimation />
+        <section className="relative overflow-hidden bg-gradient-to-b from-black via-black/60 to-transparent" id="banner">
+            {/* 3D scene: right half on desktop, full-bleed and dimmed on phones. */}
+            <div className="pointer-events-none absolute inset-0 md:left-auto md:w-[58%]">
+                <HeroScene className="absolute inset-0 opacity-35 md:opacity-100 [mask-image:radial-gradient(ellipse_70%_75%_at_60%_50%,black_45%,transparent_100%)]" />
+            </div>
+
             <div
-                className="container h-[90svh] md:h-[100svh] min-h-[540px] max-md:pb-10 flex justify-between items-center max-md:flex-col max-md:pt-24 relative z-10"
                 ref={containerRef}
+                className="container relative z-10 flex min-h-[560px] flex-col justify-center pb-24 pt-28 md:h-[100svh] md:pb-20 md:pt-24"
             >
-                <div className="max-md:grow max-md:flex flex-col justify-center items-start max-w-[544px] relative z-10">
-                    <h1 className="banner-title slide-up-and-fade leading-[1.02] md:leading-[.95] text-5xl sm:text-[64px] md:text-[80px] font-anton text-foreground opacity-100" style={{ opacity: 1, color: 'inherit' }}>
-                        <span className="text-primary" style={{ color: 'hsl(var(--primary))' }}>FULL STACK</span>
-                        <br /> <span className="ml-4 text-foreground hover:text-primary smooth-transition" style={{ color: 'hsl(var(--foreground))' }}>DEVELOPER</span>
-                    </h1>
-                    <p className="banner-description slide-up-and-fade mt-5 md:mt-6 text-base md:text-lg text-muted-foreground max-w-prose leading-relaxed opacity-100" style={{ opacity: 1, color: 'hsl(var(--muted-foreground))' }}>
-                        Hi! I&apos;m{' '}
-                        <span className="font-medium text-foreground bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                            Mithresh
-                        </span>
-                        . A Computer Science undergraduate and full stack
-                        developer working with React, Next.js, Node.js, and
-                        REST APIs. Currently building production LMS
-                        infrastructure at an early-stage AI EdTech startup.
+                <div className="hero-copy max-w-[640px]">
+                    <p className="hero-in flex items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
+                        <MapPin size={12} aria-hidden="true" />
+                        Hyderabad, India · Computer Science undergraduate
                     </p>
-                    <Button
-                        as="link"
-                        href="/hire-me"
-                        variant="primary"
-                        className="mt-7 md:mt-9 banner-button slide-up-and-fade group hover:scale-105 smooth-transition hover:shadow-2xl hover:shadow-primary/30"
-                    >
-                        Hire Me
-                    </Button>
+
+                    <h1 className="hero-in mt-6 font-anton text-[58px] leading-[0.92] sm:text-[80px] md:text-[96px] lg:text-[110px]">
+                        <span className="block text-foreground text-glow">FULL STACK</span>
+                        <span className="text-outline block">DEVELOPER</span>
+                    </h1>
+
+                    <p className="hero-in mt-7 max-w-[520px] text-base leading-relaxed text-muted-foreground md:text-lg">
+                        Hi, I&apos;m <span className="font-medium text-foreground">Mithresh</span>. I build with React,
+                        Next.js, Node.js and REST APIs — currently shipping production LMS infrastructure at an
+                        early-stage AI EdTech startup.
+                    </p>
+
+                    <div className="hero-in mt-9 flex flex-wrap items-center gap-3">
+                        <Button as="link" href="/hire-me" variant="primary" className="px-8">
+                            Hire me
+                        </Button>
+                        <Button as="link" href="/#selected-projects" variant="link" className="px-4 hover:text-foreground">
+                            <span className="inline-flex items-center gap-2 whitespace-nowrap">
+                                View work
+                                <ArrowDown size={16} aria-hidden="true" className="transition-transform group-hover:translate-y-0.5" />
+                            </span>
+                        </Button>
+                    </div>
+
+                    <ul className="hero-in mt-12 flex flex-wrap gap-2.5">
+                        {STATUS.map((s) => (
+                            <li
+                                key={s.label}
+                                className="flex items-center gap-2.5 rounded-full border border-border/70 bg-background/60 px-3.5 py-1.5 text-sm backdrop-blur-sm"
+                            >
+                                {s.live ? (
+                                    <span className="relative flex size-2">
+                                        <span className="absolute inline-flex size-full animate-ping rounded-full bg-foreground/60 motion-reduce:animate-none" />
+                                        <span className="relative inline-flex size-2 rounded-full bg-foreground" />
+                                    </span>
+                                ) : (
+                                    <span className="size-2 rounded-full bg-muted-foreground/60" />
+                                )}
+                                <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{s.label}</span>
+                                <span className="text-foreground/90">{s.value}</span>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
-                <div className="md:absolute bottom-[10%] right-[4%] flex md:flex-col gap-3 md:gap-8 text-center md:text-right mt-10 md:mt-0 z-[1]">
-                    <div className="info-card rounded-2xl px-6 py-4 bg-background/90 backdrop-blur-md border-2 border-primary/40 hover:border-primary/70 hover:bg-background smooth-transition hover:scale-105 hover:shadow-2xl hover:shadow-primary/30">
-                        <h5 className="text-2xl sm:text-3xl md:text-4xl font-anton text-primary mb-1 text-glow">
-                            NOW
-                        </h5>
-                        <p className="text-foreground text-sm font-medium">
-                            Full Stack Dev @ Menler
-                        </p>
-                    </div>
-                    <div className="info-card rounded-2xl px-6 py-4 bg-background/90 backdrop-blur-md border-2 border-secondary/40 hover:border-secondary/70 hover:bg-background smooth-transition hover:scale-105 hover:shadow-2xl hover:shadow-secondary/30">
-                        <h5 className="text-2xl sm:text-3xl md:text-4xl font-anton text-secondary text-glow-secondary mb-1">
-                            OPEN TO
-                        </h5>
-                        <p className="text-foreground text-sm font-medium">Internships · Freelance</p>
-                    </div>
-                    <div className="info-card rounded-2xl px-6 py-4 bg-background/90 backdrop-blur-md border-2 border-accent/40 hover:border-accent/70 hover:bg-background smooth-transition hover:scale-105 hover:shadow-2xl hover:shadow-accent/30">
-                        <h5 className="text-2xl sm:text-3xl md:text-4xl font-anton text-accent mb-1">
-                            WIN
-                        </h5>
-                        <p className="text-foreground text-sm font-medium">Ideathon Champion</p>
-                    </div>
-                </div>
+                <a
+                    href="#about-me"
+                    className="hero-in absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-muted-foreground transition-colors hover:text-foreground md:flex"
+                >
+                    Scroll
+                    <span className="block h-10 w-px overflow-hidden bg-border">
+                        <span className="block h-full w-full origin-top animate-[scrollhint_1.8s_ease-in-out_infinite] bg-foreground motion-reduce:animate-none" />
+                    </span>
+                </a>
             </div>
-            
-            {/* Music Visualizer */}
+
             <MusicVisualizer youtubeVideoId="vfnAYipqj1k" />
         </section>
     );

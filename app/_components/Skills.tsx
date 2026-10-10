@@ -74,7 +74,8 @@ const TechIcon = ({ src, alt, size = 28 }: { src: string; alt: string; size?: nu
 const TechTile = ({ item }: { item: StackItem }) => (
     <li className="skill-tile group">
         <div className="relative flex items-center gap-3 rounded-xl border border-border/50 bg-background-light/40 px-3.5 py-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-background-light/70 hover:shadow-[0_12px_32px_-14px_hsl(var(--primary)/0.55)]">
-            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-background/70 ring-1 ring-border/60 transition-transform duration-300 group-hover:scale-110">
+            {/* Logos sit in greyscale and regain their colour on hover. */}
+            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-background/70 ring-1 ring-border/60 grayscale transition-[transform,filter] duration-300 group-hover:scale-110 group-hover:grayscale-0">
                 <TechIcon src={item.icon} alt={item.name} />
             </span>
             <span className="text-[15px] font-medium leading-tight text-foreground/90 transition-colors group-hover:text-foreground">
@@ -128,7 +129,7 @@ const Skills = () => {
                 >
                     <div className="animate-marquee flex w-max gap-10 px-5 group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none">
                         {[...allItems, ...allItems].map((item, i) => (
-                            <span key={`${item.name}-${i}`} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                            <span key={`${item.name}-${i}`} className="flex items-center gap-2.5 text-sm text-muted-foreground grayscale">
                                 <TechIcon src={item.icon} alt={item.name} size={22} />
                                 {item.name}
                             </span>

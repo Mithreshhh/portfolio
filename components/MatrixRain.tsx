@@ -44,7 +44,7 @@ export default function MatrixRain({ isActive, onClose }: MatrixRainProps) {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Green text
-      ctx.fillStyle = '#00ff41';
+      ctx.fillStyle = '#ffffff';
       ctx.font = `${fontSize}px monospace`;
 
       // Draw characters
@@ -55,7 +55,7 @@ export default function MatrixRain({ isActive, onClose }: MatrixRainProps) {
 
         // Gradient effect (brighter at top)
         const opacity = Math.min(1, (canvas.height - y) / 200);
-        ctx.fillStyle = `rgba(0, 255, 65, ${opacity})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.fillText(text, x, y);
 
         // Reset drop if it reaches bottom
@@ -107,7 +107,7 @@ export default function MatrixRain({ isActive, onClose }: MatrixRainProps) {
             setFadeOut(true);
             setTimeout(() => onClose(), 1000);
           }}
-          className="px-6 py-3 bg-black/80 border-2 border-green-400 text-green-400 font-mono rounded-lg hover:bg-green-400 hover:text-black transition-all duration-300"
+          className="px-6 py-3 bg-black/80 border-2 border-white text-white font-mono rounded-lg hover:bg-white hover:text-black transition-all duration-300"
         >
           EXIT MATRIX
         </button>

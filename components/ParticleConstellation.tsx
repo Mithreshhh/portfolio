@@ -3,133 +3,109 @@
 import { useEffect, useRef } from 'react';
 
 interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  label: string;
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    label: string;
 }
 
-export default function ParticleConstellation() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const particlesRef = useRef<Particle[]>([]);
-
-  const skills = [
+const SKILLS = [
     'React', 'Next.js', 'TypeScript', 'Node.js', 'Python',
-    'MongoDB', 'PostgreSQL', 'Docker', 'AWS', 'Git',
-    'Tailwind', 'GSAP', 'ML/AI'
-  ];
+    'MongoDB', 'PostgreSQL', 'Docker', 'Azure', 'Git',
+    'Tailwind', 'GSAP', 'Express',
+];
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+/** Drifting constellation of skill nodes that lean toward the cursor. White on black. */
+export default function ParticleConstellation() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // Set canvas size
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+        const mouse = { x: -9999, y: -9999 };
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        resize();
+        window.addEventListener('resize', resize);
 
-    // Initialize particles
-    particlesRef.current = skills.map(() => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      label: skills[Math.floor(Math.random() * skills.length)],
-    }));
+        const particles: Particle[] = SKILLS.map((label) => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            label,
+        }));
 
-    // Mouse move handler
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    window.addEventListener('mousemove', handleMouseMove);
+        const onMove = (e: MouseEvent) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        };
+        window.addEventListener('mousemove', onMove);
 
-    // Animation loop
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let raf = 0;
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Update and draw particles
-      particlesRef.current.forEach((particle, i) => {
-        // Mouse attraction
-        const dx = mouseRef.current.x - particle.x;
-        const dy = mouseRef.current.y - particle.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+            particles.forEach((p, i) => {
+                const dx = mouse.x - p.x;
+                const dy = mouse.y - p.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 150 && dist > 0) {
+                    p.vx += (dx / dist) * 0.1;
+                    p.vy += (dy / dist) * 0.1;
+                }
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= 0.98;
+                p.vy *= 0.98;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        if (dist < 150) {
-          particle.vx += (dx / dist) * 0.1;
-          particle.vy += (dy / dist) * 0.1;
-        }
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+                ctx.fill();
+                ctx.shadowBlur = 0;
 
-        // Update position
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+                for (let j = i + 1; j < particles.length; j++) {
+                    const o = particles[j];
+                    const d = Math.hypot(p.x - o.x, p.y - o.y);
+                    if (d < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(o.x, o.y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - d / 120) * 0.6})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
 
-        // Friction
-        particle.vx *= 0.98;
-        particle.vy *= 0.98;
+                if (dist < 50) {
+                    ctx.font = '12px monospace';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(p.label, p.x + 10, p.y - 10);
+                }
+            });
 
-        // Boundary check
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+            raf = requestAnimationFrame(animate);
+        };
+        raf = requestAnimationFrame(animate);
 
-        // Draw particle
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = '#a855f7'; // primary color
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#a855f7';
-        ctx.fill();
+        return () => {
+            cancelAnimationFrame(raf);
+            window.removeEventListener('resize', resize);
+            window.removeEventListener('mousemove', onMove);
+        };
+    }, []);
 
-        // Draw connections
-        particlesRef.current.forEach((otherParticle, j) => {
-          if (i === j) return;
-
-          const dx = particle.x - otherParticle.x;
-          const dy = particle.y - otherParticle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `rgba(168, 85, 247, ${1 - distance / 120})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        });
-
-        // Draw label on hover
-        if (dist < 50) {
-          ctx.font = '12px monospace';
-          ctx.fillStyle = '#ffffff';
-          ctx.fillText(particle.label, particle.x + 10, particle.y - 10);
-        }
-      });
-
-      requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[0]"
-      style={{ opacity: 0.6 }}
-    />
-  );
+    return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 z-[0]" style={{ opacity: 0.5 }} />;
 }
-

@@ -4,36 +4,36 @@
 
 @layer base {
     :root {
-        /* Dark base unchanged for layout */
-        --background: 0 0% 10%;
-        --background-light: 0 0% 16%;
-        --foreground: 0 0% 92%;
+        /* Monochrome space theme: pure blacks, soft whites, greys in between. */
+        --background: 0 0% 4%;
+        --background-light: 0 0% 9%;
+        --foreground: 0 0% 96%;
 
-        --card: 0 0% 6%;
+        --card: 0 0% 5%;
         --card-foreground: 0 0% 98%;
-        --popover: 0 0% 6%;
+        --popover: 0 0% 5%;
         --popover-foreground: 0 0% 98%;
 
-        /* New brand: Purple primary + Orange secondary */
-        --primary: 265 85% 62%; /* vivid purple */
-        --primary-foreground: 0 0% 10%;
-        --secondary: 24 95% 58%; /* orange */
-        --secondary-foreground: 0 0% 10%;
+        /* primary = white, secondary = light grey, accent = mid grey */
+        --primary: 0 0% 98%;
+        --primary-foreground: 0 0% 5%;
+        --secondary: 0 0% 74%;
+        --secondary-foreground: 0 0% 5%;
 
-        --muted: 0 0% 18%;
-        --muted-foreground: 0 0% 70%;
-        --accent: 210 90% 55%; /* blue accent for links/badges */
+        --muted: 0 0% 13%;
+        --muted-foreground: 0 0% 62%;
+        --accent: 0 0% 55%;
         --accent-foreground: 0 0% 98%;
-        --destructive: 0 72% 40%;
+        --destructive: 0 0% 40%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 26%;
-        --input: 0 0% 18%;
-        --ring: 265 85% 62%;
-        --chart-1: 265 85% 62%;
-        --chart-2: 24 95% 58%;
-        --chart-3: 210 90% 55%;
-        --chart-4: 155 75% 45%;
-        --chart-5: 340 75% 60%;
+        --border: 0 0% 19%;
+        --input: 0 0% 14%;
+        --ring: 0 0% 98%;
+        --chart-1: 0 0% 98%;
+        --chart-2: 0 0% 74%;
+        --chart-3: 0 0% 55%;
+        --chart-4: 0 0% 38%;
+        --chart-5: 0 0% 24%;
     }
 }
 
@@ -41,63 +41,63 @@
     ::-webkit-scrollbar {
         width: 8px;
     }
-    
+
     ::-webkit-scrollbar-track {
         background: hsl(var(--background));
     }
-    
+
     ::-webkit-scrollbar-thumb {
-        background: hsl(var(--primary) / 0.5);
+        background: hsl(var(--foreground) / 0.25);
         border-radius: 4px;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
-        background: hsl(var(--primary) / 0.7);
+        background: hsl(var(--foreground) / 0.45);
     }
-    
+
     * {
         @apply border-border;
     }
-    
+
     html {
         scroll-behavior: smooth;
     }
-    
+
     body {
         @apply bg-background text-foreground font-roboto-flex;
         position: relative;
         overflow-x: hidden;
     }
-    
+
     body::before {
         content: '';
         position: fixed;
         inset: 0;
         z-index: -1;
-        /* Animated gradient mesh background */
+        /* Deep space: black at the top easing into charcoal, with two slow-drifting white glows. */
         background-image:
-            radial-gradient(circle at 20% 20%, hsla(265,85%,35%,0.15), transparent 50%),
-            radial-gradient(circle at 80% 80%, hsla(24,95%,35%,0.12), transparent 50%),
-            radial-gradient(circle at 40% 60%, hsla(210,90%,35%,0.08), transparent 40%),
-            linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background-light)) 100%);
+            radial-gradient(ellipse 60% 50% at 18% 15%, hsla(0, 0%, 100%, 0.07), transparent 60%),
+            radial-gradient(ellipse 50% 45% at 82% 85%, hsla(0, 0%, 100%, 0.045), transparent 60%),
+            radial-gradient(ellipse 40% 40% at 50% 55%, hsla(0, 0%, 100%, 0.025), transparent 55%),
+            linear-gradient(180deg, hsl(0 0% 1%) 0%, hsl(var(--background)) 35%, hsl(var(--background-light)) 100%);
         background-attachment: fixed;
-        animation: gradientShift 15s ease infinite;
+        animation: gradientShift 24s ease-in-out infinite;
     }
-    
+
     body::after {
         content: '';
         position: fixed;
         inset: 0;
         z-index: -1;
         /* Subtle grid pattern */
-        background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
         background-size: 50px 50px;
         mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
         pointer-events: none;
     }
-    
+
     @keyframes gradientShift {
         0%, 100% {
             background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%;
@@ -112,6 +112,12 @@
             background-position: 40% 60%, 60% 40%, 50% 50%, 0% 0%;
         }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+        body::before {
+            animation: none;
+        }
+    }
 }
 
 @layer components {
@@ -122,7 +128,7 @@
     .markdown-text ul {
         @apply pl-5 mt-2 list-disc;
     }
-    
+
     /* Glassmorphism utility */
     .glass {
         background: rgba(255, 255, 255, 0.05);
@@ -130,28 +136,35 @@
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .glass-hover {
         transition: all 0.3s ease;
     }
-    
+
     .glass-hover:hover {
         background: rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         transform: translateY(-2px);
-        box-shadow: 0 10px 40px -10px hsl(var(--primary) / 0.3);
+        box-shadow: 0 10px 40px -10px hsl(var(--foreground) / 0.2);
     }
-    
+
     /* Text glow effect */
     .text-glow {
-        text-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+        text-shadow: 0 0 24px hsl(var(--foreground) / 0.35);
     }
-    
+
     .text-glow-secondary {
         text-shadow: 0 0 20px hsl(var(--secondary) / 0.3);
     }
-    
+
+    /* Outlined display text (hero) */
+    .text-outline {
+        color: transparent;
+        -webkit-text-stroke: 1.5px hsl(var(--foreground) / 0.85);
+        text-stroke: 1.5px hsl(var(--foreground) / 0.85);
+    }
+
     /* Smooth animations */
     .smooth-transition {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -170,14 +183,34 @@
     .animate-marquee {
         animation: marquee 40s linear infinite;
     }
-    
+
+    /* Hero "scroll" hint: a line that fills from the top, then drains from the bottom. */
+    @keyframes scrollhint {
+        0% {
+            transform: scaleY(0);
+            transform-origin: top;
+        }
+        45% {
+            transform: scaleY(1);
+            transform-origin: top;
+        }
+        55% {
+            transform: scaleY(1);
+            transform-origin: bottom;
+        }
+        100% {
+            transform: scaleY(0);
+            transform-origin: bottom;
+        }
+    }
+
     /* Section divider */
     .section-divider {
         position: relative;
         margin-top: 4rem;
         margin-bottom: 4rem;
     }
-    
+
     .section-divider::before {
         content: '';
         position: absolute;
@@ -185,9 +218,9 @@
         transform: translateX(-50%);
         width: 100px;
         height: 2px;
-        background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5), transparent);
+        background: linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.4), transparent);
     }
-    
+
     /* Ensure animated elements are visible by default (fallback if JS fails) */
     .slide-up-and-fade,
     .slide-up {

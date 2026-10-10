@@ -19,12 +19,12 @@ const themeBridge = {
     '--color-muted-foreground': 'hsl(var(--muted-foreground))',
 } as CSSProperties;
 
-// Site purple (the component's "grape" preset). The preset's darkest step is too
-// close to an empty day on the near-black card, so the low end is lifted. Values
-// are inlined because only components cross the server → client boundary.
+// Monochrome ramp to match the site. The lowest step is lifted well clear of an
+// empty day on the near-black card. Values are inlined because only components
+// cross the server → client boundary.
 const PALETTE = {
-    light: ['#e4d4fb', '#b794f4', '#805ad5', '#44337a'],
-    dark: ['#3d2b78', '#5d3fb8', '#8b5cf6', '#c4b5fd'],
+    light: ['#d4d4d4', '#a3a3a3', '#525252', '#171717'],
+    dark: ['#3a3a3a', '#6b6b6b', '#a8a8a8', '#f5f5f5'],
 };
 
 async function fetchContributions(): Promise<ContributionDay[] | null> {

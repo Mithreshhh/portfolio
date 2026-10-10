@@ -60,7 +60,7 @@ export default function MusicVisualizer({
         radius: Math.random() * 2 + 1,
         vx: (Math.random() - 0.5) * 2,
         vy: (Math.random() - 0.5) * 2,
-        color: i % 2 === 0 ? '#a855f7' : '#ff7f57',
+        color: i % 2 === 0 ? '#ffffff' : '#8a8a8a',
       });
     }
 
@@ -191,7 +191,7 @@ export default function MusicVisualizer({
 
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="p-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition-colors"
+                  className="p-2 rounded-lg bg-foreground/10 hover:bg-foreground/20 transition-colors"
                 >
                   <Minimize2 className="w-5 h-5" />
                 </button>
@@ -211,7 +211,7 @@ export default function MusicVisualizer({
                     style={{
                       height: `${height * 1.5}px`,
                       boxShadow: `0 0 20px ${
-                        i % 3 === 0 ? '#a855f7' : i % 3 === 1 ? '#ff7f57' : '#3b82f6'
+                        i % 2 === 0 ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)'
                       }`,
                     }}
                   />

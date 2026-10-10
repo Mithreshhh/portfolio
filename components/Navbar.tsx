@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import { GENERAL_INFO, SOCIAL_LINKS } from '@/lib/data';
 
 const COLORS = [
-    'bg-yellow-500 text-black',
-    'bg-blue-500 text-white',
-    'bg-teal-500 text-black',
-    'bg-purple-500 text-white',
-    'bg-indigo-500 text-white',
+    'bg-white text-black',
+    'bg-neutral-300 text-black',
+    'bg-neutral-500 text-white',
+    'bg-neutral-700 text-white',
+    'bg-neutral-200 text-black',
 ];
 
 const MENU_LINKS = [

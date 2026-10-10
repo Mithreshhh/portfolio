@@ -123,18 +123,18 @@ const Project = ({ index, project, selectedProject, onMouseEnter }: Props) => {
                     _{(index + 1).toString().padStart(2, '0')}.
                 </div>
                 <div className="">
-                    <h4 className="text-4xl xs:text-6xl flex gap-3 items-center font-anton transition-all duration-700 bg-gradient-to-r from-primary to-foreground from-[50%] to-[50%] bg-[length:200%] bg-right bg-clip-text text-transparent group-hover:bg-left">
+                    <h4 className="text-4xl xs:text-6xl flex gap-3 items-center font-anton transition-all duration-700 bg-gradient-to-r from-foreground to-neutral-400 from-[50%] to-[50%] bg-[length:200%] bg-right bg-clip-text text-transparent group-hover:bg-left">
                         {project.title}
                         {project.status && (
                             <span
                                 className={cn(
                                     'text-xs uppercase tracking-wide rounded-full px-3 py-1.5 glass glass-hover',
                                     {
-                                        'border-green-500 text-green-400':
+                                        'border-foreground/70 text-foreground':
                                             project.status === 'live',
-                                        'border-yellow-500 text-yellow-400':
+                                        'border-neutral-500 text-neutral-300':
                                             project.status === 'in-progress',
-                                        'border-blue-500 text-blue-400':
+                                        'border-neutral-600 text-neutral-400':
                                             project.status === 'private',
                                     },
                                 )}

@@ -72,7 +72,7 @@ export default function DeveloperMode() {
       {floatingComments.map((comment) => (
         <div
           key={comment.id}
-          className="fixed pointer-events-none z-[100] text-xs font-mono text-green-400/60 whitespace-nowrap animate-pulse"
+          className="fixed pointer-events-none z-[100] text-xs font-mono text-foreground/60 whitespace-nowrap animate-pulse"
           style={{
             left: `${comment.x}%`,
             top: `${comment.y}%`,
@@ -84,13 +84,13 @@ export default function DeveloperMode() {
       ))}
 
       {/* Developer Console */}
-      <div className="fixed bottom-0 left-0 right-0 z-[99] bg-black/95 backdrop-blur-md border-t-2 border-green-400/50 p-4 font-mono text-xs">
+      <div className="fixed bottom-0 left-0 right-0 z-[99] bg-black/95 backdrop-blur-md border-t-2 border-foreground/40 p-4 font-mono text-xs">
         <div className="container mx-auto">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Code2 className="size-4 text-green-400" />
-                <span className="text-green-400 font-bold">DEVELOPER MODE ACTIVE</span>
+                <Code2 className="size-4 text-foreground" />
+                <span className="text-foreground font-bold">DEVELOPER MODE ACTIVE</span>
               </div>
               <div className="flex items-center gap-2">
                 <Activity className="size-3 text-primary" />
@@ -103,7 +103,7 @@ export default function DeveloperMode() {
             </div>
             <button
               onClick={() => setIsActive(false)}
-              className="flex items-center gap-2 px-3 py-1 bg-red-500/20 hover:bg-red-500/30 rounded smooth-transition text-red-400"
+              className="flex items-center gap-2 px-3 py-1 bg-foreground/10 hover:bg-foreground/20 rounded smooth-transition text-foreground"
             >
               <EyeOff className="size-3" />
               <span>Exit (Ctrl+Shift+D)</span>
@@ -130,13 +130,13 @@ export default function DeveloperMode() {
           </div>
 
           <div className="mt-3 p-2 bg-background/50 rounded border border-primary/20">
-            <p className="text-green-400">
+            <p className="text-foreground">
               <span className="text-secondary">[LOG]</span> You discovered the hidden developer mode! 🎉
             </p>
-            <p className="text-green-400">
+            <p className="text-foreground">
               <span className="text-secondary">[INFO]</span> This portfolio was crafted with ❤️ and lots of ☕
             </p>
-            <p className="text-green-400">
+            <p className="text-foreground">
               <span className="text-secondary">[TIP]</span> Try opening the terminal (bottom-left) for more secrets!
             </p>
           </div>

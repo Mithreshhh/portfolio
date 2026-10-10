@@ -179,7 +179,7 @@ export default function InteractiveTerminal() {
             <p>
               <span className="text-secondary">[{idx + 1}]</span>{' '}
               <span className="text-accent">{project.title}</span>
-              {project.status === 'live' && <span className="text-green-400"> ● LIVE</span>}
+              {project.status === 'live' && <span className="text-foreground"> ● LIVE</span>}
             </p>
             <p className="text-muted-foreground text-sm ml-6">{project.description}</p>
           </div>
@@ -190,7 +190,7 @@ export default function InteractiveTerminal() {
       <div className="space-y-2">
         <p className="text-primary font-bold">Let&apos;s Work Together!</p>
         <p>📧 Email: <span className="text-accent">mithreshuttarwarmmvi@gmail.com</span></p>
-        <p>💼 Status: <span className="text-green-400">Open to opportunities</span></p>
+        <p>💼 Status: <span className="text-foreground">Open to opportunities</span></p>
         <p>🔗 LinkedIn: <a href="https://www.linkedin.com/in/mithresh-uttarwar/" target="_blank" className="text-secondary hover:underline">linkedin.com/in/mithresh-uttarwar</a></p>
         <p>🐙 GitHub: <a href="https://github.com/Mithreshhh" target="_blank" className="text-secondary hover:underline">github.com/Mithreshhh</a></p>
       </div>
@@ -199,21 +199,21 @@ export default function InteractiveTerminal() {
       setMatrixActive(true);
       return (
         <div className="space-y-2 animate-in fade-in zoom-in duration-500">
-          <p className="text-green-400 font-bold text-lg">🔴 MATRIX MODE ACTIVATED</p>
-          <p className="text-green-400/80">Wake up, Neo...</p>
-          <p className="text-green-400/60 text-xs">The Matrix has you. Follow the white rabbit.</p>
-          <p className="text-green-400/40 text-xs mt-2">Type /exitmatrix to close</p>
+          <p className="text-foreground font-bold text-lg">🔴 MATRIX MODE ACTIVATED</p>
+          <p className="text-foreground/80">Wake up, Neo...</p>
+          <p className="text-foreground/60 text-xs">The Matrix has you. Follow the white rabbit.</p>
+          <p className="text-foreground/40 text-xs mt-2">Type /exitmatrix to close</p>
         </div>
       );
     },
     exitmatrix: () => {
       setMatrixActive(false);
-      return <p className="text-green-400">Matrix mode deactivated. Welcome back to reality.</p>;
+      return <p className="text-foreground">Matrix mode deactivated. Welcome back to reality.</p>;
     },
     easteregg: () => (
       <div className="space-y-2">
         <p className="text-primary font-bold">🎉 You found the Easter Egg!</p>
-        <p className="text-accent">Secret Achievement Unlocked: <span className="text-yellow-400">Curious Explorer</span></p>
+        <p className="text-accent">Secret Achievement Unlocked: <span className="text-secondary">Curious Explorer</span></p>
         <p className="text-sm">Fun fact: This terminal was built with React, TypeScript, and lots of ☕</p>
         <p className="text-sm">Try typing <span className="text-secondary">/konami</span> for another surprise!</p>
       </div>
@@ -302,7 +302,7 @@ export default function InteractiveTerminal() {
     const command = commands[inputLower.replace('/', '')];
     const output = command 
       ? command() 
-      : <span className="text-red-400 animate-pulse">Command not found. Type <span className="text-secondary">/help</span> for available commands.</span>;
+      : <span className="text-foreground/70 animate-pulse">Command not found. Type <span className="text-secondary">/help</span> for available commands.</span>;
 
     setHistory([...history, { 
       input: currentInput, 
@@ -367,7 +367,7 @@ export default function InteractiveTerminal() {
             TERMINAL
           </span>
           {konamiUnlocked && (
-            <Sparkles className="size-3 text-yellow-400 animate-pulse" />
+            <Sparkles className="size-3 text-secondary animate-pulse" />
           )}
           <span className="text-xs text-muted-foreground">v1.0</span>
         </div>
@@ -381,7 +381,7 @@ export default function InteractiveTerminal() {
           </button>
           <button
             onClick={() => setIsOpen(false)}
-            className="hover:bg-red-500/20 p-1 rounded smooth-transition"
+            className="hover:bg-foreground/10 p-1 rounded smooth-transition"
             title="Close"
           >
             <X className="size-4" />
@@ -405,7 +405,7 @@ export default function InteractiveTerminal() {
             <div className="sticky bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/95 to-transparent pointer-events-none z-10" />
             {/* Welcome Message */}
             {history.length === 0 && (
-              <div className="space-y-2 text-green-400 animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className="space-y-2 text-foreground animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <p className="flex items-center gap-2">
                   <span className="animate-pulse">●</span>
                   Welcome to Mithresh&apos;s Interactive Terminal!
@@ -426,7 +426,7 @@ export default function InteractiveTerminal() {
                   className={cn(
                     "space-y-1 transition-all duration-500",
                     "animate-in fade-in slide-in-from-bottom-2",
-                    isMatrix && "border-l-2 border-green-400/50 pl-2",
+                    isMatrix && "border-l-2 border-foreground/50 pl-2",
                     isKonami && konamiUnlocked && "border-l-2 border-primary/50 pl-2"
                   )}
                   style={{
@@ -453,7 +453,7 @@ export default function InteractiveTerminal() {
                     <span className="text-muted-foreground">$</span>
                     <span className={cn(
                       "ml-1 transition-all duration-300",
-                      isMatrix && "text-green-400",
+                      isMatrix && "text-foreground",
                       isKonami && konamiUnlocked && "text-primary font-bold"
                     )}>
                       {cmd.input}
@@ -462,7 +462,7 @@ export default function InteractiveTerminal() {
                   <div className={cn(
                     "ml-4 mt-1 transition-all duration-500",
                     "text-foreground/90",
-                    isMatrix && "text-green-400/90",
+                    isMatrix && "text-foreground/90",
                     konamiUnlocked && isKonami && "text-primary/90"
                   )}>
                     {cmd.output}
