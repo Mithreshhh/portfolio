@@ -114,19 +114,6 @@ export const PROJECTS: IProject[] = [
         images: ['/images/voltworx(1).png', '/images/voltworx(2).png'],
         status: 'live',
     },
-    {
-        title: 'Browser Extension',
-        slug: 'browser-extension',
-        year: 2024,
-        description:
-            'DSA Helper — a Chrome extension that detects algorithms on coding sites and surfaces definitions, time/space complexities, and examples. Built UI first; packaging and store listing next.',
-        role: 'Developer',
-        techStack: ['JavaScript', 'Chrome API', 'HTML/CSS'],
-        thumbnail: '/images/web-ext(1).png',
-        longThumbnail: '/images/web-ext(2).png',
-        images: ['/images/web-ext(1).png', '/images/web-ext(2).png'],
-        status: 'in-progress',
-    },
 ];
 
 export type ExperienceType = 'Full-time' | 'Internship' | 'Leadership';

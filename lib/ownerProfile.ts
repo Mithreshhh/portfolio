@@ -174,23 +174,6 @@ export const ownerProfile = {
       stack: ["React", "Node.js", "MongoDB", "Express.js", "REST API"],
       services: ["Backend Engineering", "Team Leadership"],
       featured: true
-    },
-    {
-      id: "browser-extension",
-      name: "DSA Helper Chrome Extension",
-      client: "Developer Tool / Open Source",
-      category: "Browser Extension / Developer Productivity",
-      dates: "2024",
-      role: "Creator & Developer",
-      problem: "Students solving DSA problems on competitive platforms often lack instant context on algorithm definitions and space/time complexities.",
-      intervention: "Built a browser extension leveraging Chrome APIs to detect problem types on coding sites and overlay clean algorithm reference cards.",
-      outcome: "Fully working UI prototype with context parsing engine ready for Chrome Web Store publishing.",
-      outcomeStatus: "verified",
-      image: "/images/web-ext(1).png",
-      images: ["/images/web-ext(1).png", "/images/web-ext(2).png"],
-      stack: ["JavaScript", "Chrome Extension API", "HTML/CSS"],
-      services: ["Browser Extension Engineering", "Developer Tools"],
-      featured: true
     }
   ] as Project[],
   clientCases: [
@@ -242,7 +225,7 @@ export const ownerProfile = {
     {
       year: "2024",
       title: "Frontend Engineering & Industry Internship",
-      story: "Interned at Join Eazy as a Frontend Developer. Built the DSA Helper Chrome Extension and expanded into full web app development.",
+      story: "Interned at Join Eazy as a Frontend Developer. Expanded into full web app development.",
       role: "Frontend Developer @ Join Eazy",
       upgrade: "React, Chrome APIs & Professional Workflow",
       category: "Career"

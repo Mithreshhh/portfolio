@@ -32,8 +32,7 @@ export const FounderNotepadApp: React.FC = () => {
           <p className="mt-1">
             - Voltworx (CTO & Developer) — Flagship live SaaS product.<br />
             - MLRITM College Platform — Official institutional web portal on Next.js + Payload CMS.<br />
-            - SIH 2025 Innovation Project — High-scale React/Node.js hackathon system.<br />
-            - DSA Helper Chrome Extension — Real-time algorithm context detection tool.
+            - SIH 2025 Innovation Project — High-scale React/Node.js hackathon system.
           </p>
         </div>
 
