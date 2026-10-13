@@ -313,8 +313,14 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
             </div>
 
             {/* Diagram (remounted per blueprint so nodes replay their entrance). Sits closest to the viewer. */}
-            <div key={bp.key} className="relative px-2 pt-1" style={canTilt ? { transform: 'translateZ(44px)' } : undefined}>
-                <Diagram bp={bp} animate={!reduced} uid={`${uid}-${bp.key}`} />
+            {/* On phones the diagram keeps a readable width and scrolls sideways inside the card. */}
+            <div
+                key={bp.key}
+                className="relative overflow-x-auto px-2 pt-1 [scrollbar-width:thin]"
+                data-lenis-prevent-wheel
+                style={canTilt ? { transform: 'translateZ(44px)' } : undefined}
+            >
+                <Diagram bp={bp} animate={!reduced} uid={`${uid}-${bp.key}`} className="min-w-[520px] sm:min-w-0" />
             </div>
 
             {/* Facts */}
