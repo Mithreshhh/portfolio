@@ -57,14 +57,14 @@ const Banner = ({ contributionsLastYear }: { contributionsLastYear?: number }) =
         <section className="relative overflow-hidden bg-gradient-to-b from-black via-black/60 to-transparent" id="banner">
             <div
                 ref={containerRef}
-                className="container relative z-10 grid min-h-[560px] items-center gap-10 pb-36 pt-28 md:min-h-[100svh] md:grid-cols-12 md:gap-8 md:pb-24 md:pt-24"
+                className="container relative z-10 grid min-h-[560px] items-center gap-10 pb-16 pt-24 md:min-h-[100svh] md:grid-cols-12 md:gap-8 md:pb-24 md:pt-24"
             >
-                <div className="hero-copy md:col-span-7 lg:col-span-6">
-                    <p className="hero-in flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
+                <div className="hero-copy min-w-0 md:col-span-7 lg:col-span-6">
+                    <p className="hero-in flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:tracking-[0.3em]">
                         <span className="text-foreground/90">Mithresh Uttarwar</span>
-                        <span aria-hidden="true">·</span>
+                        <span aria-hidden="true" className="hidden sm:inline">·</span>
                         <span>B.Tech CS &apos;27 · CGPA 8.66</span>
-                        <span aria-hidden="true">·</span>
+                        <span aria-hidden="true" className="hidden sm:inline">·</span>
                         <span className="inline-flex items-center gap-1">
                             <MapPin size={12} aria-hidden="true" />
                             Hyderabad, India
@@ -140,9 +140,10 @@ const Banner = ({ contributionsLastYear }: { contributionsLastYear?: number }) =
                 </div>
 
                 {/* The visual is the work itself: blueprints of systems I've shipped, cycling. */}
-                <div className="hero-in md:col-span-5 lg:col-span-6">
+                <div className="hero-in min-w-0 md:col-span-5 lg:col-span-6">
                     <p className="mb-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                        Not a demo reel — the systems I actually built
+                        <span className="sm:hidden">The systems I actually built</span>
+                        <span className="hidden sm:inline">Not a demo reel — the systems I actually built</span>
                     </p>
                     <HeroBlueprint />
                 </div>

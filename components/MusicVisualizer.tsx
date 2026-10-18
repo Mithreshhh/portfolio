@@ -117,7 +117,7 @@ export default function MusicVisualizer({
       {!isExpanded && (
         <div
           className={cn(
-            'fixed bottom-8 right-8 z-50 group transition-[opacity,transform] duration-500',
+            'fixed bottom-5 right-5 z-50 group md:bottom-8 md:right-8 transition-[opacity,transform] duration-500',
             scrolled || isPlaying ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-4',
           )}
           aria-hidden={!(scrolled || isPlaying)}
@@ -125,7 +125,7 @@ export default function MusicVisualizer({
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             tabIndex={scrolled || isPlaying ? 0 : -1}
-            className="relative w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center hover:scale-110"
+            className="relative size-12 md:size-16 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center hover:scale-110"
           >
             {isPlaying && (
               <>

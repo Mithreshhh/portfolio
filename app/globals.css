@@ -80,8 +80,8 @@
             radial-gradient(ellipse 50% 45% at 82% 85%, hsla(0, 0%, 100%, 0.045), transparent 60%),
             radial-gradient(ellipse 40% 40% at 50% 55%, hsla(0, 0%, 100%, 0.025), transparent 55%),
             linear-gradient(180deg, hsl(0 0% 1%) 0%, hsl(var(--background)) 35%, hsl(var(--background-light)) 100%);
-        background-attachment: fixed;
-        animation: gradientShift 24s ease-in-out infinite;
+        /* Static on purpose: animating a full-viewport gradient repaints every frame, and
+           background-attachment: fixed would repaint the whole document on every scroll. */
     }
 
     body::after {
@@ -121,6 +121,18 @@
 }
 
 @layer components {
+    /* backdrop-filter forces every card to re-blur whatever moves behind it on each
+       scroll frame; the cards are near-opaque anyway, so drop it everywhere. */
+    .backdrop-blur,
+    .backdrop-blur-sm,
+    .backdrop-blur-md,
+    .backdrop-blur-lg,
+    .backdrop-blur-xl,
+    .glass {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
     .grid {
         @apply gap-4 md:gap-[25px];
     }
@@ -198,6 +210,20 @@
     .bp-node {
         opacity: 0;
         animation: bp-node-in 0.5s ease-out forwards;
+    }
+    /* Request dots ride their edge via offset-path, which the compositor animates without
+       repainting the SVG (SMIL animateMotion invalidated layout on every frame). */
+    @keyframes bp-travel {
+        from {
+            offset-distance: 0%;
+        }
+        to {
+            offset-distance: 100%;
+        }
+    }
+    .bp-dot {
+        offset-rotate: 0deg;
+        animation: bp-travel 2.6s linear infinite;
     }
     @keyframes bp-progress {
         from {

@@ -28,7 +28,7 @@ const SectionTitle = ({ icon, title, className, classNames }: Props) => {
                 <SectionFlower
                     width={25}
                     className={cn(
-                        'animate-spin duration-7000 text-primary',
+                        'text-primary',
                         classNames?.icon,
                     )}
                 />

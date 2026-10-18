@@ -328,7 +328,7 @@ export default function CommandPalette() {
                 aria-label={`Open command palette (${shortcut})`}
                 title={`Command palette · ${shortcut}`}
                 className={cn(
-                    'fixed bottom-6 left-6 z-50 flex size-14 items-center justify-center rounded-full border border-border/60 bg-background/80 text-foreground shadow-lg backdrop-blur-sm transition-[opacity,transform,background-color,color] duration-300',
+                    'fixed bottom-5 left-5 z-50 flex size-12 items-center md:bottom-6 md:left-6 md:size-14 justify-center rounded-full border border-border/60 bg-background/80 text-foreground shadow-lg backdrop-blur-sm transition-[opacity,transform,background-color,color] duration-300',
                     'hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                     scrolled ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-4',
                 )}

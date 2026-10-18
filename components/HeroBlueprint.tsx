@@ -8,7 +8,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSPrope
 /**
  * Animated blueprints of the systems Mithresh has actually built, cycling
  * through the entries in BLUEPRINTS. Pure SVG + CSS: no WebGL, no canvas.
- * Requests travel the edges with <animateMotion>; under reduced motion the
+ * Requests travel the edges with a CSS offset-path animation; under reduced motion the
  * diagram is static and the cycling stops.
  */
 
@@ -111,19 +111,11 @@ export const Diagram = ({ bp, animate = true, uid: uidProp, highlight, className
                     <g key={id} className={cn('transition-opacity duration-300', dimEdge(e) && 'opacity-[0.35]')}>
                         <path id={id} d={d} className="fill-none stroke-border" strokeWidth="1" markerEnd={`url(#${uid}-arrow)`} />
                         {animate && (
-                            <>
-                                {/* Soft halo under the request dot. */}
-                                <circle r="7" className="fill-foreground/20">
-                                    <animateMotion dur="2.6s" begin={`${(i * 0.45).toFixed(2)}s`} repeatCount="indefinite" calcMode="linear">
-                                        <mpath href={`#${id}`} />
-                                    </animateMotion>
-                                </circle>
-                                <circle r="2.6" className="fill-foreground">
-                                    <animateMotion dur="2.6s" begin={`${(i * 0.45).toFixed(2)}s`} repeatCount="indefinite" calcMode="linear">
-                                        <mpath href={`#${id}`} />
-                                    </animateMotion>
-                                </circle>
-                            </>
+                            // Halo and dot share one group so the compositor moves a single layer per edge.
+                            <g className="bp-dot" style={{ offsetPath: `path("${d}")`, animationDelay: `${(i * 0.45).toFixed(2)}s` }}>
+                                <circle r="7" className="fill-foreground/20" />
+                                <circle r="2.6" className="fill-foreground" />
+                            </g>
                         )}
                     </g>
                 );
@@ -187,6 +179,7 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
     const reduced = useReducedMotion();
     const [index, setIndex] = useState(0);
     const [paused, setPaused] = useState(false);
+    const [inView, setInView] = useState(true);
     const bp = BLUEPRINTS[index];
 
     // Auto-advance unless hovered/focused, hidden, or the visitor prefers reduced motion.
@@ -217,6 +210,15 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
         return () => mq.removeEventListener('change', on);
     }, [reduced]);
 
+    // SMIL dots keep running off-screen otherwise, costing frames on every other section.
+    useEffect(() => {
+        const el = cardRef.current;
+        if (!el) return;
+        const io = new IntersectionObserver((entries) => setInView(entries.some((e) => e.isIntersecting)), { threshold: 0.05 });
+        io.observe(el);
+        return () => io.disconnect();
+    }, []);
+
     const onPointerMove = useCallback(
         (e: PointerEvent<HTMLDivElement>) => {
             if (!canTilt || !cardRef.current) return;
@@ -242,11 +244,11 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
     useEffect(() => () => cancelAnimationFrame(raf.current), []);
 
     return (
-        <div className={cn('[perspective:1400px]', className)}>
+        <div className={cn('min-w-0 max-w-full [perspective:1400px]', className)}>
         <div
             ref={cardRef}
             className={cn(
-                'relative rounded-2xl border border-border/60 bg-background/70 backdrop-blur-md transition-transform duration-500 ease-out will-change-transform',
+                'relative min-w-0 max-w-full rounded-2xl border border-border/60 bg-background/70 backdrop-blur-md transition-transform duration-500 ease-out will-change-transform',
                 canTilt && '[transform-style:preserve-3d]',
             )}
             style={{ '--glare-x': '50%', '--glare-y': '30%' } as CSSProperties}
@@ -275,7 +277,7 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
             )}
 
             {/* Tabs */}
-            <div role="tablist" aria-label="Systems I've built" className="relative flex flex-wrap gap-1 border-b border-border/60 p-2" style={canTilt ? { transform: 'translateZ(16px)' } : undefined}>
+            <div role="tablist" aria-label="Systems I've built" className="relative flex gap-1 overflow-x-auto border-b border-border/60 p-2 [scrollbar-width:none] sm:flex-wrap [&::-webkit-scrollbar]:hidden" style={canTilt ? { transform: 'translateZ(16px)' } : undefined}>
                 {BLUEPRINTS.map((b, i) => (
                     <button
                         key={b.key}
@@ -283,7 +285,7 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
                         aria-selected={i === index}
                         onClick={() => setIndex(i)}
                         className={cn(
-                            'rounded-md px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] transition-colors',
+                            'shrink-0 whitespace-nowrap rounded-md px-2.5 py-1 text-[11px] uppercase tracking-[0.12em] transition-colors sm:tracking-[0.16em]',
                             i === index ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground',
                         )}
                     >
@@ -320,7 +322,7 @@ const HeroBlueprint = ({ className }: { className?: string }) => {
                 data-lenis-prevent-wheel
                 style={canTilt ? { transform: 'translateZ(44px)' } : undefined}
             >
-                <Diagram bp={bp} animate={!reduced} uid={`${uid}-${bp.key}`} className="min-w-[520px] sm:min-w-0" />
+                <Diagram bp={bp} animate={!reduced && inView} uid={`${uid}-${bp.key}`} className="min-w-[520px] sm:min-w-0" />
             </div>
 
             {/* Facts */}

@@ -6,7 +6,6 @@ import 'lenis/dist/lenis.css';
 import './globals.css';
 import Footer from '@/components/Footer';
 import ScrollProgressIndicator from '@/components/ScrollProgressIndicator';
-import ParticleBackground from '@/components/ParticleBackground';
 import ParticleConstellation from '@/components/ParticleConstellation';
 import Navbar from '@/components/Navbar';
 import Preloader from '../components/Preloader';
@@ -59,8 +58,9 @@ export default function RootLayout({
                 <ReactLenis
                     root
                     options={{
-                        lerp: 0.1,
-                        duration: 1.4,
+                        // Higher lerp = scroll catches up faster; 0.1 read as lag.
+                        lerp: 0.2,
+                        duration: 1,
                     }}
                 >
                     {/* <a
@@ -78,7 +78,6 @@ export default function RootLayout({
 
                     <Preloader />
                     <ScrollProgressIndicator />
-                    <ParticleBackground />
                     <ParticleConstellation />
                     <StickyEmail />
                     <CommandPalette />

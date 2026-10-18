@@ -16,7 +16,12 @@ const SKILLS = [
     'Tailwind', 'GSAP', 'Express',
 ];
 
-/** Drifting constellation of skill nodes that lean toward the cursor. White on black. */
+/**
+ * Drifting constellation of skill nodes that lean toward the cursor. White on black.
+ * Desktop only: on phones the dots sit over the text and read as noise, and the
+ * canvas competes with scrolling. Draws at 1x and without shadow blur so a frame
+ * costs almost nothing; pauses when the tab is hidden.
+ */
 export default function ParticleConstellation() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -25,7 +30,8 @@ export default function ParticleConstellation() {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px), (hover: none)');
+        if (mq.matches) return;
 
         const mouse = { x: -9999, y: -9999 };
         const resize = () => {
@@ -47,13 +53,32 @@ export default function ParticleConstellation() {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
         };
-        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mousemove', onMove, { passive: true });
 
         let raf = 0;
         const animate = () => {
+            raf = 0;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            particles.forEach((p, i) => {
+            // Links first, then dots, so dots sit on top. The halo is a second faint
+            // circle rather than canvas shadowBlur, which is the single most expensive call here.
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                for (let j = i + 1; j < particles.length; j++) {
+                    const o = particles[j];
+                    const d = Math.hypot(p.x - o.x, p.y - o.y);
+                    if (d < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(o.x, o.y);
+                        ctx.strokeStyle = `rgba(255,255,255,${((1 - d / 120) * 0.6).toFixed(3)})`;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            for (const p of particles) {
                 const dx = mouse.x - p.x;
                 const dy = mouse.y - p.y;
                 const dist = Math.hypot(dx, dy);
@@ -69,43 +94,36 @@ export default function ParticleConstellation() {
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+                ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.12)';
                 ctx.fill();
-                ctx.shadowBlur = 0;
-
-                for (let j = i + 1; j < particles.length; j++) {
-                    const o = particles[j];
-                    const d = Math.hypot(p.x - o.x, p.y - o.y);
-                    if (d < 120) {
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(o.x, o.y);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - d / 120) * 0.6})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
-                    }
-                }
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.85)';
+                ctx.fill();
 
                 if (dist < 50) {
                     ctx.font = '12px monospace';
                     ctx.fillStyle = '#ffffff';
                     ctx.fillText(p.label, p.x + 10, p.y - 10);
                 }
-            });
+            }
 
-            raf = requestAnimationFrame(animate);
+            if (!document.hidden) raf = requestAnimationFrame(animate);
         };
-        raf = requestAnimationFrame(animate);
+        const kick = () => {
+            if (!raf && !document.hidden) raf = requestAnimationFrame(animate);
+        };
+        document.addEventListener('visibilitychange', kick);
+        kick();
 
         return () => {
-            cancelAnimationFrame(raf);
+            if (raf) cancelAnimationFrame(raf);
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', onMove);
+            document.removeEventListener('visibilitychange', kick);
         };
     }, []);
 
-    return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 z-[0]" style={{ opacity: 0.5 }} />;
+    return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 z-[0] hidden md:block" style={{ opacity: 0.5 }} />;
 }
