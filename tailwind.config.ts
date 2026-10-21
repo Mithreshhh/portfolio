@@ -3,6 +3,10 @@ import tailwindAnimate from 'tailwindcss-animate';
 
 export default {
     darkMode: ['class'],
+    // Touch screens fire :hover on tap and leave it stuck; only real pointers get hover styles.
+    future: {
+        hoverOnlyWhenSupported: true,
+    },
     content: [
         './pages/**/*.{js,ts,jsx,tsx,mdx}',
         './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -44,6 +48,7 @@ export default {
                     DEFAULT: 'hsl(var(--destructive))',
                     foreground: 'hsl(var(--destructive-foreground))',
                 },
+                live: 'hsl(var(--live))',
                 border: 'hsl(var(--border))',
                 input: 'hsl(var(--input))',
                 ring: 'hsl(var(--ring))',
@@ -77,6 +82,13 @@ export default {
             },
             transitionDuration: {
                 '7000': '7s',
+            },
+            // The stock curves are too soft to read as intentional; these replace `ease-out` and
+            // `ease-in-out` everywhere. `ease-drawer` is the iOS sheet curve, for panels.
+            transitionTimingFunction: {
+                out: 'var(--ease-out)',
+                'in-out': 'var(--ease-in-out)',
+                drawer: 'var(--ease-drawer)',
             },
             screens: {
                 xs: '420px',

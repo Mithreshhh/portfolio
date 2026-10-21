@@ -328,6 +328,22 @@ export const EDUCATION = [
     },
 ];
 
+// How I work. Each principle is backed by a line on the résumé; keep them in sync with EXPERIENCE.
+export const PRINCIPLES = [
+    {
+        title: 'Ship to real users early',
+        detail: 'The LMS modules I build at Menler went live to ~30 users while still evolving; feedback beats guessing.',
+    },
+    {
+        title: 'Measure, then optimise',
+        detail: 'Took a page-speed score from 48 to 91 by fixing the actual bottleneck (PNG → WebP), not by rewriting.',
+    },
+    {
+        title: 'Security is part of done',
+        detail: 'Audited our webhooks, found an exploitable one, rotated secrets and removed hard-coded fallbacks.',
+    },
+];
+
 export const ACHIEVEMENTS = [
     { title: 'Ideathon winner', detail: 'Geethanjali College' },
     { title: 'Hackathon participant', detail: 'Smart India Hackathon 2025' },

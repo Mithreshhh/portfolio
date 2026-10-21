@@ -24,19 +24,12 @@ const TransitionLink = ({
 
     const handleLinkClick = contextSafe(
         async (e: React.MouseEvent<HTMLAnchorElement>) => {
+            // New-tab and download intents belong to the browser, not the transition.
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
             e.preventDefault();
 
-            gsap.set('.page-transition', { yPercent: 100 });
-            gsap.set('.page-transition--inner', { yPercent: 100 });
-
-            const tl = gsap.timeline();
-
-            tl.to('.page-transition', {
-                yPercent: 0,
-                duration: 0.3,
-            });
-
-            tl.then(() => {
+            const navigate = () => {
                 if (back) {
                     router.back();
                 } else if (href) {
@@ -44,7 +37,26 @@ const TransitionLink = ({
                 } else if (onClick) {
                     onClick(e);
                 }
+            };
+
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                navigate();
+                return;
+            }
+
+            gsap.set('.page-transition', { yPercent: 100 });
+            gsap.set('.page-transition--inner', { yPercent: 100 });
+
+            const tl = gsap.timeline();
+
+            // A full-screen wipe travels across the viewport, so it eases in and out.
+            tl.to('.page-transition', {
+                yPercent: 0,
+                duration: 0.3,
+                ease: 'power3.inOut',
             });
+
+            tl.then(navigate);
         },
     );
 

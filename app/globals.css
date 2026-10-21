@@ -34,6 +34,15 @@
         --chart-3: 0 0% 55%;
         --chart-4: 0 0% 38%;
         --chart-5: 0 0% 24%;
+
+        /* The one colour on the site: marks what is happening right now (the clock's markers). */
+        --live: 217 91% 60%;
+
+        /* Motion: strong ease-out for anything entering or responding, ease-in-out for things
+           travelling across the screen, and the iOS sheet curve for panels. */
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+        --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
     }
 }
 
@@ -67,6 +76,18 @@
         @apply bg-background text-foreground font-roboto-flex;
         position: relative;
         overflow-x: hidden;
+        caret-color: hsl(var(--foreground));
+    }
+
+    ::selection {
+        background: hsl(var(--foreground));
+        color: hsl(var(--background));
+    }
+
+    /* One focus ring for every control that doesn't draw its own. */
+    :focus-visible {
+        outline: 2px solid hsl(var(--ring));
+        outline-offset: 3px;
     }
 
     body::before {
@@ -96,27 +117,6 @@
         background-size: 50px 50px;
         mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
         pointer-events: none;
-    }
-
-    @keyframes gradientShift {
-        0%, 100% {
-            background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%;
-        }
-        25% {
-            background-position: 30% 40%, 70% 60%, 60% 40%, 0% 0%;
-        }
-        50% {
-            background-position: 60% 30%, 40% 70%, 40% 60%, 0% 0%;
-        }
-        75% {
-            background-position: 40% 60%, 60% 40%, 50% 50%, 0% 0%;
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        body::before {
-            animation: none;
-        }
     }
 }
 
@@ -150,7 +150,10 @@
     }
 
     .glass-hover {
-        transition: all 0.3s ease;
+        transition:
+            background-color 200ms ease,
+            transform 200ms var(--ease-out),
+            box-shadow 200ms ease;
     }
 
     .glass-hover:hover {
@@ -179,7 +182,9 @@
 
     /* Smooth animations */
     .smooth-transition {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+        transition-duration: 200ms;
+        transition-timing-function: var(--ease-out);
     }
 
     /* Infinite logo strip (content is duplicated once, so -50% loops seamlessly) */

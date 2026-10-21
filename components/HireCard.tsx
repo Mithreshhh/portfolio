@@ -1,7 +1,7 @@
 'use client';
 import { GENERAL_INFO, SOCIAL_LINKS } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { ArrowRight, ArrowUpRight, Check, Copy, FileText, Github, Linkedin } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Copy, FileText, Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +19,16 @@ const formatHyderabadTime = () =>
         new Date(),
     );
 
-const HireCard = ({ className }: { className?: string }) => {
+const MAILTO = `mailto:${GENERAL_INFO.email}?subject=${encodeURIComponent(GENERAL_INFO.emailSubject)}&body=${encodeURIComponent(GENERAL_INFO.emailBody)}`;
+
+const HireCard = ({
+    className,
+    primaryAction = 'hire',
+}: {
+    className?: string;
+    /** On /hire-me itself the card can't link to /hire-me, so its lead action becomes an email. */
+    primaryAction?: 'hire' | 'email';
+}) => {
     // Null until mount so server and first client render agree.
     const [time, setTime] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
@@ -49,7 +58,9 @@ const HireCard = ({ className }: { className?: string }) => {
     };
 
     const emailClasses =
-        'group flex w-full items-center justify-between gap-3 rounded-lg border border-border/60 bg-background/60 px-3 py-2.5 text-left text-sm transition-colors hover:border-foreground/40';
+        'group flex w-full items-center justify-between gap-3 rounded-lg border border-border/60 bg-background/60 px-3 py-2.5 text-left text-sm transition-[border-color,transform] duration-150 ease-out hover:border-foreground/40 active:scale-[0.99]';
+    const primaryClasses =
+        'inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-primary px-4 font-anton text-base uppercase tracking-widest text-primary-foreground transition-[background-color,transform] duration-150 ease-out hover:bg-primary/85 active:scale-[0.97]';
 
     return (
         <div
@@ -77,18 +88,22 @@ const HireCard = ({ className }: { className?: string }) => {
 
             {/* Side-by-side only where a cell can hold "WORK WITH ME" on one line; the md aside is too narrow. */}
             <div className="mt-5 grid grid-cols-1 gap-2.5 xs:grid-cols-2 md:grid-cols-1 xl:grid-cols-2">
-                <Link
-                    href="/hire-me"
-                    className="inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-primary px-4 font-anton text-base uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/85"
-                >
-                    Work with me
-                    <ArrowRight size={16} aria-hidden="true" />
-                </Link>
+                {primaryAction === 'email' ? (
+                    <a href={MAILTO} className={primaryClasses}>
+                        <Mail size={16} aria-hidden="true" />
+                        Email me
+                    </a>
+                ) : (
+                    <Link href="/hire-me" className={primaryClasses}>
+                        Work with me
+                        <ArrowRight size={16} aria-hidden="true" />
+                    </Link>
+                )}
                 <a
                     href={GENERAL_INFO.resume}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-border/60 bg-background/60 px-4 font-anton text-base uppercase tracking-widest text-foreground transition-colors hover:border-foreground/40"
+                    className="inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border border-border/60 bg-background/60 px-4 font-anton text-base uppercase tracking-widest text-foreground transition-[border-color,transform] duration-150 ease-out hover:border-foreground/40 active:scale-[0.97]"
                 >
                     <FileText size={16} aria-hidden="true" />
                     Resume

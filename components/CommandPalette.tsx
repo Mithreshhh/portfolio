@@ -47,6 +47,7 @@ const GROUP_ORDER: Group[] = ['Sections', 'Projects', 'Actions'];
 const SECTIONS: { label: string; hash: string | null; keywords: string[]; icon: LucideIcon }[] = [
     { label: 'Home', hash: null, keywords: ['top', 'hero', 'start'], icon: Home },
     { label: 'Featured work', hash: 'selected-projects', keywords: ['projects', 'portfolio', 'work'], icon: FolderGit2 },
+    { label: 'Under the hood', hash: 'systems', keywords: ['architecture', 'blueprint', 'diagram', 'systems'], icon: Layers },
     { label: 'Experience', hash: 'my-experience', keywords: ['jobs', 'career', 'menler', 'internship'], icon: Briefcase },
     { label: 'GitHub', hash: 'github-activity', keywords: ['commits', 'activity', 'contributions'], icon: GitCommitHorizontal },
     { label: 'Stack', hash: 'my-stack', keywords: ['skills', 'tech', 'tools', 'languages'], icon: Layers },
@@ -346,7 +347,7 @@ export default function CommandPalette() {
                         aria-label="Close command palette"
                         tabIndex={-1}
                         onClick={close}
-                        className="absolute inset-0 bg-background/70 backdrop-blur-[2px] motion-safe:animate-in motion-safe:fade-in motion-safe:duration-150"
+                        className="absolute inset-0 bg-background/70 backdrop-blur-[2px]"
                     />
 
                     <div
@@ -355,10 +356,8 @@ export default function CommandPalette() {
                         aria-modal="true"
                         aria-label="Command palette"
                         onKeyDown={onDialogKeyDown}
-                        className={cn(
-                            'relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/95 text-foreground shadow-2xl backdrop-blur-md',
-                            'motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:slide-in-from-bottom-2 motion-safe:duration-150',
-                        )}
+                        // No open animation: it's summoned from the keyboard and should feel instant.
+                        className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/95 text-foreground shadow-2xl backdrop-blur-md"
                     >
                         {/* Input */}
                         <div className="flex items-center gap-3 border-b border-border/50 px-4 py-3">

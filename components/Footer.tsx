@@ -42,14 +42,11 @@ const Footer = async () => {
                                     href={link.url}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="group relative inline-flex size-12 items-center justify-center rounded-full border border-border/60 bg-background-light/50 overflow-hidden transition-all duration-300 hover:border-primary/60 hover:text-primary hover:scale-105"
+                                    className="group relative inline-flex size-12 items-center justify-center overflow-hidden rounded-full border border-border/60 bg-background-light/50 transition-[border-color,color,transform] duration-200 ease-out hover:border-primary/60 hover:text-primary active:scale-[0.95]"
                                     aria-label={link.name}
                                 >
-                                    <span className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/20 to-secondary/20 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
-                                    <Icon size={18} className="relative transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-0.5" />
-                                    <span className="pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs text-muted-foreground opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                                        {link.name}
-                                    </span>
+                                    <span className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary/20 to-secondary/20 opacity-0 blur-md transition-opacity duration-200 group-hover:opacity-100" />
+                                    <Icon size={18} aria-hidden="true" className="relative transition-transform duration-200 ease-out group-hover:-translate-y-0.5" />
                                 </a>
                             </li>
                         );
@@ -62,10 +59,10 @@ const Footer = async () => {
                         href={GENERAL_INFO.resume}
                         target="_blank"
                         download
-                        variant="secondary"
-                        className="px-8 py-0 h-12 rounded-md shadow-[0_8px_0_theme(colors.border)] hover:translate-y-[1px] hover:shadow-[0_6px_0_theme(colors.border)] active:translate-y-[2px] active:shadow-[0_4px_0_theme(colors.border)]"
+                        variant="no-color"
+                        className="border border-foreground/40 px-8 text-foreground hover:border-foreground"
                     >
-                        <FileDown size={18} />
+                        <FileDown size={18} aria-hidden="true" />
                         Download Resume
                     </Button>
                 </div>

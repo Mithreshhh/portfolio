@@ -60,7 +60,7 @@ const ProjectCard = ({
                     alt={`${project.title} screenshot`}
                     fill
                     sizes={featured ? '(min-width: 768px) 640px, 100vw' : '(min-width: 768px) 560px, 100vw'}
-                    className="object-cover object-top grayscale transition-[filter,transform] duration-700 ease-out group-hover:scale-[1.03] group-hover:grayscale-0"
+                    className="object-cover object-top grayscale transition-[filter,transform] duration-500 ease-out group-hover:scale-[1.03] group-hover:grayscale-0"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
             </TransitionLink>

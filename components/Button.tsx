@@ -50,8 +50,8 @@ const Button = ({
     ...rest
 }: Props) => {
     const variantClasses = {
-        primary: `bg-primary text-primary-foreground  hover:bg-primary-hover`,
-        secondary: `bg-secondary text-secondary-foreground hover:bg-secondary-hover`,
+        primary: `bg-primary text-primary-foreground`,
+        secondary: `bg-secondary text-secondary-foreground`,
         success: `bg-foreground text-background hover:bg-foreground/85`,
         warning: `bg-secondary text-secondary-foreground hover:bg-secondary/85`,
         danger: `bg-destructive text-destructive-foreground hover:bg-destructive/70`,
@@ -68,10 +68,37 @@ const Button = ({
     );
 
     const buttonClasses = cn(
-        `group h-12 px-8 inline-flex justify-center items-center gap-2 text-lg uppercase font-anton tracking-widest outline-none smooth-transition relative overflow-hidden hover:shadow-xl`,
+        `group h-12 px-8 inline-flex justify-center items-center gap-2 text-lg uppercase font-anton tracking-widest relative overflow-hidden`,
+        'transition-[transform,color,background-color,border-color] duration-150 ease-out active:scale-[0.97]',
+        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground',
         variantClasses,
         { [iconClasses]: icon },
         className,
+    );
+
+    // The hover fill is a curved wash that rises from below. Its colour has to contrast with
+    // the resting surface, and on the outline style the label flips dark to stay readable.
+    const fillColor =
+        variant === 'no-color' ? 'bg-foreground' : variant === 'secondary' ? 'bg-white' : 'bg-neutral-300';
+    const fill = variant !== 'link' && (
+        <span
+            aria-hidden="true"
+            className={cn(
+                // scale-150 grows the wash 25% past each edge, so it has to park well below the button.
+                'absolute inset-x-0 top-0 h-full scale-150 rounded-[50%] translate-y-[140%] transition-transform duration-200 ease-out group-hover:translate-y-0 group-hover:duration-300',
+                fillColor,
+            )}
+        />
+    );
+    const label = (
+        <span
+            className={cn(
+                'relative z-[1] inline-flex items-center gap-2',
+                variant === 'no-color' && 'transition-colors duration-200 group-hover:text-background',
+            )}
+        >
+            {loading ? <Child icon={icon} /> : children}
+        </span>
     );
 
     if (as === 'link') {
@@ -84,24 +111,16 @@ const Button = ({
                     {...props}
                     href={props.href.toString() || '#'}
                 >
-                    {variant !== 'link' && (
-                        <span className="absolute top-[200%] left-0 right-0 h-full bg-white rounded-[50%] group-hover:top-0 transition-all duration-500 scale-150"></span>
-                    )}
-                    <span className="z-[1]">
-                        {loading ? <Child icon={icon} /> : children}
-                    </span>
+                    {fill}
+                    {label}
                 </a>
             );
         }
 
         return (
             <Link className={buttonClasses} {...props} href={props.href || '#'}>
-                {variant !== 'link' && (
-                    <span className="absolute top-[200%] left-0 right-0 h-full bg-white rounded-[50%] group-hover:top-0 transition-all duration-500 scale-150"></span>
-                )}
-                <span className="z-[1]">
-                    {loading ? <Child icon={icon} /> : children}
-                </span>
+                {fill}
+                {label}
             </Link>
         );
     } else if (as === 'button') {
@@ -109,12 +128,8 @@ const Button = ({
 
         return (
             <button className={buttonClasses} {...props}>
-                {variant !== 'link' && (
-                    <span className="absolute top-[200%] left-0 right-0 h-full bg-white rounded-[50%] group-hover:top-0 transition-all duration-500 scale-150"></span>
-                )}
-                <span className="z-[1]">
-                    {loading ? <Child icon={icon} /> : children}
-                </span>
+                {fill}
+                {label}
             </button>
         );
     }

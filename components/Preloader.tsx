@@ -8,7 +8,16 @@ gsap.registerPlugin(useGSAP);
 const NAME = 'MITHRESH';
 const SESSION_KEY = 'portfolio:preloader-shown';
 // Hard ceiling: the overlay always comes down, even if an animation stalls.
-const SAFETY_MS = 4500;
+const SAFETY_MS = 3000;
+
+/** Fired as the curtain starts to open, so the hero can rise into the gap instead of animating unseen. */
+export const PRELOADER_REVEAL_EVENT = 'preloader:reveal';
+
+const signalReveal = () => {
+    if (document.documentElement.dataset.preloader === 'done') return;
+    document.documentElement.dataset.preloader = 'done';
+    window.dispatchEvent(new Event(PRELOADER_REVEAL_EVENT));
+};
 
 const Preloader = () => {
     const rootRef = useRef<HTMLDivElement>(null);
@@ -33,22 +42,24 @@ const Preloader = () => {
 
             // Repeat visits in the same session, or reduced motion: a quick fade, no show.
             if (seen || reduced) {
-                gsap.to(root, { autoAlpha: 0, duration: 0.35, ease: 'power1.out', onComplete: finish });
+                signalReveal();
+                gsap.to(root, { autoAlpha: 0, duration: 0.3, ease: 'power2.out', onComplete: finish });
                 return;
             }
 
             const counter = { value: 0 };
             const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, onComplete: finish });
 
+            // ~1.6s end to end: long enough to read the name, short enough not to gate the work.
             // The letters start translated below their clipping box via the CSS class;
             // GSAP reads that as a pixel offset, so animate `y`, not `yPercent`.
-            tl.to('.pl-letter', { y: 0, duration: 0.7, stagger: 0.045 })
-                .to('.pl-meta', { autoAlpha: 1, y: 0, duration: 0.5 }, '-=0.45')
+            tl.to('.pl-letter', { y: 0, duration: 0.45, stagger: 0.025 })
+                .to('.pl-meta', { autoAlpha: 1, y: 0, duration: 0.35 }, '-=0.3')
                 .to(
                     counter,
                     {
                         value: 100,
-                        duration: 1.2,
+                        duration: 0.6,
                         ease: 'power2.inOut',
                         onUpdate: () => {
                             if (countRef.current) countRef.current.textContent = Math.round(counter.value) + '%';
@@ -56,18 +67,22 @@ const Preloader = () => {
                     },
                     '<',
                 )
-                .to('.pl-bar', { scaleX: 1, duration: 1.2, ease: 'power2.inOut' }, '<')
+                .to('.pl-bar', { scaleX: 1, duration: 0.6, ease: 'power2.inOut' }, '<')
                 // Lift the content away, then split the curtain to reveal the page.
-                .to('.pl-content', { autoAlpha: 0, y: -40, duration: 0.45, ease: 'power2.in' }, '+=0.15')
-                .to('.pl-glow', { autoAlpha: 0, duration: 0.4 }, '<')
-                .to('.pl-panel-top', { yPercent: -100, duration: 0.8, ease: 'power4.inOut' }, '-=0.15')
-                .to('.pl-panel-bottom', { yPercent: 100, duration: 0.8, ease: 'power4.inOut' }, '<');
+                .to('.pl-content', { autoAlpha: 0, y: -24, duration: 0.25, ease: 'power2.out' }, '+=0.05')
+                .to('.pl-glow', { autoAlpha: 0, duration: 0.25 }, '<')
+                .call(signalReveal, [], '-=0.1')
+                .to('.pl-panel-top', { yPercent: -100, duration: 0.5, ease: 'power4.inOut' }, '<')
+                .to('.pl-panel-bottom', { yPercent: 100, duration: 0.5, ease: 'power4.inOut' }, '<');
         },
         { scope: rootRef },
     );
 
     useEffect(() => {
-        const id = window.setTimeout(() => setIsVisible(false), SAFETY_MS);
+        const id = window.setTimeout(() => {
+            signalReveal();
+            setIsVisible(false);
+        }, SAFETY_MS);
         return () => window.clearTimeout(id);
     }, []);
 
@@ -110,7 +125,7 @@ const Preloader = () => {
                     {NAME.split('').map((letter, i) => (
                         <span
                             key={i}
-                            className="pl-letter inline-block translate-y-[110%] bg-gradient-to-b from-foreground to-foreground/55 bg-clip-text text-transparent"
+                            className="pl-letter inline-block translate-y-[110%] text-foreground"
                         >
                             {letter}
                         </span>

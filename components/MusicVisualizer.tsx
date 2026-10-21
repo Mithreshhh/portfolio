@@ -36,6 +36,15 @@ export default function MusicVisualizer({
   }, [isPlaying]);
 
   useEffect(() => {
+    if (!isExpanded) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsExpanded(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isExpanded]);
+
+  useEffect(() => {
     if (!canvasRef.current || !isExpanded) return;
 
     const canvas = canvasRef.current;
@@ -123,22 +132,22 @@ export default function MusicVisualizer({
           aria-hidden={!(scrolled || isPlaying)}
         >
           <button
+            type="button"
             onClick={() => setIsPlaying(!isPlaying)}
             tabIndex={scrolled || isPlaying ? 0 : -1}
-            className="relative size-12 md:size-16 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center hover:scale-110"
+            aria-label={isPlaying ? `Pause ${songTitle}` : `Play ${songTitle} by ${artist}`}
+            aria-pressed={isPlaying}
+            className="relative size-12 md:size-16 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg transition-transform duration-150 ease-out flex items-center justify-center hover:scale-105 active:scale-[0.95]"
           >
             {isPlaying && (
-              <>
-                <span className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
-                <span className="absolute inset-0 rounded-full bg-primary/20 animate-pulse" />
-              </>
+              <span className="absolute inset-0 rounded-full bg-primary/30 animate-ping motion-reduce:animate-none" />
             )}
-            <Music className={cn('w-6 h-6 text-white relative z-10', isPlaying && 'animate-pulse')} />
+            <Music aria-hidden="true" className="w-6 h-6 text-background relative z-10" />
           </button>
 
-          {/* Mini info panel */}
+          {/* Mini info panel: hover for mouse users, focus-within so keyboard users can reach it too. */}
           {isPlaying && (
-            <div className="absolute bottom-full right-0 mb-4 bg-black/90 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-primary/30 min-w-[280px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute bottom-full right-0 mb-4 bg-black/90 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-primary/30 min-w-[280px] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200">
               <div className="mb-3">
                 <p className="text-sm font-bold text-primary">{songTitle}</p>
                 <p className="text-xs text-muted-foreground">{artist}</p>
@@ -167,7 +176,7 @@ export default function MusicVisualizer({
                 {bars.slice(0, 12).map((height, i) => (
                   <div
                     key={i}
-                    className="w-1 bg-gradient-to-t from-primary via-secondary to-accent rounded-full transition-all duration-150"
+                    className="w-1 bg-gradient-to-t from-primary via-secondary to-accent rounded-full transition-[height] duration-150"
                     style={{ height: `${height}%` }}
                   />
                 ))}
@@ -193,14 +202,18 @@ export default function MusicVisualizer({
 
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={() => setIsMuted(!isMuted)}
+                  aria-label={isMuted ? 'Unmute' : 'Mute'}
                   className="p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
                 >
                   {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => setIsExpanded(false)}
+                  aria-label="Close visualizer"
                   className="p-2 rounded-lg bg-foreground/10 hover:bg-foreground/20 transition-colors"
                 >
                   <Minimize2 className="w-5 h-5" />
@@ -217,7 +230,7 @@ export default function MusicVisualizer({
                 {bars.map((height, i) => (
                   <div
                     key={i}
-                    className="w-4 bg-gradient-to-t from-primary via-secondary to-accent rounded-t-lg shadow-lg transition-all duration-150"
+                    className="w-4 bg-gradient-to-t from-primary via-secondary to-accent rounded-t-lg shadow-lg transition-[height] duration-150"
                     style={{
                       height: `${height * 1.5}px`,
                       boxShadow: `0 0 20px ${
@@ -233,10 +246,13 @@ export default function MusicVisualizer({
             <div className="px-6 py-4 bg-background/50">
               <div className="flex items-center justify-center gap-6">
                 <button
+                  type="button"
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary hover:scale-110 transition-transform flex items-center justify-center shadow-lg shadow-primary/50"
+                  aria-label={isPlaying ? 'Pause' : 'Play'}
+                  aria-pressed={isPlaying}
+                  className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary hover:scale-105 active:scale-[0.95] transition-transform duration-150 ease-out flex items-center justify-center shadow-lg shadow-primary/50"
                 >
-                  <Music className="w-6 h-6 text-white" />
+                  <Music aria-hidden="true" className="w-6 h-6 text-background" />
                 </button>
 
                 <div className="text-center">

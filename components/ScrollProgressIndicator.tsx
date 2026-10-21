@@ -20,12 +20,12 @@ const ScrollProgressIndicator = () => {
 
         handleScroll();
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
-        <div className="max-md:hidden fixed top-[50svh] right-[2%] -translate-y-1/2 w-1.5 h-[100px] rounded-full bg-background-light overflow-hidden">
+        <div aria-hidden="true" className="max-md:hidden fixed top-[50svh] right-[2%] -translate-y-1/2 w-1.5 h-[100px] rounded-full bg-background-light overflow-hidden">
             <div
                 className="w-full bg-primary rounded-full h-full"
                 ref={scrollBarRef}

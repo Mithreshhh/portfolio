@@ -5,8 +5,9 @@ import Experiences from './_components/Experiences';
 import GithubActivity from './_components/GithubActivity';
 import ProjectList from './_components/ProjectList';
 import Skills from './_components/Skills';
+import Systems from './_components/Systems';
 
-// Order is deliberate: proof first (work, then the job), corroboration (GitHub),
+// Order is deliberate: proof first (work, how it's built, then the job), corroboration (GitHub),
 // then the reference material (stack) and the human closer (about) before contact.
 export default async function Home() {
     const contributions = totalContributions(await fetchContributions());
@@ -15,6 +16,7 @@ export default async function Home() {
         <div className="page-">
             <Banner contributionsLastYear={contributions} />
             <ProjectList />
+            <Systems />
             <Experiences />
             <GithubActivity />
             <Skills />

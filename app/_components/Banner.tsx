@@ -1,7 +1,8 @@
 'use client';
 import Button from '@/components/Button';
-import HeroBlueprint from '@/components/HeroBlueprint';
+import HeroClock from '@/components/HeroClock';
 import MusicVisualizer from '@/components/MusicVisualizer';
+import { PRELOADER_REVEAL_EVENT } from '@/components/Preloader';
 import { GENERAL_INFO, PROJECTS } from '@/lib/data';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -27,15 +28,23 @@ const Banner = ({ contributionsLastYear }: { contributionsLastYear?: number }) =
 
     useGSAP(
         () => {
-            // Intro: copy rises in once the preloader is gone; the blueprint follows.
-            gsap.from('.hero-in', {
-                y: 28,
+            // Intro: copy rises into the gap as the preloader curtain parts; the blueprint follows.
+            // Reduced motion keeps the fade and drops the travel.
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const intro = gsap.from('.hero-in', {
+                y: reduced ? 0 : 28,
                 opacity: 0,
-                duration: 0.9,
-                stagger: 0.08,
+                duration: reduced ? 0.4 : 0.8,
+                stagger: 0.07,
                 ease: 'power3.out',
-                delay: 0.2,
+                paused: true,
             });
+            const play = () => intro.play();
+            // Already revealed (repeat visit, or navigating back to /): play straight away.
+            if (document.documentElement.dataset.preloader === 'done') play();
+            else window.addEventListener(PRELOADER_REVEAL_EVENT, play, { once: true });
+            // Never leave the hero hidden if the signal is somehow missed.
+            const fallback = window.setTimeout(play, 3500);
 
             // Exit: fade the copy as the hero scrolls away.
             gsap.to('.hero-copy', {
@@ -49,6 +58,11 @@ const Banner = ({ contributionsLastYear }: { contributionsLastYear?: number }) =
                     scrub: 1,
                 },
             });
+
+            return () => {
+                window.removeEventListener(PRELOADER_REVEAL_EVENT, play);
+                window.clearTimeout(fallback);
+            };
         },
         { scope: containerRef },
     );
@@ -139,13 +153,12 @@ const Banner = ({ contributionsLastYear }: { contributionsLastYear?: number }) =
                     </ul>
                 </div>
 
-                {/* The visual is the work itself: blueprints of systems I've shipped, cycling. */}
+                {/* Where I am right now, and the time zones a remote team would check me against. */}
                 <div className="hero-in min-w-0 md:col-span-5 lg:col-span-6">
-                    <p className="mb-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                        <span className="sm:hidden">The systems I actually built</span>
-                        <span className="hidden sm:inline">Not a demo reel — the systems I actually built</span>
+                    <p className="mb-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground md:text-right">
+                        Where I am · who I overlap with
                     </p>
-                    <HeroBlueprint />
+                    <HeroClock />
                 </div>
 
                 <a

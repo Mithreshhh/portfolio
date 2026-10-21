@@ -1,7 +1,7 @@
 'use client';
 import HireCard from '@/components/HireCard';
 import SectionTitle from '@/components/SectionTitle';
-import { ACHIEVEMENTS, EDUCATION, EXPERIENCE, PROJECTS } from '@/lib/data';
+import { ACHIEVEMENTS, EDUCATION, EXPERIENCE, PRINCIPLES, PROJECTS } from '@/lib/data';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
@@ -10,24 +10,8 @@ import React from 'react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// Each principle is backed by a line on the résumé; keep them in sync with lib/data.ts.
-const PRINCIPLES = [
-    {
-        icon: Users,
-        title: 'Ship to real users early',
-        detail: 'The LMS modules I build at Menler went live to ~30 users while still evolving; feedback beats guessing.',
-    },
-    {
-        icon: Gauge,
-        title: 'Measure, then optimise',
-        detail: 'Took a page-speed score from 48 to 91 by fixing the actual bottleneck (PNG → WebP), not by rewriting.',
-    },
-    {
-        icon: ShieldCheck,
-        title: 'Security is part of done',
-        detail: 'Audited our webhooks, found an exploitable one, rotated secrets and removed hard-coded fallbacks.',
-    },
-];
+// One icon per principle in lib/data.ts, in the same order.
+const PRINCIPLE_ICONS = [Users, Gauge, ShieldCheck];
 
 const AboutMe = () => {
     const container = React.useRef<HTMLDivElement>(null);
@@ -76,9 +60,9 @@ const AboutMe = () => {
                                 front of users and fixing what broke.
                             </p>
                             <p className="about-in">
-                                Right now that means LMS infrastructure at Menler: a PDF reader, Google Drive automation,
-                                and assessment scoring, used by around 30 people so far. Before that, client sites
-                                at Sleek Sky, and my major project: a browser agent that blacks out faces and
+                                Right now that means LMS infrastructure at Menler: a PDF reader, Google Drive
+                                automation, and assessment scoring, used by around 30 people so far. Before that, client
+                                sites at Sleek Sky, and my major project: a browser agent that blacks out faces and
                                 personal data on-device before any AI sees the page.
                             </p>
                             <p className="about-in">
@@ -88,16 +72,19 @@ const AboutMe = () => {
                         </div>
 
                         <ul className="about-in mt-8 grid gap-3 sm:grid-cols-3" aria-label="How I work">
-                            {PRINCIPLES.map(({ icon: Icon, title, detail }) => (
-                                <li
-                                    key={title}
-                                    className="rounded-xl border border-border/50 bg-background-light/20 p-4 backdrop-blur-sm"
-                                >
-                                    <Icon size={18} className="text-foreground" aria-hidden="true" />
-                                    <p className="mt-3 text-sm font-medium text-foreground">{title}</p>
-                                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{detail}</p>
-                                </li>
-                            ))}
+                            {PRINCIPLES.map(({ title, detail }, i) => {
+                                const Icon = PRINCIPLE_ICONS[i];
+                                return (
+                                    <li
+                                        key={title}
+                                        className="rounded-xl border border-border/50 bg-background-light/20 p-4 backdrop-blur-sm"
+                                    >
+                                        <Icon size={18} className="text-foreground" aria-hidden="true" />
+                                        <p className="mt-3 text-sm font-medium text-foreground">{title}</p>
+                                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{detail}</p>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </div>
 
@@ -106,7 +93,9 @@ const AboutMe = () => {
                         <dl className="divide-y divide-border/50 border-y border-border/50">
                             {facts.map((f) => (
                                 <div key={f.label} className="grid grid-cols-[96px_1fr] gap-4 py-3 text-sm">
-                                    <dt className="text-[11px] uppercase leading-6 tracking-[0.2em] text-muted-foreground">{f.label}</dt>
+                                    <dt className="text-[11px] uppercase leading-6 tracking-[0.2em] text-muted-foreground">
+                                        {f.label}
+                                    </dt>
                                     <dd className="leading-6 text-foreground/90">{f.value}</dd>
                                 </div>
                             ))}
