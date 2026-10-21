@@ -10,11 +10,12 @@ import { useEffect, useRef, useState } from 'react';
  * labels are HTML so they stay crisp and selectable.
  */
 
-const VB = { w: 600, h: 560 };
-const C = { x: 300, y: 386 };
-const RINGS = { hours: 216, minutes: 268, seconds: 320 };
-const LABEL_GAP = 17;
-const GLOBE_R = 162;
+// Sized so the outer numbers and the lowest city label both fit inside the box: nothing is cropped.
+const VB = { w: 640, h: 540 };
+const C = { x: 320, y: 326 };
+const RINGS = { hours: 190, minutes: 236, seconds: 282 };
+const LABEL_GAP = 16;
+const GLOBE_R = 150;
 // IST has no daylight saving, so a fixed offset is exact and avoids Intl on every frame.
 const IST_OFFSET_MS = 330 * 60_000;
 const GLOBE_LAT0 = (14 * Math.PI) / 180;
@@ -96,7 +97,7 @@ const Ring = ({
                                 dominantBaseline="middle"
                                 fontSize="11.5"
                                 className={cn(
-                                    'hidden tabular-nums sm:block',
+                                    'hidden tabular-nums lg:block',
                                     live ? 'fill-live font-medium' : 'fill-muted-foreground',
                                 )}
                             >
@@ -327,7 +328,7 @@ const HeroClock = ({ className }: { className?: string }) => {
         <div
             ref={rootRef}
             className={cn(
-                'relative w-full select-none overflow-hidden [mask-image:linear-gradient(to_bottom,black_88%,transparent)]',
+                'relative w-full select-none',
                 className,
             )}
             style={{ aspectRatio: `${VB.w} / ${VB.h}` }}
@@ -351,10 +352,10 @@ const HeroClock = ({ className }: { className?: string }) => {
                 ))}
                 <text
                     x={C.x}
-                    y={C.y - RINGS.hours + 46}
+                    y={C.y - GLOBE_R - 16}
                     textAnchor="middle"
                     fontSize="10"
-                    className="hidden fill-muted-foreground uppercase sm:block"
+                    className="hidden fill-muted-foreground uppercase lg:block"
                     style={{ letterSpacing: '0.22em' }}
                 >
                     Hyderabad · IST

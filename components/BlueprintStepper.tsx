@@ -71,7 +71,8 @@ const BlueprintStepper = ({ blueprintKey, className }: Props) => {
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:linear-gradient(hsl(var(--foreground))_1px,transparent_1px),linear-gradient(90deg,hsl(var(--foreground))_1px,transparent_1px)] [background-size:24px_24px]"
                 />
-                <div className="overflow-x-auto [scrollbar-width:thin]" data-lenis-prevent-wheel>
+                {/* No data-lenis-prevent-wheel here: it swallows the page scroll under the pointer. */}
+                <div className="overflow-x-auto [scrollbar-width:thin]">
                     <Diagram bp={bp} animate={!reduced} uid={`${uid}-${bp.key}`} highlight={step.nodes} className="relative min-w-[520px] sm:min-w-0" />
                 </div>
             </div>
